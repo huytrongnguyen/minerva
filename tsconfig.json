@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "lib": [ "dom", "esnext" ],
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "minerva/core": ["src/Minerva/ClientApp/core"],
+      "rosie": ["src/Shared/ClientApp/rosie/ts"]
+    },
+    "removeComments": true,
+    "declaration": true,
+    "strictPropertyInitialization": false,
+    "inlineSourceMap": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
+}

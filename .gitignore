@@ -1,0 +1,10 @@
+.DS_Store
+bin
+obj
+node_modules
+.parcel-cache
+dist
+
+launchSettings.json
+appsettings.Development.json
+package-lock.json

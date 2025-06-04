@@ -1,0 +1,39 @@
+{
+  "name": "edm",
+  "version": "1.0.0",
+  "description": "Minerva",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huytrongnguyen/edm.git"
+  },
+  "bugs": "https://github.com/huytrongnguyen/edm/issues",
+  "scripts": {
+    "minerva-start": "parcel serve src/Minerva/ClientApp/app.html --dist-dir dist --no-cache -p 8585 --hmr-port 8586",
+    "minerva-build": "parcel build src/Minerva/ClientApp/app.html --dist-dir src/Minerva/wwwroot --no-source-maps --no-cache --no-autoinstall --no-content-hash"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "6.7.2",
+    "@popperjs/core": "2.11.8",
+    "axios": "1.9.0",
+    "bootstrap": "5.3.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-router-dom": "7.6.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "2.15.1",
+    "@types/bootstrap": "5.2.10",
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "@types/react-router-dom": "5.3.3",
+    "buffer": "6.0.3",
+    "parcel": "2.15.1",
+    "process": "0.11.10",
+    "typescript": "5.8.3"
+  },
+  "alias": {
+    "minerva/core": "./src/Minerva/ClientApp/core",
+    "rosie": "./src/Shared/ClientApp/rosie/ts"
+  }
+}

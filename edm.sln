@@ -1,0 +1,36 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minerva", "src\Minerva\Minerva.csproj", "{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CBA577F4-E9E7-0543-6CF8-9E286DFADC1A} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{BDCFAD44-90B3-4DCF-81CB-6E0322D4B872} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {772808AC-9B63-4074-ACCC-A14DE3BDACFB}
+	EndGlobalSection
+EndGlobal

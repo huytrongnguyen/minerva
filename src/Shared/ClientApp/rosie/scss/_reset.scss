@@ -1,0 +1,31 @@
+// System
+
+*:focus, *:active, *:read-only {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+// Body
+
+body, input, textarea, select, button {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Buttons
+//
+// For each of Bootstrap's buttons, define text, background, and border color.
+
+.btn-outline-secondary {
+  border-color: $border-color !important;
+  color: $body-color;
+}
+
+.btn-primary, .btn-outline-primary:hover, .btn-check:checked + .btn-outline-primary,
+.btn-success, .btn-outline-success:hover, .btn-check:checked + .btn-outline-success,
+.btn-danger, .btn-outline-danger:hover, .btn-check:checked + .btn-outline-danger {
+  color: $white !important;
+}
