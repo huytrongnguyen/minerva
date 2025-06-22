@@ -1,0 +1,1 @@
+colima start --cpu 4 --memory 4 --disk 64 --vm-type=qemu

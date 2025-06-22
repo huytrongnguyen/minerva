@@ -1,10 +1,6 @@
 .DS_Store
-bin
-obj
-node_modules
-.parcel-cache
-dist
-
-launchSettings.json
-appsettings.Development.json
-package-lock.json
+data
+spark/conf/*
+!spark/conf/spark-defaults.conf
+spark/libs/*
+logs

@@ -1,0 +1,1789 @@
+{
+  "id": "urn:datacontract:appsflyer:id123456789",
+  "info": {
+    "title": "AppsFlyer Data Contract for app_id=id123456789",
+    "version": "1.0.0",
+    "description": "Data contract for AppsFlyer raw data (app_id=id123456789), using Pull API for daily batch processing and Push API for real-time streaming. Data is stored in Apache Iceberg tables on MinIO, processed by Spark, Flink, and Airflow.",
+    "owner": "Data Owner",
+    "contact": {
+      "name": "ProductA Data Team",
+      "email": "producta-data@company.com"
+    }
+  },
+  "servers": {
+    "pull": {
+      "type": "api",
+      "location": "https://hq1.appsflyer.com/api/raw-data/export/app/{app-id}",
+      "format": "json",
+      "description": "Daily batch data from AppsFlyer Pull API"
+    },
+    "push": {
+      "type": "api",
+      "location": "https://hq1.appsflyer.com/api/pushapi/v1.0/app/{app-id}",
+      "format": "json",
+      "description": "Real-time streaming data from AppsFlyer Push API"
+    }
+  },
+  "terms": {
+    "usage": "Data for internal analytics and dashboarding, restricted to ProductA Analytics and Data Science teams."
+
+  },
+  "models": {
+    "installs_report": {
+      "description": "Batch-processed non-organic installs from Pull API",
+      "type": "table",
+      "fields": {
+        "attributed_touch_type": {
+          "type": "string",
+          "description": "Classifies the engagement. Set by AppsFlyer after the engagement was matched with an install",
+          "constraints": {
+            "enum": ["click", "download", "impression", "pre-install"]
+          }
+        },
+        "attributed_touch_time": {
+          "type": "timestamp",
+          "description": "Time of attributed touch, attributed engagement"
+        },
+        "install_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "UA: First launch after install. Retargeting: First launch after re-engagement/re-attribution",
+          "constraints": {
+            "format": "date-time"
+          }
+        },
+        "event_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "Time the event occurred"
+        },
+        "event_name": {
+          "type": "string",
+          "required": true,
+          "description": "The attribution event type or the in-app event name sent by the app",
+          "constraints": {
+            "enum": ["install", "af_complete_registration", "af_login", "af_purchase"]
+          }
+        },
+        "event_value": {
+          "type": "string",
+          "description": "Detailed event content sent from the SDK"
+        },
+        "event_revenue": {
+          "type": "string",
+          "description": "Value of revenue using Event Revenue Currency"
+        },
+        "event_revenue_currency": {
+          "type": "string",
+          "description": "The event revenue currency code reported to the SDK"
+        },
+        "event_revenue_usd": {
+          "type": "string",
+          "description": "The amount of revenue. The currency will depend on the reporting tool used. Preferred or selected means the app-specific currency set in the app settings"
+        },
+        "event_source": {
+          "type": "string",
+          "description": "Either SDK or S2S",
+          "constraints": {
+            "enum": ["SDK", "S2S"]
+          }
+        },
+        "is_receipt_validated": {
+          "type": "string",
+          "description": "TRUE/FALSE/NULL when implemented in the SDK, empty otherwise"
+        },
+        "af_prt": {
+          "type": "string",
+          "description": "Agency identifier"
+        },
+        "media_source": {
+          "type": "string",
+          "description": "The media source attributed to an event or restricted"
+        },
+        "af_channel": {
+          "type": "string",
+          "description": "Media source channel",
+          "examples": ["YouTube for Google", "Instagram for Meta ads"]
+        },
+        "af_keywords": {
+          "type": "string",
+          "description": "Word(s) used in the user's online search. As reported by the ad network"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign name"
+        },
+        "af_c_id": {
+          "type": "string",
+          "description": "Campaign ID"
+        },
+        "af_adset": {
+          "type": "string",
+          "description": "Adset name, identifies a group that contains one or more ads"
+        },
+        "af_adset_id": {
+          "type": "string",
+          "description": "Adset ID, identifies a group that contains one or more ads"
+        },
+        "af_ad": {
+          "type": "string",
+          "description": "Ad name"
+        },
+        "af_ad_id": {
+          "type": "string",
+          "description": "Ad ID"
+        },
+        "af_ad_type": {
+          "type": "string",
+          "description": "Example: banner, footer",
+          "examples": ["banner", "footer"]
+        },
+        "af_siteid": {
+          "type": "string",
+          "description": "Publisher ID"
+        },
+        "af_sub_siteid": {
+          "type": "string",
+          "description": "Sub-publisher ID"
+        },
+        "af_sub1": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub2": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub3": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub4": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub5": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_cost_model": {
+          "type": "string",
+          "description": "Cost model reported on the attribution link"
+        },
+        "af_cost_value": {
+          "type": "string",
+          "description": "Amount of Cost Currency, 4 digits after the decimal point permitted",
+          "examples": ["320.5095"]
+        },
+        "af_cost_currency": {
+          "type": "string",
+          "description": "3-letter currency code that complies with ISO-4217, default is USD",
+          "constraints": {
+            "pattern": "^[A-Z]{3}$"
+          },
+          "examples": ["USD", "EUR"]
+        },
+        "contributor_1_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_1_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_1_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_1_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_1_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_2_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_2_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_2_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_2_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_2_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_3_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_3_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_3_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_3_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_3_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "region": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "country_code": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code",
+          "constraints": {
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "state": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "city": {
+          "type": "string",
+          "description": "The most granular location of the user based on the device IP. Usually, the value holds a city name, but it can also be districts, boroughs, etc., which are more accurate"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "dma": {
+          "type": "string",
+          "description": "Designated Market Area or geographic areas"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP address being IPV4 or IPV6. AppsFlyer uses the address to determine the user location. If needed, advertisers can mask the IP address from reports and postbacks"
+        },
+        "wifi": {
+          "type": "string",
+          "description": "Set to either TRUE or FALSE"
+        },
+        "operator": {
+          "type": "string",
+          "description": "The name of the mobile operator derived from the SIM MCCMNC. Available if the user is registered to the network using Android"
+        },
+        "carrier": {
+          "type": "string",
+          "description": "The carrier name provided by Android"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language (locale) reported by the device and set by the device OS. Usually has the form ll-DD. Where ll is the language and DD is the dialect",
+          "examples": ["en-ZA"]
+        },
+        "appsflyer_id": {
+          "type": "string",
+          "required": true,
+          "description": "A unique ID generated by the SDK when the app is installed on a device. The ID is used to attribute in-app events in LTV flows, fetch conversion data, and affiliate in-app events",
+          "constraints": {
+            "pattern": "^[0-9a-fA-F-]+$"
+          }
+        },
+        "advertising_id": {
+          "type": "string",
+          "description": "User resettable advertising ID found on Android devices"
+        },
+        "idfa": {
+          "type": "string",
+          "description": "User resettable advertising ID found on iOS devices"
+        },
+        "android_id": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "customer_user_id": {
+          "type": "string",
+          "description": "A unique app user ID, set by the app owner"
+        },
+        "imei": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "idfv": {
+          "type": "string",
+          "description": "Vendor ID provided by iOS"
+        },
+        "platform": {
+          "type": "string",
+          "required": true,
+          "description": "Device platform",
+          "examples": ["android", "ios", "windowsphone", "smartcast", "tizen", "roku", "webos", "vidaa", "playstation", "xbox", "switch", "steam", "epic", "nativepc", "quest"]
+        },
+        "device_type": {
+          "type": "string",
+          "description": "The commercial model name of the device. Starting Feb 2, 2022, this field is no longer populated. Instead of this field use Device model which is similarly populated"
+        },
+        "os_version": {
+          "type": "string",
+          "required": true,
+          "description": "Device operating system version"
+        },
+        "app_version": {
+          "type": "string",
+          "description": "App version set by the advertiser"
+        },
+        "sdk_version": {
+          "type": "string",
+          "required": false,
+          "description": "AppsFlyer SDK version"
+        },
+        "app_id": {
+          "type": "string",
+          "required": true,
+          "description": "Unique app identifier in Appsflyer",
+          "examples": ["id123456789", "com.appsflyer.referrersender"]
+        },
+        "app_name": {
+          "type": "string",
+          "description": "App name set by the advertiser"
+        },
+        "bundle_id": {
+          "type": "string",
+          "description": "Bundle ID, identification to match either a single app or a group of apps in iOS"
+        },
+        "is_retargeting": {
+          "type": "string",
+          "description": "True for retargeting conversions and events"
+        },
+        "retargeting_conversion_type": {
+          "type": "string",
+          "description": "This field will be deprecated in the future. Use conversion_type and campaign_type to determine the context of the conversion"
+        },
+        "af_attribution_lookback": {
+          "type": "string",
+          "description": "Maximum period of time when an install can be attributed to a specific ad"
+        },
+        "af_reengagement_window": {
+          "type": "string",
+          "description": "Retargeting: The time period during which events are attributed to a retargeting campaign. The field is not populated in retargeting campaigns"
+        },
+        "is_primary_attribution": {
+          "type": "string",
+          "description": "UA: True. Retargeting: During a re-engagement window, we attribute to both the original media source (before the re-engagement) and to the re-engagement media source. While the event is within the re-engagement window. The original media source will be FALSE (not primary attribution). The re-engagement media source will be TRUE"
+        },
+        "user_agent": {
+          "type": "string",
+          "description": "The URL/device user agent"
+        },
+        "http_referrer": {
+          "type": "string",
+          "description": "Identifies the address of the webpage that linked to the AppsFlyer click URL. By checking the referrer, you can see where the request originated"
+        },
+        "original_url": {
+          "type": "string",
+          "description": "UA: Click/impression URL used. If the link is a Branded Link: the field is populated using the branded link. Retargeting: contains one of the following: Retargeting link, deep linking data, empty for SRNs"
+        },
+        "device_model": {
+          "type": "string",
+          "description": "The commercial model name of the device",
+          "examples": ["xiaomi::Redmi Note 8", "iPhone7"]
+        },
+        "campaign_type": {
+          "type": "string",
+          "description": "The source bringing the user: UA, Organic, Retargeting, Unknown."
+        },
+        "conversion_type": {
+          "type": "string",
+          "description": "The type of conversion: Install, Reinstall, Re-engagement, Unknown. If conversion_type=reinstall and campaign_type=retargeting is equivalent to retargeting_conversion_type=re-attribution"
+        }
+      }
+    },
+    "in_app_events_report": {
+      "description": "Batch-processed non-organic in-app events from Pull API",
+      "type": "table",
+      "fields": {
+        "attributed_touch_type": {
+          "type": "string",
+          "description": "Classifies the engagement. Set by AppsFlyer after the engagement was matched with an install",
+          "constraints": {
+            "enum": ["click", "download", "impression", "pre-install"]
+          }
+        },
+        "attributed_touch_time": {
+          "type": "timestamp",
+          "description": "Time of attributed touch, attributed engagement"
+        },
+        "install_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "UA: First launch after install. Retargeting: First launch after re-engagement/re-attribution",
+          "constraints": {
+            "format": "date-time"
+          }
+        },
+        "event_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "Time the event occurred"
+        },
+        "event_name": {
+          "type": "string",
+          "required": true,
+          "description": "The attribution event type or the in-app event name sent by the app",
+          "constraints": {
+            "enum": ["install", "af_complete_registration", "af_login", "af_purchase"]
+          }
+        },
+        "event_value": {
+          "type": "string",
+          "description": "Detailed event content sent from the SDK"
+        },
+        "event_revenue": {
+          "type": "string",
+          "description": "Value of revenue using Event Revenue Currency"
+        },
+        "event_revenue_currency": {
+          "type": "string",
+          "description": "The event revenue currency code reported to the SDK"
+        },
+        "event_revenue_usd": {
+          "type": "string",
+          "description": "The amount of revenue. The currency will depend on the reporting tool used. Preferred or selected means the app-specific currency set in the app settings"
+        },
+        "event_source": {
+          "type": "string",
+          "description": "Either SDK or S2S",
+          "constraints": {
+            "enum": ["SDK", "S2S"]
+          }
+        },
+        "is_receipt_validated": {
+          "type": "string",
+          "description": "TRUE/FALSE/NULL when implemented in the SDK, empty otherwise"
+        },
+        "af_prt": {
+          "type": "string",
+          "description": "Agency identifier"
+        },
+        "media_source": {
+          "type": "string",
+          "description": "The media source attributed to an event or restricted"
+        },
+        "af_channel": {
+          "type": "string",
+          "description": "Media source channel",
+          "examples": ["YouTube for Google", "Instagram for Meta ads"]
+        },
+        "af_keywords": {
+          "type": "string",
+          "description": "Word(s) used in the user's online search. As reported by the ad network"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign name"
+        },
+        "af_c_id": {
+          "type": "string",
+          "description": "Campaign ID"
+        },
+        "af_adset": {
+          "type": "string",
+          "description": "Adset name, identifies a group that contains one or more ads"
+        },
+        "af_adset_id": {
+          "type": "string",
+          "description": "Adset ID, identifies a group that contains one or more ads"
+        },
+        "af_ad": {
+          "type": "string",
+          "description": "Ad name"
+        },
+        "af_ad_id": {
+          "type": "string",
+          "description": "Ad ID"
+        },
+        "af_siteid": {
+          "type": "string",
+          "description": "Publisher ID"
+        },
+        "af_sub_siteid": {
+          "type": "string",
+          "description": "Sub-publisher ID"
+        },
+        "af_sub1": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub2": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub3": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub4": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub5": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_cost_model": {
+          "type": "string",
+          "description": "Cost model reported on the attribution link"
+        },
+        "af_cost_value": {
+          "type": "string",
+          "description": "Amount of Cost Currency, 4 digits after the decimal point permitted",
+          "examples": ["320.5095"]
+        },
+        "af_cost_currency": {
+          "type": "string",
+          "description": "3-letter currency code that complies with ISO-4217, default is USD",
+          "constraints": {
+            "pattern": "^[A-Z]{3}$"
+          },
+          "examples": ["USD", "EUR"]
+        },
+        "contributor_1_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_1_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_1_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_1_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_1_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_2_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_2_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_2_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_2_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_2_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_3_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_3_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_3_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_3_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_3_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "region": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "country_code": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code",
+          "constraints": {
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "state": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "city": {
+          "type": "string",
+          "description": "The most granular location of the user based on the device IP. Usually, the value holds a city name, but it can also be districts, boroughs, etc., which are more accurate"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "dma": {
+          "type": "string",
+          "description": "Designated Market Area or geographic areas"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP address being IPV4 or IPV6. AppsFlyer uses the address to determine the user location. If needed, advertisers can mask the IP address from reports and postbacks"
+        },
+        "wifi": {
+          "type": "string",
+          "description": "Set to either TRUE or FALSE"
+        },
+        "operator": {
+          "type": "string",
+          "description": "The name of the mobile operator derived from the SIM MCCMNC. Available if the user is registered to the network using Android"
+        },
+        "carrier": {
+          "type": "string",
+          "description": "The carrier name provided by Android"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language (locale) reported by the device and set by the device OS. Usually has the form ll-DD. Where ll is the language and DD is the dialect",
+          "examples": ["en-ZA"]
+        },
+        "appsflyer_id": {
+          "type": "string",
+          "required": true,
+          "description": "A unique ID generated by the SDK when the app is installed on a device. The ID is used to attribute in-app events in LTV flows, fetch conversion data, and affiliate in-app events",
+          "constraints": {
+            "pattern": "^[0-9a-fA-F-]+$"
+          }
+        },
+        "advertising_id": {
+          "type": "string",
+          "description": "User resettable advertising ID found on Android devices"
+        },
+        "idfa": {
+          "type": "string",
+          "description": "User resettable advertising ID found on iOS devices"
+        },
+        "android_id": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "customer_user_id": {
+          "type": "string",
+          "description": "A unique app user ID, set by the app owner"
+        },
+        "imei": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "idfv": {
+          "type": "string",
+          "description": "Vendor ID provided by iOS"
+        },
+        "platform": {
+          "type": "string",
+          "required": true,
+          "description": "Device platform",
+          "examples": ["android", "ios", "windowsphone", "smartcast", "tizen", "roku", "webos", "vidaa", "playstation", "xbox", "switch", "steam", "epic", "nativepc", "quest"]
+        },
+        "device_type": {
+          "type": "string",
+          "description": "The commercial model name of the device. Starting Feb 2, 2022, this field is no longer populated. Instead of this field use Device model which is similarly populated"
+        },
+        "os_version": {
+          "type": "string",
+          "required": true,
+          "description": "Device operating system version"
+        },
+        "app_version": {
+          "type": "string",
+          "description": "App version set by the advertiser"
+        },
+        "sdk_version": {
+          "type": "string",
+          "required": false,
+          "description": "AppsFlyer SDK version"
+        },
+        "app_id": {
+          "type": "string",
+          "required": true,
+          "description": "Unique app identifier in Appsflyer",
+          "examples": ["id123456789", "com.appsflyer.referrersender"]
+        },
+        "app_name": {
+          "type": "string",
+          "description": "App name set by the advertiser"
+        },
+        "bundle_id": {
+          "type": "string",
+          "description": "Bundle ID, identification to match either a single app or a group of apps in iOS"
+        },
+        "is_retargeting": {
+          "type": "string",
+          "description": "True for retargeting conversions and events"
+        },
+        "retargeting_conversion_type": {
+          "type": "string",
+          "description": "This field will be deprecated in the future. Use conversion_type and campaign_type to determine the context of the conversion"
+        },
+        "af_attribution_lookback": {
+          "type": "string",
+          "description": "Maximum period of time when an install can be attributed to a specific ad"
+        },
+        "af_reengagement_window": {
+          "type": "string",
+          "description": "Retargeting: The time period during which events are attributed to a retargeting campaign. The field is not populated in retargeting campaigns"
+        },
+        "is_primary_attribution": {
+          "type": "string",
+          "description": "UA: True. Retargeting: During a re-engagement window, we attribute to both the original media source (before the re-engagement) and to the re-engagement media source. While the event is within the re-engagement window. The original media source will be FALSE (not primary attribution). The re-engagement media source will be TRUE"
+        },
+        "user_agent": {
+          "type": "string",
+          "description": "The URL/device user agent"
+        },
+        "http_referrer": {
+          "type": "string",
+          "description": "Identifies the address of the webpage that linked to the AppsFlyer click URL. By checking the referrer, you can see where the request originated"
+        },
+        "original_url": {
+          "type": "string",
+          "description": "UA: Click/impression URL used. If the link is a Branded Link: the field is populated using the branded link. Retargeting: contains one of the following: Retargeting link, deep linking data, empty for SRNs"
+        },
+        "device_model": {
+          "type": "string",
+          "description": "The commercial model name of the device",
+          "examples": ["xiaomi::Redmi Note 8", "iPhone7"]
+        },
+        "campaign_type": {
+          "type": "string",
+          "description": "The source bringing the user: UA, Organic, Retargeting, Unknown."
+        },
+        "conversion_type": {
+          "type": "string",
+          "description": "The type of conversion: Install, Reinstall, Re-engagement, Unknown. If conversion_type=reinstall and campaign_type=retargeting is equivalent to retargeting_conversion_type=re-attribution"
+        }
+      }
+    },
+    "organic_installs_report": {
+      "description": "Batch-processed organic installs from Pull API",
+      "type": "table",
+      "fields": {
+        "attributed_touch_type": {
+          "type": "string",
+          "description": "Classifies the engagement. Set by AppsFlyer after the engagement was matched with an install",
+          "constraints": {
+            "enum": ["click", "download", "impression", "pre-install"]
+          }
+        },
+        "attributed_touch_time": {
+          "type": "timestamp",
+          "description": "Time of attributed touch, attributed engagement"
+        },
+        "install_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "UA: First launch after install. Retargeting: First launch after re-engagement/re-attribution",
+          "constraints": {
+            "format": "date-time"
+          }
+        },
+        "event_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "Time the event occurred"
+        },
+        "event_name": {
+          "type": "string",
+          "required": true,
+          "description": "The attribution event type or the in-app event name sent by the app",
+          "constraints": {
+            "enum": ["install", "af_complete_registration", "af_login", "af_purchase"]
+          }
+        },
+        "event_value": {
+          "type": "string",
+          "description": "Detailed event content sent from the SDK"
+        },
+        "event_revenue": {
+          "type": "string",
+          "description": "Value of revenue using Event Revenue Currency"
+        },
+        "event_revenue_currency": {
+          "type": "string",
+          "description": "The event revenue currency code reported to the SDK"
+        },
+        "event_revenue_usd": {
+          "type": "string",
+          "description": "The amount of revenue. The currency will depend on the reporting tool used. Preferred or selected means the app-specific currency set in the app settings"
+        },
+        "event_source": {
+          "type": "string",
+          "description": "Either SDK or S2S",
+          "constraints": {
+            "enum": ["SDK", "S2S"]
+          }
+        },
+        "is_receipt_validated": {
+          "type": "string",
+          "description": "TRUE/FALSE/NULL when implemented in the SDK, empty otherwise"
+        },
+        "af_prt": {
+          "type": "string",
+          "description": "Agency identifier"
+        },
+        "media_source": {
+          "type": "string",
+          "description": "The media source attributed to an event or restricted"
+        },
+        "af_channel": {
+          "type": "string",
+          "description": "Media source channel",
+          "examples": ["YouTube for Google", "Instagram for Meta ads"]
+        },
+        "af_keywords": {
+          "type": "string",
+          "description": "Word(s) used in the user's online search. As reported by the ad network"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign name"
+        },
+        "af_c_id": {
+          "type": "string",
+          "description": "Campaign ID"
+        },
+        "af_adset": {
+          "type": "string",
+          "description": "Adset name, identifies a group that contains one or more ads"
+        },
+        "af_adset_id": {
+          "type": "string",
+          "description": "Adset ID, identifies a group that contains one or more ads"
+        },
+        "af_ad": {
+          "type": "string",
+          "description": "Ad name"
+        },
+        "af_ad_id": {
+          "type": "string",
+          "description": "Ad ID"
+        },
+        "af_siteid": {
+          "type": "string",
+          "description": "Publisher ID"
+        },
+        "af_sub_siteid": {
+          "type": "string",
+          "description": "Sub-publisher ID"
+        },
+        "af_sub1": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub2": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub3": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub4": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub5": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_cost_model": {
+          "type": "string",
+          "description": "Cost model reported on the attribution link"
+        },
+        "af_cost_value": {
+          "type": "string",
+          "description": "Amount of Cost Currency, 4 digits after the decimal point permitted",
+          "examples": ["320.5095"]
+        },
+        "af_cost_currency": {
+          "type": "string",
+          "description": "3-letter currency code that complies with ISO-4217, default is USD",
+          "constraints": {
+            "pattern": "^[A-Z]{3}$"
+          },
+          "examples": ["USD", "EUR"]
+        },
+        "contributor_1_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_1_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_1_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_1_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_1_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_2_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_2_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_2_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_2_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_2_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_3_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_3_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_3_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_3_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_3_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "region": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "country_code": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code",
+          "constraints": {
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "state": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "city": {
+          "type": "string",
+          "description": "The most granular location of the user based on the device IP. Usually, the value holds a city name, but it can also be districts, boroughs, etc., which are more accurate"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "dma": {
+          "type": "string",
+          "description": "Designated Market Area or geographic areas"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP address being IPV4 or IPV6. AppsFlyer uses the address to determine the user location. If needed, advertisers can mask the IP address from reports and postbacks"
+        },
+        "wifi": {
+          "type": "string",
+          "description": "Set to either TRUE or FALSE"
+        },
+        "operator": {
+          "type": "string",
+          "description": "The name of the mobile operator derived from the SIM MCCMNC. Available if the user is registered to the network using Android"
+        },
+        "carrier": {
+          "type": "string",
+          "description": "The carrier name provided by Android"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language (locale) reported by the device and set by the device OS. Usually has the form ll-DD. Where ll is the language and DD is the dialect",
+          "examples": ["en-ZA"]
+        },
+        "appsflyer_id": {
+          "type": "string",
+          "required": true,
+          "description": "A unique ID generated by the SDK when the app is installed on a device. The ID is used to attribute in-app events in LTV flows, fetch conversion data, and affiliate in-app events",
+          "constraints": {
+            "pattern": "^[0-9a-fA-F-]+$"
+          }
+        },
+        "advertising_id": {
+          "type": "string",
+          "description": "User resettable advertising ID found on Android devices"
+        },
+        "idfa": {
+          "type": "string",
+          "description": "User resettable advertising ID found on iOS devices"
+        },
+        "android_id": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "customer_user_id": {
+          "type": "string",
+          "description": "A unique app user ID, set by the app owner"
+        },
+        "imei": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "idfv": {
+          "type": "string",
+          "description": "Vendor ID provided by iOS"
+        },
+        "platform": {
+          "type": "string",
+          "required": true,
+          "description": "Device platform",
+          "examples": ["android", "ios", "windowsphone", "smartcast", "tizen", "roku", "webos", "vidaa", "playstation", "xbox", "switch", "steam", "epic", "nativepc", "quest"]
+        },
+        "device_type": {
+          "type": "string",
+          "description": "The commercial model name of the device. Starting Feb 2, 2022, this field is no longer populated. Instead of this field use Device model which is similarly populated"
+        },
+        "os_version": {
+          "type": "string",
+          "required": true,
+          "description": "Device operating system version"
+        },
+        "app_version": {
+          "type": "string",
+          "description": "App version set by the advertiser"
+        },
+        "sdk_version": {
+          "type": "string",
+          "required": false,
+          "description": "AppsFlyer SDK version"
+        },
+        "app_id": {
+          "type": "string",
+          "required": true,
+          "description": "Unique app identifier in Appsflyer",
+          "examples": ["id123456789", "com.appsflyer.referrersender"]
+        },
+        "app_name": {
+          "type": "string",
+          "description": "App name set by the advertiser"
+        },
+        "bundle_id": {
+          "type": "string",
+          "description": "Bundle ID, identification to match either a single app or a group of apps in iOS"
+        },
+        "is_retargeting": {
+          "type": "string",
+          "description": "True for retargeting conversions and events"
+        },
+        "retargeting_conversion_type": {
+          "type": "string",
+          "description": "This field will be deprecated in the future. Use conversion_type and campaign_type to determine the context of the conversion"
+        },
+        "af_attribution_lookback": {
+          "type": "string",
+          "description": "Maximum period of time when an install can be attributed to a specific ad"
+        },
+        "af_reengagement_window": {
+          "type": "string",
+          "description": "Retargeting: The time period during which events are attributed to a retargeting campaign. The field is not populated in retargeting campaigns"
+        },
+        "is_primary_attribution": {
+          "type": "string",
+          "description": "UA: True. Retargeting: During a re-engagement window, we attribute to both the original media source (before the re-engagement) and to the re-engagement media source. While the event is within the re-engagement window. The original media source will be FALSE (not primary attribution). The re-engagement media source will be TRUE"
+        },
+        "user_agent": {
+          "type": "string",
+          "description": "The URL/device user agent"
+        },
+        "http_referrer": {
+          "type": "string",
+          "description": "Identifies the address of the webpage that linked to the AppsFlyer click URL. By checking the referrer, you can see where the request originated"
+        },
+        "original_url": {
+          "type": "string",
+          "description": "UA: Click/impression URL used. If the link is a Branded Link: the field is populated using the branded link. Retargeting: contains one of the following: Retargeting link, deep linking data, empty for SRNs"
+        },
+        "device_model": {
+          "type": "string",
+          "description": "The commercial model name of the device",
+          "examples": ["xiaomi::Redmi Note 8", "iPhone7"]
+        },
+        "campaign_type": {
+          "type": "string",
+          "description": "The source bringing the user: UA, Organic, Retargeting, Unknown."
+        },
+        "conversion_type": {
+          "type": "string",
+          "description": "The type of conversion: Install, Reinstall, Re-engagement, Unknown. If conversion_type=reinstall and campaign_type=retargeting is equivalent to retargeting_conversion_type=re-attribution"
+        }
+      }
+    },
+    "organic_in_app_events_report": {
+      "description": "Batch-processed organic in-app events from Pull API",
+      "type": "table",
+      "fields": {
+        "attributed_touch_type": {
+          "type": "string",
+          "description": "Classifies the engagement. Set by AppsFlyer after the engagement was matched with an install",
+          "constraints": {
+            "enum": ["click", "download", "impression", "pre-install"]
+          }
+        },
+        "attributed_touch_time": {
+          "type": "timestamp",
+          "description": "Time of attributed touch, attributed engagement"
+        },
+        "install_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "UA: First launch after install. Retargeting: First launch after re-engagement/re-attribution",
+          "constraints": {
+            "format": "date-time"
+          }
+        },
+        "event_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "Time the event occurred"
+        },
+        "event_name": {
+          "type": "string",
+          "required": true,
+          "description": "The attribution event type or the in-app event name sent by the app",
+          "constraints": {
+            "enum": ["install", "af_complete_registration", "af_login", "af_purchase"]
+          }
+        },
+        "event_value": {
+          "type": "string",
+          "description": "Detailed event content sent from the SDK"
+        },
+        "event_revenue": {
+          "type": "string",
+          "description": "Value of revenue using Event Revenue Currency"
+        },
+        "event_revenue_currency": {
+          "type": "string",
+          "description": "The event revenue currency code reported to the SDK"
+        },
+        "event_revenue_usd": {
+          "type": "string",
+          "description": "The amount of revenue. The currency will depend on the reporting tool used. Preferred or selected means the app-specific currency set in the app settings"
+        },
+        "event_source": {
+          "type": "string",
+          "description": "Either SDK or S2S",
+          "constraints": {
+            "enum": ["SDK", "S2S"]
+          }
+        },
+        "is_receipt_validated": {
+          "type": "string",
+          "description": "TRUE/FALSE/NULL when implemented in the SDK, empty otherwise"
+        },
+        "af_prt": {
+          "type": "string",
+          "description": "Agency identifier"
+        },
+        "media_source": {
+          "type": "string",
+          "description": "The media source attributed to an event or restricted"
+        },
+        "af_channel": {
+          "type": "string",
+          "description": "Media source channel",
+          "examples": ["YouTube for Google", "Instagram for Meta ads"]
+        },
+        "af_keywords": {
+          "type": "string",
+          "description": "Word(s) used in the user's online search. As reported by the ad network"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign name"
+        },
+        "af_c_id": {
+          "type": "string",
+          "description": "Campaign ID"
+        },
+        "af_adset": {
+          "type": "string",
+          "description": "Adset name, identifies a group that contains one or more ads"
+        },
+        "af_adset_id": {
+          "type": "string",
+          "description": "Adset ID, identifies a group that contains one or more ads"
+        },
+        "af_ad": {
+          "type": "string",
+          "description": "Ad name"
+        },
+        "af_ad_id": {
+          "type": "string",
+          "description": "Ad ID"
+        },
+        "af_siteid": {
+          "type": "string",
+          "description": "Publisher ID"
+        },
+        "af_sub_siteid": {
+          "type": "string",
+          "description": "Sub-publisher ID"
+        },
+        "af_sub1": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub2": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub3": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub4": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_sub5": {
+          "type": "string",
+          "description": "Parameter populated by the advertiser in the attribution link"
+        },
+        "af_cost_model": {
+          "type": "string",
+          "description": "Cost model reported on the attribution link"
+        },
+        "af_cost_value": {
+          "type": "string",
+          "description": "Amount of Cost Currency, 4 digits after the decimal point permitted",
+          "examples": ["320.5095"]
+        },
+        "af_cost_currency": {
+          "type": "string",
+          "description": "3-letter currency code that complies with ISO-4217, default is USD",
+          "constraints": {
+            "pattern": "^[A-Z]{3}$"
+          },
+          "examples": ["USD", "EUR"]
+        },
+        "contributor_1_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_1_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_1_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_1_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_1_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_2_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_2_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_2_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_2_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_2_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "contributor_3_af_prt": {
+          "type": "string",
+          "description": "Agency or PMD - always converted to lowercase"
+        },
+        "contributor_3_media_source": {
+          "type": "string",
+          "description": "Contributor media source"
+        },
+        "contributor_3_campaign": {
+          "type": "string",
+          "description": "Contributor campaign"
+        },
+        "contributor_3_touch_type": {
+          "type": "string",
+          "description": "Possible values: click, impression",
+          "constraints": {
+            "enum": ["click", "impression"]
+          }
+        },
+        "contributor_3_touch_time": {
+          "type": "timestamp",
+          "description": "Contributor touch time"
+        },
+        "region": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "country_code": {
+          "type": "string",
+          "description": "ISO 3166-1 alpha-2 country code",
+          "constraints": {
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        "state": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "city": {
+          "type": "string",
+          "description": "The most granular location of the user based on the device IP. Usually, the value holds a city name, but it can also be districts, boroughs, etc., which are more accurate"
+        },
+        "postal_code": {
+          "type": "string",
+          "description": "Using the device IP address reported by the SDK"
+        },
+        "dma": {
+          "type": "string",
+          "description": "Designated Market Area or geographic areas"
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP address being IPV4 or IPV6. AppsFlyer uses the address to determine the user location. If needed, advertisers can mask the IP address from reports and postbacks"
+        },
+        "wifi": {
+          "type": "string",
+          "description": "Set to either TRUE or FALSE"
+        },
+        "operator": {
+          "type": "string",
+          "description": "The name of the mobile operator derived from the SIM MCCMNC. Available if the user is registered to the network using Android"
+        },
+        "carrier": {
+          "type": "string",
+          "description": "The carrier name provided by Android"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language (locale) reported by the device and set by the device OS. Usually has the form ll-DD. Where ll is the language and DD is the dialect",
+          "examples": ["en-ZA"]
+        },
+        "appsflyer_id": {
+          "type": "string",
+          "required": true,
+          "description": "A unique ID generated by the SDK when the app is installed on a device. The ID is used to attribute in-app events in LTV flows, fetch conversion data, and affiliate in-app events",
+          "constraints": {
+            "pattern": "^[0-9a-fA-F-]+$"
+          }
+        },
+        "advertising_id": {
+          "type": "string",
+          "description": "User resettable advertising ID found on Android devices"
+        },
+        "idfa": {
+          "type": "string",
+          "description": "User resettable advertising ID found on iOS devices"
+        },
+        "android_id": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "customer_user_id": {
+          "type": "string",
+          "description": "A unique app user ID, set by the app owner"
+        },
+        "imei": {
+          "type": "string",
+          "description": "Permanent device ID"
+        },
+        "idfv": {
+          "type": "string",
+          "description": "Vendor ID provided by iOS"
+        },
+        "platform": {
+          "type": "string",
+          "required": true,
+          "description": "Device platform",
+          "examples": ["android", "ios", "windowsphone", "smartcast", "tizen", "roku", "webos", "vidaa", "playstation", "xbox", "switch", "steam", "epic", "nativepc", "quest"]
+        },
+        "device_type": {
+          "type": "string",
+          "description": "The commercial model name of the device. Starting Feb 2, 2022, this field is no longer populated. Instead of this field use Device model which is similarly populated"
+        },
+        "os_version": {
+          "type": "string",
+          "required": true,
+          "description": "Device operating system version"
+        },
+        "app_version": {
+          "type": "string",
+          "description": "App version set by the advertiser"
+        },
+        "sdk_version": {
+          "type": "string",
+          "required": false,
+          "description": "AppsFlyer SDK version"
+        },
+        "app_id": {
+          "type": "string",
+          "required": true,
+          "description": "Unique app identifier in Appsflyer",
+          "examples": ["id123456789", "com.appsflyer.referrersender"]
+        },
+        "app_name": {
+          "type": "string",
+          "description": "App name set by the advertiser"
+        },
+        "bundle_id": {
+          "type": "string",
+          "description": "Bundle ID, identification to match either a single app or a group of apps in iOS"
+        },
+        "is_retargeting": {
+          "type": "string",
+          "description": "True for retargeting conversions and events"
+        },
+        "retargeting_conversion_type": {
+          "type": "string",
+          "description": "This field will be deprecated in the future. Use conversion_type and campaign_type to determine the context of the conversion"
+        },
+        "af_attribution_lookback": {
+          "type": "string",
+          "description": "Maximum period of time when an install can be attributed to a specific ad"
+        },
+        "af_reengagement_window": {
+          "type": "string",
+          "description": "Retargeting: The time period during which events are attributed to a retargeting campaign. The field is not populated in retargeting campaigns"
+        },
+        "is_primary_attribution": {
+          "type": "string",
+          "description": "UA: True. Retargeting: During a re-engagement window, we attribute to both the original media source (before the re-engagement) and to the re-engagement media source. While the event is within the re-engagement window. The original media source will be FALSE (not primary attribution). The re-engagement media source will be TRUE"
+        },
+        "user_agent": {
+          "type": "string",
+          "description": "The URL/device user agent"
+        },
+        "http_referrer": {
+          "type": "string",
+          "description": "Identifies the address of the webpage that linked to the AppsFlyer click URL. By checking the referrer, you can see where the request originated"
+        },
+        "original_url": {
+          "type": "string",
+          "description": "UA: Click/impression URL used. If the link is a Branded Link: the field is populated using the branded link. Retargeting: contains one of the following: Retargeting link, deep linking data, empty for SRNs"
+        },
+        "device_model": {
+          "type": "string",
+          "description": "The commercial model name of the device",
+          "examples": ["xiaomi::Redmi Note 8", "iPhone7"]
+        },
+        "campaign_type": {
+          "type": "string",
+          "description": "The source bringing the user: UA, Organic, Retargeting, Unknown."
+        },
+        "conversion_type": {
+          "type": "string",
+          "description": "The type of conversion: Install, Reinstall, Re-engagement, Unknown. If conversion_type=reinstall and campaign_type=retargeting is equivalent to retargeting_conversion_type=re-attribution"
+        }
+      }
+    },
+    "appsflyer_event": {
+      "description": "Real-time raw data from Push API",
+      "type": "table",
+      "fields": {
+        "app_id": {
+          "type": "string",
+          "required": true,
+          "description": "Unique app identifier in Appsflyer",
+          "examples": ["id123456789", "com.appsflyer.referrersender"]
+        },
+        "event_name": {
+          "type": "string",
+          "required": true,
+          "description": "The attribution event type or the in-app event name sent by the app",
+          "constraints": {
+            "enum": [
+              "install",
+              "af_complete_registration",
+              "af_login",
+              "af_purchase"
+            ]
+          }
+        },
+        "event_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "Time the event occurred"
+        },
+        "af_ad": {
+          "type": "string",
+          "description": "Ad name"
+        },
+        "af_ad_id": {
+          "type": "string",
+          "description": "Ad ID"
+        },
+        "af_adset": {
+          "type": "string",
+          "description": "Adset name, identifies a group that contains one or more ads"
+        },
+        "af_adset_id": {
+          "type": "string",
+          "description": "Adset ID, identifies a group that contains one or more ads"
+        },
+        "advertising_id": {
+          "type": "string",
+          "description": "User resettable advertising ID found on Android devices"
+        },
+        "android_id": {
+          "type": "string",
+          "description": "Permanent Android device ID"
+        },
+        "app_name": {
+          "type": "string",
+          "description": "App name set by the advertiser"
+        },
+        "app_version": {
+          "type": "string",
+          "description": "App version set by the advertiser"
+        },
+        "appsflyer_id": {
+          "type": "string",
+          "required": true,
+          "description": "A unique ID generated by the SDK when the app is installed on a device. The ID is used to attribute in-app events in LTV flows, fetch conversion data, and affiliate in-app events",
+          "constraints": {
+            "pattern": "^[0-9a-fA-F-]+$"
+          }
+        },
+        "bundle_id": {
+          "type": "string",
+          "description": "Bundle ID, identification to match either a single app or a group of apps in iOS"
+        },
+        "campaign": {
+          "type": "string",
+          "description": "Campaign name"
+        },
+        "af_c_id": {
+          "type": "string",
+          "description": "Campaign ID"
+        },
+        "af_channel": {
+          "type": "string",
+          "description": "Media source channel",
+          "examples": ["YouTube for Google", "Instagram for Meta ads"]
+        },
+        "af_cost_currency": {
+          "type": "string",
+          "description": "3-letter currency code that complies with ISO-4217, default is USD",
+          "constraints": {
+            "pattern": "^[A-Z]{3}$"
+          },
+          "examples": ["USD", "EUR"]
+        },
+        "af_cost_value": {
+          "type": "string",
+          "description": "Amount of Cost Currency, 4 digits after the decimal point permitted",
+          "examples": ["320.5095"]
+        },
+        "country_code": {
+          "type": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 alpha-2",
+          "constraints": {
+            "pattern": "^[A-Z]{2}$"
+          },
+          "examples": ["US", "CN"]
+        },
+        "customer_user_id": {
+          "type": "string",
+          "description": "A unique app user ID, set by the app owner"
+        },
+        "device_model": {
+          "type": "string",
+          "description": "The commercial model name of the device",
+          "examples": ["xiaomi::Redmi Note 8", "iPhone7"]
+        },
+        "event_value": {
+          "type": "string",
+          "description": "Detailed event content sent from the SDK"
+        },
+        "idfa": {
+          "type": "string",
+          "description": "User resettable advertising ID found on iOS devices"
+        },
+        "idfv": {
+          "type": "string",
+          "description": "Vendor ID provided by iOS"
+        },
+        "impressions": {
+          "type": "string",
+          "description": "Number of times that the user saw the ad"
+        },
+        "install_time": {
+          "type": "timestamp",
+          "required": true,
+          "description": "UA: First launch after install. Retargeting: First launch after re-engagement/re-attribution",
+          "constraints": {
+            "format": "date-time"
+          }
+        },
+        "ip": {
+          "type": "string",
+          "description": "IP address being IPV4 or IPV6, AppsFlyer uses the address to determine the user location"
+        },
+        "media_source": {
+          "type": "string",
+          "description": "The media source attributed to an event or restricted"
+        },
+        "os_version": {
+          "type": "string",
+          "required": false,
+          "description": "Device operating system version"
+        },
+        "af_prt": {
+          "type": "string",
+          "description": "Agency identifier"
+        },
+        "platform": {
+          "type": "string",
+          "required": true,
+          "description": "Device platform",
+          "examples": ["android", "ios", "windowsphone", "smartcast", "tizen", "roku", "webos", "vidaa", "playstation", "xbox", "switch", "steam", "epic", "nativepc", "quest"]
+        },
+        "af_revenue": {
+          "type": "string",
+          "description": "Estimated revenue from the purchase"
+        },
+        "af_currency": {
+          "type": "string",
+          "description": "Currency code"
+        },
+        "af_quantity": {
+          "type": "string",
+          "description": "Number of items purchased"
+        },
+        "af_content_id": {
+          "type": "string",
+          "description": "Item ID"
+        }
+      },
+      "quality": {
+        "type": "sql",
+        "description": "Row Count",
+        "query": "SELECT count(*) as row_count FROM appsflyer_event",
+        "mustBeGreaterThan": 5
+      }
+    }
+  },
+  "servicelevels": {
+    "availability": {
+      "description": "The server is available during support hours"
+    },
+    "retention": {
+      "description": "Data is retained for one year"
+    },
+    "latency": {
+      "description": "Available in batch tables by 01:00 AM +07"
+    },
+    "freshness": {
+      "description": "Reflects data up to previous day"
+    },
+    "frequency": {
+      "description": "Data is delivered once a day",
+      "cron": "0 1 * * *"
+    },
+    "backup": {
+      "description": "Data is backed up once a week",
+      "cron": "0 0 * * 0"
+    }
+  },
+  "tags": ["appsflyer", "marketing", "analytics"],
+  "links": {
+    "Pull API raw data": "https://support.appsflyer.com/hc/en-us/articles/360007530258-Pull-API-raw-data",
+    "Push API streaming raw data": "https://support.appsflyer.com/hc/en-us/articles/207034356-Push-API-streaming-raw-data#serverside-requirements-your-server",
+    "Raw data field dictionary": "https://support.appsflyer.com/hc/en-us/articles/208387843-Raw-data-field-dictionary",
+    "Raw data reporting overview": "https://support.appsflyer.com/hc/en-us/articles/209680773-Raw-data-reporting-overview",
+    "In-app events—Event structure": "https://support.appsflyer.com/hc/en-us/articles/4410481112081-In-app-events-Event-structure",
+    "Pull API aggregate data": "https://support.appsflyer.com/hc/en-us/articles/207034346-Pull-API-aggregate-data",
+    "Aggregated and analytics reporting overview": "https://support.appsflyer.com/hc/en-us/articles/360005437257-Aggregated-and-analytics-reporting-overview"
+  }
+}
