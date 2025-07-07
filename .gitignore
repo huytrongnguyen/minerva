@@ -1,6 +1,0 @@
-.DS_Store
-data
-spark/conf/*
-!spark/conf/spark-defaults.conf
-spark/libs/*
-logs
