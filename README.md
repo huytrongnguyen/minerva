@@ -2,6 +2,34 @@
 
 This project is a Spark 3.5.3 application built with Scala 2.12 and Java 17, using Gradle 7.6 as the build tool. It reads and writes data to a MinIO bucket and includes JUnit 5 tests. The application is deployed using Docker Compose with Colima as the Docker runtime on macOS or Linux.
 
+## Objectives
+
+An in-house metrics platform that offers, among other things, a centralised and participative source of truth for analytics, reporting and experimentation across the company.
+
+Marketing might calculate it one way, the product team another, leading to a battle of conflicting dashboards and eroding trust in the data itself. This is precisely the chaos that a centralised metrics platform like Airbnb’s Minerva was designed to tame. 
+
+By creating a single, governed source of truth for business logic, a metrics store ensures that when anyone asks a question about the data, they get one consistent, reliable answer.
+
+## Minerva Logic
+
+The abstractions of metrics from the end user seems to be achieved through two **layers of definitions** (config files) that, starting from origin data, are used to build a **unified metric layer** by providing instructions on how to query the underlying data.
+
+### Denormalised Layer
+
+In the first layer there is some kind of **virtual denormalisation**:
+Starting from origin data sources — like databases, warehouses and object storage buckets — a **denormalised SQL definition** for an event data model (sales, rentals, stays, etc.) is provided.
+The goal here is to flatten the model to streamline analytical queries in later stages.
+
+### Metrics and Dimensions Layer
+
+In the second layer metrics and dimensions definitions are built upon the denormalised event tables.
+
+### Inquiries
+
+An Inquiry to the service can include **multiple metrics and dimensions** along with **granularity** specification and **filters**.
+
+When an inquiry is made, Minerva seems to read from the various configs and dynamically generate SQL to appropriately fetch the data from origin and deliver it to the end user. To do so efficiently it uses a **split-apply-combine** strategy.
+
 ## Prerequisites
 
 - **Java 17**: OpenJDK 17.
