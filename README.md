@@ -60,10 +60,10 @@ minerva/
 - Install Gradle 7.6.6: `brew install gradle@7`
 - Verify installation: `gradle -v`
   - Ensure JVM version is 17.
-- Set JAVA_HOME: `export JAVA_HOME=/path/to/jdk-17`
+- Set JAVA_HOME: `export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home`
 - Add to your shell profile: 
   ```sh
-  echo 'export JAVA_HOME=/path/to/jdk-17' >> ~/.zshrc
+  echo 'export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home' >> ~/.zshrc
   source ~/.zshrc
   ```
 - Verify Java version: `java -v`
@@ -71,9 +71,17 @@ minerva/
 - Ensure gradle.properties includes:
   ```properties
   org.gradle.jvmargs=-Xmx2g -XX:MaxPermSize=512m
-  org.gradle.java.home=/path/to/jdk-17
+  org.gradle.java.home=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
   ```
-  - Replace /path/to/jdk-17 with your JDK 17 path.
+
+### Install Python dependencies (Optional)
+
+- Verify installation: `python3 --version`
+  - Ensure Python version is 3.9
+- Install dependencies
+  ```sh
+  pip3 install -r requirements.txt
+  ```
 
 ### Install Colima and Docker CLI:
 - Install Colima: `brew install colima`
@@ -86,7 +94,7 @@ minerva/
 ## Build the Project
 
 - Refresh Dependencies: `gradle clean --refresh-dependencies`
-- Run Tests: `gradle test`
+- Run Tests: `gradle test` or `python3 -m pytest -s test/minerva/app-suite.py`
   - The project includes a JUnit 5 test to verify DataFrame creation.
   - View test results in build/reports/tests/test/index.html if errors occur.
   - Note: Tests include JVM arguments to handle Java 17 module access issues.
