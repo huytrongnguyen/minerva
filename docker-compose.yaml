@@ -17,8 +17,103 @@ services:
     ports:
       - 8888:8888
       - 8080:8080
-      - 10000:10000
-      - 10001:10001
+  # spark-master:
+  #   image: tabulario/spark-iceberg
+  #   container_name: spark-master
+  #   networks:
+  #     iceberg_net:
+  #       aliases:
+  #         - spark-master
+  #   depends_on:
+  #     - rest
+  #     - minio
+  #   environment:
+  #     - SPARK_MASTER_HOST=spark-master
+  #     - SPARK_MASTER_PORT=7077
+  #     - SPARK_MASTER_WEBUI_PORT=8080
+  #     - SPARK_NO_DAEMONIZE=true
+  #   ports:
+  #     - 8080:8080
+  #     - 7077:7077
+  #   entrypoint: /bin/bash
+  #   command: >
+  #     -c "
+  #     /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master --host spark-master --port 7077 --webui-port 8080"
+  # spark-worker-1:
+  #   build:
+  #     context: ./images/spark
+  #     dockerfile: Dockerfile
+  #   container_name: spark-worker-1
+  #   networks:
+  #     iceberg_net:
+  #   depends_on:
+  #     - spark-master
+  #     - rest
+  #     - minio
+  #   volumes:
+  #     - ./warehouse:/home/iceberg/warehouse
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #     - SPARK_MODE=worker
+  #     - SPARK_MASTER=spark://spark-master:7077
+  #     - SPARK_WORKER_CORES=2
+  #     - SPARK_WORKER_MEMORY=2g
+  #     - SPARK_NO_DAEMONIZE=true
+  #     - SPARK_WORKER_OPTS=-Dspark.worker.cleanup.enabled=true
+  #     - SPARK_DAEMON_JAVA_OPTS=-Dspark.worker.resourceFileServer=spark://spark-master:7077
+  #   command: >
+  #     /bin/bash -c "
+  #     /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077 --cores 2 --memory 2g"
+  # spark-worker-2:
+  #   build:
+  #     context: ./images/spark
+  #     dockerfile: Dockerfile
+  #   container_name: spark-worker-2
+  #   networks:
+  #     iceberg_net:
+  #   depends_on:
+  #     - spark-master
+  #     - rest
+  #     - minio
+  #   volumes:
+  #     - ./warehouse:/home/iceberg/warehouse
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #     - SPARK_MODE=worker
+  #     - SPARK_MASTER=spark://spark-master:7077
+  #     - SPARK_WORKER_CORES=2
+  #     - SPARK_WORKER_MEMORY=2g
+  #     - SPARK_NO_DAEMONIZE=true
+  #     - SPARK_WORKER_OPTS=-Dspark.worker.cleanup.enabled=true
+  #     - SPARK_DAEMON_JAVA_OPTS=-Dspark.worker.resourceFileServer=spark://spark-master:7077
+  #   command: >
+  #     /bin/bash -c "
+  #     /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077 --cores 2 --memory 2g"
+  # jupyter:
+  #   image: tabulario/spark-iceberg
+  #   container_name: jupyter
+  #   networks:
+  #     iceberg_net:
+  #   depends_on:
+  #     - spark-master
+  #     - rest
+  #     - minio
+  #   volumes:
+  #     - ./notebooks:/home/iceberg/notebooks/notebooks
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #   ports:
+  #     - 8888:8888
+  #   entrypoint: /bin/bash
+  #   command: >
+  #     -c "
+  #     jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password='' --notebook-dir=/home/iceberg/notebooks"
   rest:
     image: tabulario/iceberg-rest
     container_name: iceberg-rest

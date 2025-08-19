@@ -86,7 +86,7 @@ minerva/
 ### Install Colima and Docker CLI:
 - Install Colima: `brew install colima`
 - Install Docker CLI: `brew install docker`
-- Start Colima with sufficient resources for Spark and MinIO: `colima start --cpu 6 --memory 12 --disk 20`
+- Start Colima with sufficient resources for Spark and MinIO: `colima start --cpu 10 --memory 24 --disk 128`
   - Adjust CPU/memory based on your system.
   - Use --mount if volume access issues occur (see Troubleshooting).
 - Verify Docker is running: `docker ps`
