@@ -1,0 +1,22 @@
+{
+  "inputs": {
+    "appsflyer": {
+      "type": "csv",
+      "location": "/data/appsflyer"
+    },
+    "inapp": {
+      "type": "csv",
+      "location": "/data/appsflyer"
+    }
+  },
+  "data": {
+    "type": "parquet",
+    "location": "/data/tos"
+  },
+  "outputs": {
+    "reporting": {
+      "type": "postgres",
+      "location": "localhost:5432/tos"
+    }
+  }
+}
