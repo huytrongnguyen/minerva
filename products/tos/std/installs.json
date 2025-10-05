@@ -1,0 +1,10 @@
+{
+  "sources": [{
+    "name": "appsflyer_installs_report",
+    "type": "csv",
+    "location": "{{location(inputs,appsflyer)}}/{{var(app_id)}}/{{var(event_date)}}/installs_report"
+  }],
+  "targets": [{
+    "location": "{{location(data)}}/{{var(product_id}}/devices/installs/{{var(event_date)}}"
+  }]
+}

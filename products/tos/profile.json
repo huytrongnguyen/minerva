@@ -18,5 +18,8 @@
       "type": "postgres",
       "location": "localhost:5432/tos"
     }
+  },
+  "vars": {
+    "app_id": "id123456789"
   }
 }
