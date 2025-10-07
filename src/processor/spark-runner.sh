@@ -1,1 +1,1 @@
-python3 ./src/app.py product_id=tos report_date=2025-09-30 layouts=raw/appsflyer/installs
+python3 ./src/app.py product_id=tos action=transform layouts=raw/appsflyer/installs event_date=2025-09-30

@@ -1,4 +1,11 @@
-select  {{var('product_id')}} as product_id
+{{
+  insert_overwrite({
+    'path': '{{ location("datastore") }}/{{ vars("product_id") }}/devices/installs/{{ event_date }}',
+    'type': 'parquet'
+  })
+}}
+
+select  '{{ vars("product_id") }}' as product_id
       , to_date(event_time) as event_date
       , appsflyer_id as install_id
       , cast(install_time as timestamp) as event_time
@@ -10,5 +17,10 @@ select  {{var('product_id')}} as product_id
       , af_cost_currency as cost_currency
       , country_code
       , platform
-      ,
-from appsflyer_installs_report
+from {{
+  source({
+    'name': 'appsflyer_installs_report'
+    'path': '{{ location("inputs.appsflyer") }}/{{ vars("app_id") }}/{{ event_date }}/installs_report',
+    'type': 'csv'
+  })
+}}

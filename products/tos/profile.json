@@ -2,16 +2,16 @@
   "inputs": {
     "appsflyer": {
       "type": "csv",
-      "location": "/data/appsflyer"
+      "location": "/appsflyer"
     },
     "inapp": {
       "type": "csv",
-      "location": "/data/appsflyer"
+      "location": "/appsflyer"
     }
   },
-  "data": {
+  "datastore": {
     "type": "parquet",
-    "location": "/data/tos"
+    "location": "/datastore/tos"
   },
   "outputs": {
     "reporting": {

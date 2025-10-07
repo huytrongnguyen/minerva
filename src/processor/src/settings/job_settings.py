@@ -3,9 +3,10 @@ from os import path
 class JobSettings:
     def __init__(self):
         self.product_id = ''
-        self.report_date = ''
+        self.event_date = ''
+        self.action = ''
         self.layouts = ''
-        self.config_dir = '../../models'
+        self.config_dir = '../../products'
 
     @classmethod
     def parse(cls, args: list[str]):
@@ -19,8 +20,10 @@ class JobSettings:
             if len(entry) >= 2:
                 if entry[0] == 'product_id':
                     job_settings.product_id = entry[1]
-                elif entry[0] == 'report_date':
-                    job_settings.report_date = entry[1]
+                elif entry[0] == 'event_date':
+                    job_settings.event_date = entry[1]
+                elif entry[0] == 'action':
+                    job_settings.action = entry[1]
                 elif entry[0] == 'layouts':
                     job_settings.layouts = entry[1]
                 else:
