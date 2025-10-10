@@ -2,17 +2,18 @@ import sys
 
 from pyspark.sql import SparkSession
 from shared import json_utils
-from settings import job_settings
+from settings.job_settings import JobSettings
+from settings.product_settings import ProductSettings
 
 def main():
     if len(sys.argv) < 2:
         raise ValueError('No arguments passed.')
 
-    settings = job_settings.JobSettings.parse(sys.argv[1:])
-    name = f'minerva::{settings.product_id}::{settings.action}::{settings.layouts}::{settings.event_date}'
+    settings = JobSettings.parse(sys.argv[1:])
+    name = f'minerva::{settings.product_id}::{settings.action}::{settings.models}::{settings.event_date}'
     print(f'Job name: {name}')
 
-    product_settings = json_utils.load_from_file(f'{settings.config_dir}/{settings.product_id}/profile.json')
+    product_settings = ProductSettings(**json_utils.load_from_file(f'{settings.config_dir}/{settings.product_id}/profile.json'))
     print(product_settings)
 
     # Initialize Spark session with MinIO configurations
