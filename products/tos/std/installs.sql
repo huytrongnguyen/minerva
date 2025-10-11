@@ -20,7 +20,7 @@ select  '{{ vars("product_id") }}' as product_id
 from {{
   source({
     'name': 'appsflyer_installs_report'
-    'path': '{{ location("inputs.appsflyer") }}/{{ vars("app_id") }}/{{ event_date }}/installs_report',
+    'path': '{{ location("inputs.appsflyer") }}/{{ vars("product_id") }}/{{ event_date }}/installs_report',
     'type': 'csv'
   })
 }}

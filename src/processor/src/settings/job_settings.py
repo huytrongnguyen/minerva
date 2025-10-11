@@ -1,5 +1,5 @@
 from os import path
-from pydantic.dataclasses import dataclass
+from dataclasses import dataclass
 
 @dataclass
 class JobSettings:
@@ -11,9 +11,6 @@ class JobSettings:
 
   @classmethod
   def parse(cls, args: list[str]):
-    CURRENT_DIR = path.dirname(__file__)
-    print(f'CURRENT_DIR = {CURRENT_DIR}')
-
     job_settings = cls()
 
     for pair in args:
@@ -30,6 +27,6 @@ class JobSettings:
         else:
           print(f'Unknown field: {entry[0]}')
       else:
-        print(f'Invalid parameter: {pair}')
+        print(f'Unknown parameter: {pair}')
 
     return job_settings
