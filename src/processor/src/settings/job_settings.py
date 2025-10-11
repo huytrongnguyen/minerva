@@ -7,7 +7,7 @@ class JobSettings:
   event_date = ''
   action = ''
   models = ''
-  config_dir = '../../products'
+  config_dir = path.dirname(__file__) + '/../../../../products'
 
   @classmethod
   def parse(cls, args: list[str]):
@@ -24,6 +24,8 @@ class JobSettings:
           job_settings.action = entry[1]
         elif entry[0] == 'models':
           job_settings.models = entry[1]
+        elif entry[0] == 'config_dir':
+          job_settings.config_dir = entry[1]
         else:
           print(f'Unknown field: {entry[0]}')
       else:
