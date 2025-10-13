@@ -1,11 +1,11 @@
 import sys
 
 from pyspark.sql import SparkSession
-from core import loader
-from core import standardizer
-from shared import file_utils
-from settings.job_settings import JobSettings
-from settings.product_settings import ProductSettings
+from src.core import loader
+from src.core import standardizer
+from src.shared import file_utils
+from src.settings.job_settings import JobSettings
+from src.settings.product_settings import ProductSettings
 
 def main():
   if len(sys.argv) < 2:
@@ -13,7 +13,6 @@ def main():
 
   settings = JobSettings.parse(sys.argv[1:])
   product_settings = ProductSettings(**file_utils.load_json(f'{settings.config_dir}/{settings.product_id}/profile.json'))
-  models = settings.models.split(',')
 
   # Initialize Spark session with MinIO configurations
   name = f'minerva::{settings.product_id}::{settings.action}::{settings.models}::{settings.event_date}'
@@ -26,9 +25,9 @@ def main():
     # .getOrCreate()
 
   if settings.action == 'load':
-    loader.run(spark, models, product_settings, settings)
+    loader.run(spark, product_settings, settings)
   elif settings.action == 'standardize':
-    standardizer.run(spark, models, product_settings, settings)
+    standardizer.run(spark, product_settings, settings)
   else:
     print(f'Unknown action: {settings.action}')
 

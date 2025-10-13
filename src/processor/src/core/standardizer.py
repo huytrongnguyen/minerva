@@ -1,8 +1,7 @@
 from pyspark.sql import SparkSession
-from core import processor
-from settings.job_settings import JobSettings
-from settings.product_settings import ProductSettings
+from src.core import processor
+from src.settings.job_settings import JobSettings
+from src.settings.product_settings import ProductSettings
 
-
-def run(spark: SparkSession, models: list[str], productSettings: ProductSettings, jobSettings: JobSettings):
-  processor.run(spark, models, productSettings, jobSettings)
+def run(spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
+  processor.run(spark, product_settings, job_settings)

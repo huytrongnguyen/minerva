@@ -12,9 +12,9 @@ class DataModel:
   location: str
   name: Optional[str] = None
   type: Optional[str] = 'parquet'
-  caseSensitive: Optional[bool] = False
-  numPartitions: Optional[int] = 4
-  partitionColumns: Optional[list[str]] = field(default_factory=list)
+  case_sensitive: Optional[bool] = False
+  num_partitions: Optional[int] = 1
+  partition_by: Optional[list[str]] = field(default_factory=list)
   options: Optional[dict[str, str]] = field(default_factory=dict)
   schema: Optional[list[DataColumn]] = field(default_factory=list)
 

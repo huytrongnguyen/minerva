@@ -1,17 +1,11 @@
 {
   "inputs": {
     "appsflyer": {
-      "type": "csv",
-      "location": "/appsflyer"
-    },
-    "inapp": {
-      "type": "csv",
-      "location": "/appsflyer"
+      "location": "/Users/lionel/Documents/huytrongnguyen/dip/data/appsflyer"
     }
   },
   "datastore": {
-    "type": "parquet",
-    "location": "/datastore/tos"
+    "location": "/Users/lionel/Documents/huytrongnguyen/dip/data/tos"
   },
   "outputs": {
     "reporting": {

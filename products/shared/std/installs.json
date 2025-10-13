@@ -1,10 +1,13 @@
 {
   "sources": [{
     "type": "csv",
-    "location": "{{inputs.appsflyer.location}}/{{product_id}}/{{event_date}}/installs_report"
+    "options": {
+      "header": "true"
+    },
+    "location": "{{inputs.appsflyer.location}}/install_reports/event_date={{event_date}}"
   }],
   "targets": [{
-    "location": "{{location(datastore)}}/{{product_id}}/devices/installs/{{event_date}}",
+    "location": "{{datastore.location}}/std/devices/installs/event_date={{event_date}}",
     "schema": [
       { "name": "product_id", "transform": ["set_product_id"] },
       { "name": "event_time", "transform": ["to_date"], "alias": "event_date" },

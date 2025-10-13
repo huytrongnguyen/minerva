@@ -1,13 +1,14 @@
 from os import path
 from dataclasses import dataclass
+from typing import Optional
 
 @dataclass
 class JobSettings:
-  product_id = ''
-  event_date = ''
-  action = ''
-  models = ''
-  config_dir = path.dirname(__file__) + '/../../../../products'
+  product_id: Optional[str] = ''
+  event_date: Optional[str] = ''
+  action: Optional[str] = ''
+  models: Optional[str] = ''
+  config_dir: Optional[str] = path.dirname(__file__) + '/../../../../products'
 
   @classmethod
   def parse(cls, args: list[str]):
