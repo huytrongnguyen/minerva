@@ -8,11 +8,11 @@
   }],
   "targets": [{
     "location": "{{datastore.location}}/std/devices/installs/event_date={{event_date}}",
-    "schema": [
+    "columns": [
       { "name": "product_id", "transform": ["set_product_id"] },
-      { "name": "event_time", "transform": ["to_date"], "alias": "event_date" },
+      { "name": "event_date", "transform": ["col(event_time)", "to_date"] },
       { "name": "appsflyer_id", "alias": "install_id" },
-      { "name": "install_time", "transform": ["cast(timestamp)"], "alias": "event_time" },
+      { "name": "event_time", "transform": ["col(install_time)", "cast(timestamp)"] },
       { "name": "media_source" },
       { "name": "campaign" },
       { "name": "af_c_id", "alias": "campaign_id" },

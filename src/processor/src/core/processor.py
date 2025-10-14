@@ -38,6 +38,3 @@ def process(spark: SparkSession, model: ModelLayout, settings: dict[str, Any]):
     else:
       for target in model.targets:
         transformer.process(df, DataModel(**target), settings)
-
-# def process(source: DataModel, target: DataModel, settings: dict[str, Any]):
-#   print(f'target = {target}')

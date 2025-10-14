@@ -24,12 +24,9 @@ def main():
     # .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
     # .getOrCreate()
 
-  if settings.action == 'load':
-    loader.run(spark, product_settings, settings)
-  elif settings.action == 'standardize':
-    standardizer.run(spark, product_settings, settings)
-  else:
-    print(f'Unknown action: {settings.action}')
+  if settings.action == 'load': loader.run(spark, product_settings, settings)
+  elif settings.action == 'standardize': standardizer.run(spark, product_settings, settings)
+  else: print(f'Unknown action: {settings.action}')
 
   # Stop Spark session
   spark.stop()

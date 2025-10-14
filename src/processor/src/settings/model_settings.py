@@ -4,8 +4,10 @@ from typing import Optional
 @dataclass
 class DataColumn:
   name: str
+  type: Optional[str] = 'string'
   transform: Optional[list[str]] = field(default_factory=list)
   alias: Optional[str] = None
+  drop: Optional[bool] = False
 
 @dataclass
 class DataModel:
@@ -16,7 +18,7 @@ class DataModel:
   num_partitions: Optional[int] = 1
   partition_by: Optional[list[str]] = field(default_factory=list)
   options: Optional[dict[str, str]] = field(default_factory=dict)
-  schema: Optional[list[DataColumn]] = field(default_factory=list)
+  columns: Optional[list[DataColumn]] = field(default_factory=list)
 
 @dataclass
 class ModelLayout:
