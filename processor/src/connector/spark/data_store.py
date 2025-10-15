@@ -1,10 +1,10 @@
 from typing import Any, Optional
 from pyspark.sql import SparkSession, DataFrame
 
-from src.settings.model_settings import DataModel
+from src.settings.model_settings import ModelSettings
 from src.shared import string_utils
 
-def load_data(spark: SparkSession, model: DataModel, settings: dict[str, Any]) -> Optional[DataFrame]:
+def load_data(spark: SparkSession, model: ModelSettings, settings: dict[str, Any]) -> Optional[DataFrame]:
   if (model.case_sensitive):
     spark.conf.set('spark.sql.caseSensitive', 'true')
 
@@ -22,7 +22,7 @@ def load_data(spark: SparkSession, model: DataModel, settings: dict[str, Any]) -
     print(f'Cannot load {model.type} data from "{path}" caused by: ${ex}')
     return None
 
-def save_data(data: DataFrame, model: DataModel, settings: dict[str, Any]):
+def save_data(data: DataFrame, model: ModelSettings, settings: dict[str, Any]):
   path = string_utils.parse(model.location, settings)
   print(f'Save data to "{path}" as {model.type}, num_partitions = {model.num_partitions}, partition_by = {model.partition_by}, columns = {"|".join(data.columns)}')
 

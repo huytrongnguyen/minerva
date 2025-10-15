@@ -8,3 +8,18 @@
 - Initial project
 - Implement sample pyspark app
 - Define concept
+
+## v0.0.2
+> 2025-10-11
+
+**Features**
+
+- Supports to load and save data via model configuration
+
+## v0.0.3
+> 2024-10-15
+
+**Features**
+
+- Supports to transform data via model configuration
+- Restructure codebase

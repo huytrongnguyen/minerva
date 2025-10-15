@@ -1,11 +1,11 @@
 {
   "inputs": {
     "appsflyer": {
-      "location": "/Users/lionel/Documents/huytrongnguyen/dip/data/appsflyer"
+      "location": "../../data/appsflyer"
     }
   },
   "datastore": {
-    "location": "/Users/lionel/Documents/huytrongnguyen/dip/data/tos"
+    "location": "../../data/tos"
   },
   "outputs": {
     "reporting": {

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 @dataclass
-class DataColumn:
+class ColumnSettings:
   name: str
   type: Optional[str] = 'string'
   transform: Optional[list[str]] = field(default_factory=list)
@@ -10,7 +10,7 @@ class DataColumn:
   drop: Optional[bool] = False
 
 @dataclass
-class DataModel:
+class ModelSettings:
   location: str
   name: Optional[str] = None
   type: Optional[str] = 'parquet'
@@ -18,9 +18,9 @@ class DataModel:
   num_partitions: Optional[int] = 1
   partition_by: Optional[list[str]] = field(default_factory=list)
   options: Optional[dict[str, str]] = field(default_factory=dict)
-  columns: Optional[list[DataColumn]] = field(default_factory=list)
+  columns: Optional[list[ColumnSettings]] = field(default_factory=list)
 
 @dataclass
 class ModelLayout:
-  sources: list[DataModel]
-  targets: list[DataModel]
+  sources: list[ModelSettings]
+  targets: list[ModelSettings]

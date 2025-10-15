@@ -1,9 +1,10 @@
 from typing import Any
 from pyspark.sql import SparkSession
-from src.core import transformer
-from src.core.data_store import load_data
+
+from src.connector.spark import transformer
+from src.connector.spark.data_store import load_data, save_data
 from src.settings.job_settings import JobSettings
-from src.settings.model_settings import DataModel, ModelLayout
+from src.settings.model_settings import ModelSettings, ModelLayout
 from src.settings.product_settings import ProductSettings
 from src.shared import file_utils
 
@@ -31,10 +32,14 @@ def process(spark: SparkSession, model: ModelLayout, settings: dict[str, Any]):
   if len(model.sources) > 1: # multi sources to single target
     print('multi sources')
   else: # single source to multi targets
-    df = load_data(spark, DataModel(**model.sources[0]), settings)
-    if df == None:
+    source_data = load_data(spark, ModelSettings(**model.sources[0]), settings)
+    if source_data == None:
       print(f'No data received')
       return
-    else:
-      for target in model.targets:
-        transformer.process(df, DataModel(**target), settings)
+
+    for target in model.targets:
+      target_model = ModelSettings(**target)
+      target_data = transformer.process(source_data, target_model, settings)
+      # target_data.printSchema()
+      # target_data.show(5, False)
+      save_data(target_data, target_model, settings)

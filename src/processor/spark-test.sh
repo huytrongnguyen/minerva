@@ -1,1 +1,0 @@
-python3 -m pytest --log-cli-level info -s ./test/app_test_suite.py

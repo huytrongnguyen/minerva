@@ -7,7 +7,7 @@
     "location": "{{inputs.appsflyer.location}}/install_reports/event_date={{event_date}}"
   }],
   "targets": [{
-    "location": "{{datastore.location}}/std/devices/installs/event_date={{event_date}}",
+    "location": "{{datastore.location}}/devices/installs/event_date={{event_date}}",
     "columns": [
       { "name": "product_id", "transform": ["set_product_id"] },
       { "name": "event_date", "transform": ["col(event_time)", "to_date"] },
