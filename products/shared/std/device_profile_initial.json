@@ -1,0 +1,19 @@
+{
+  "sources": [{
+    "location": "{{datastore.location}}/devices/installs/event_date={{event_date}}"
+  }],
+  "targets": [{
+    "location": "{{datastore.location}}/device_profile",
+    "columns": [
+      { "name": "product_id" },
+      { "name": "install_id" },
+      { "name": "media_source" },
+      { "name": "campaign" },
+      { "name": "campaign_id" },
+      { "name": "country_code" },
+      { "name": "platform" },
+      { "name": "install_time" }
+    ],
+    "queries": ["dropDuplicates(product_id,install_id)"]
+  }]
+}

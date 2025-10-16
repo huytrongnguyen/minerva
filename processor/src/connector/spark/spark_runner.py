@@ -1,9 +1,9 @@
 from pyspark.sql import SparkSession
 
-from src.connector.spark import loader
-from src.connector.spark import standardizer
-from src.settings.job_settings import JobSettings
-from src.settings.product_settings import ProductSettings
+from settings.job_settings import JobSettings
+from settings.product_settings import ProductSettings
+
+from . import loader, standardizer
 
 def run(product_settings: ProductSettings, job_settings: JobSettings):
   # Initialize Spark session with MinIO configurations

@@ -1,12 +1,13 @@
 from typing import Any
 from pyspark.sql import SparkSession
 
-from src.connector.spark import transformer
-from src.connector.spark.data_store import load_data, save_data
-from src.settings.job_settings import JobSettings
-from src.settings.model_settings import ModelSettings, ModelLayout
-from src.settings.product_settings import ProductSettings
-from src.shared import file_utils
+from settings.job_settings import JobSettings
+from settings.model_settings import ModelSettings, ModelLayout
+from settings.product_settings import ProductSettings
+from shared import file_utils
+
+from . import transformer
+from .data_store import load_data, save_data
 
 def run(spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
   settings = product_settings.__dict__ | {

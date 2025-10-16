@@ -10,9 +10,9 @@
     "location": "{{datastore.location}}/devices/installs/event_date={{event_date}}",
     "columns": [
       { "name": "product_id", "transform": ["set_product_id"] },
-      { "name": "event_date", "transform": ["col(event_time)", "to_date"] },
+      { "name": "event_time", "transform": ["to_date"], "alias": "event_date" },
       { "name": "appsflyer_id", "alias": "install_id" },
-      { "name": "event_time", "transform": ["col(install_time)", "cast(timestamp)"] },
+      { "name": "install_time", "transform": ["cast(timestamp)"] },
       { "name": "media_source" },
       { "name": "campaign" },
       { "name": "af_c_id", "alias": "campaign_id" },

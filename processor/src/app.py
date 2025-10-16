@@ -1,10 +1,9 @@
 import sys
 
-from processor.src.connector.spark import spark_runner
-
-from src.shared import file_utils
-from src.settings.job_settings import JobSettings
-from src.settings.product_settings import ProductSettings
+from connector.spark import spark_runner
+from settings.job_settings import JobSettings
+from settings.product_settings import ProductSettings
+from shared import file_utils
 
 def main():
   if len(sys.argv) < 2:

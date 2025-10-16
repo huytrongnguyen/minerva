@@ -1,8 +1,8 @@
 from typing import Any, Optional
 from pyspark.sql import SparkSession, DataFrame
 
-from src.settings.model_settings import ModelSettings
-from src.shared import string_utils
+from settings.model_settings import ModelSettings
+from shared import string_utils
 
 def load_data(spark: SparkSession, model: ModelSettings, settings: dict[str, Any]) -> Optional[DataFrame]:
   if (model.case_sensitive):
