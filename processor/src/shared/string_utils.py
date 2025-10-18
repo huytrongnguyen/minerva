@@ -11,5 +11,5 @@ def parse(template: str, context: dict[str, Any]):
 
 def parse_function_name_and_arguments(func: str) -> tuple[str, list[str]]:
   match = re.match(r'(.*?)\((.*)\)', func)
-  if match: return (match.group(1).strip(), [match.group(2).strip()])
+  if match: return (match.group(1).strip(), match.group(2).strip().split(','))
   else: return (func, [])

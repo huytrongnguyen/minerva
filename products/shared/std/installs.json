@@ -7,17 +7,18 @@
     "location": "{{inputs.appsflyer.location}}/install_reports/event_date={{event_date}}"
   }],
   "targets": [{
-    "location": "{{datastore.location}}/devices/installs/event_date={{event_date}}",
+    "location": "{{datastore.location}}/devices/installs",
+    "partition_by": ["event_date"],
     "columns": [
-      { "name": "product_id", "transform": ["set_product_id"] },
-      { "name": "event_time", "transform": ["to_date"], "alias": "event_date" },
+      { "name": "product_id", "funcs": ["set_product_id"] },
+      { "name": "event_time", "funcs": ["to_date"], "alias": "event_date" },
       { "name": "appsflyer_id", "alias": "install_id" },
-      { "name": "install_time", "transform": ["cast(timestamp)"] },
+      { "name": "install_time", "funcs": ["cast(timestamp)"] },
       { "name": "media_source" },
       { "name": "campaign" },
       { "name": "af_c_id", "alias": "campaign_id" },
       { "name": "af_cost_model", "alias": "cost_model" },
-      { "name": "af_cost_value", "transform": ["cast(double)"], "alias": "cost_value" },
+      { "name": "af_cost_value", "funcs": ["cast(double)"], "alias": "cost_value" },
       { "name": "af_cost_currency", "alias": "cost_currency" },
       { "name": "country_code" },
       { "name": "platform" }

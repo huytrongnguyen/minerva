@@ -29,5 +29,6 @@
 
 **Features**
 
-- Supports to filter data via model configuration
+- Supports to query data via model configuration
+- Supports to aggregate data via model configuration
 - Supports to merge source into target

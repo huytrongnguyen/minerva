@@ -14,6 +14,6 @@
       { "name": "platform" },
       { "name": "install_time" }
     ],
-    "queries": ["dropDuplicates(product_id,install_id)"]
+    "query": ["drop_duplicates(product_id,install_id)"]
   }]
 }

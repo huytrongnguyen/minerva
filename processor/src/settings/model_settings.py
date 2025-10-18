@@ -5,9 +5,16 @@ from typing import Optional
 class ColumnSettings:
   name: str
   type: Optional[str] = 'string'
-  transform: Optional[list[str]] = field(default_factory=list)
+  funcs: Optional[list[str]] = field(default_factory=list)
   alias: Optional[str] = None
   drop: Optional[bool] = False
+
+@dataclass
+class AggregationSettings:
+  type: str
+  dimensions: list[str]
+  metrics: list[ColumnSettings]
+  order_by: Optional[list[str]] = field(default_factory=list)
 
 @dataclass
 class ModelSettings:
@@ -25,7 +32,8 @@ class ModelSettings:
   # transform options
   sql_model: Optional[str] = None
   columns: Optional[list[ColumnSettings]] = field(default_factory=list)
-  queries: Optional[list[str]] = field(default_factory=list)
+  query: Optional[list[str]] = field(default_factory=list)
+  agg: Optional[AggregationSettings] = field(default_factory=list)
 
 @dataclass
 class ModelLayout:
