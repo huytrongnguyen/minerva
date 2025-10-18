@@ -23,3 +23,11 @@
 
 - Supports to transform data via model configuration
 - Restructure codebase
+
+## v0.0.4
+> 2024-10-18
+
+**Features**
+
+- Supports to filter data via model configuration
+- Supports to merge source into target

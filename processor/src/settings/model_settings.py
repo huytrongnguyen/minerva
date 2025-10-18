@@ -14,11 +14,18 @@ class ModelSettings:
   location: str
   name: Optional[str] = None
   type: Optional[str] = 'parquet'
+  # load options
   case_sensitive: Optional[bool] = False
+  options: Optional[dict[str, str]] = field(default_factory=dict)
+  # save options
   num_partitions: Optional[int] = 1
   partition_by: Optional[list[str]] = field(default_factory=list)
-  options: Optional[dict[str, str]] = field(default_factory=dict)
+  merge: Optional[bool] = False
+  temp_location: Optional[str] = None
+  # transform options
+  sql_model: Optional[str] = None
   columns: Optional[list[ColumnSettings]] = field(default_factory=list)
+  queries: Optional[list[str]] = field(default_factory=list)
 
 @dataclass
 class ModelLayout:

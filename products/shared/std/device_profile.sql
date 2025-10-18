@@ -7,7 +7,7 @@ with combine as (
     select  product_id, install_id
           , media_source, campaign, campaign_id, country_code, platform
           , install_time
-    from installs
+    from device_profile
   )
 )
 , qualify as (

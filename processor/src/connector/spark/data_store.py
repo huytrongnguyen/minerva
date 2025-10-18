@@ -31,3 +31,11 @@ def save_data(data: DataFrame, model: ModelSettings, settings: dict[str, Any]):
     writer = writer.partitionBy(model.partition_by)
 
   writer.save(path)
+
+def merge_data(spark: SparkSession, data: DataFrame, model: ModelSettings, settings: dict[str, Any]):
+  if model.merge and model.temp_location:
+    temp_path = string_utils.parse(model.temp_location, settings)
+    data.write.parquet(temp_path, 'overwrite')
+    data = spark.read.parquet(temp_path)
+
+  save_data(data, model, settings)

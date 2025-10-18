@@ -1,1 +1,1 @@
-python3 src/app.py product_id=tos event_date=2024-05-24 action=standardize models=shared/std/installs.json config_dir=../products
+python3 src/app.py product_id=tos event_date=2024-05-22 action=standardize models=shared/std/device_profile.json config_dir=../products

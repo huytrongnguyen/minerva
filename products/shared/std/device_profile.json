@@ -2,13 +2,12 @@
   "sources": [{
     "name": "installs",
     "location": "{{datastore.location}}/devices/installs/event_date={{event_date}}"
-  }, {
-    "name": "device_profile",
-    "location": "{{datastore.location}}/device_profile"
   }],
   "targets": [{
-    "merge_schema": true,
+    "name": "device_profile",
     "location": "{{datastore.location}}/device_profile",
+    "merge": true,
+    "temp_location": "{{datastore.location}}/temp/device_profile",
     "sql_model": "shared/std/device_profile.sql"
   }]
 }
