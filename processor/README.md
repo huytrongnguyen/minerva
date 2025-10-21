@@ -37,6 +37,13 @@ processor/
   pip3 install -r requirements.txt
   ```
 
+**Work with Python 3.14**
+
+- Set up a virtual environment: `python3 -m venv myenv`
+- Start the virtual environment: `source myenv/bin/activate`
+- Install your package: `pip3 install -r requirements.txt`
+- Deactivate when finished: `deactivate`
+
 ### Install Colima and Docker CLI:
 - Install Colima: `brew install colima`
 - Install Docker CLI: `brew install docker`

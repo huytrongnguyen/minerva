@@ -1,32 +1,10 @@
-from functools import reduce
 from typing import Any
 from pyspark.sql import DataFrame, Column, Window
 from pyspark.sql.functions import lit, to_date, col, expr
-from pyspark.sql.functions import count, sum, avg, min, max, count_distinct, collect_list, collect_set, row_number, first, last
+from pyspark.sql.functions import count, sum, avg, min, max, count_distinct, collect_list, collect_set, first, last
 
-from settings.model_settings import AggregationSettings, ColumnSettings, ModelSettings
+from settings.model_settings import ColumnSettings
 from shared import string_utils
-
-def transform_dataset(source_data: DataFrame, target_model: ModelSettings, settings: dict[str, Any]) -> DataFrame:
-  target_columns = [ColumnSettings(**column) for column in target_model.columns]
-  target_data = reduce(lambda data, column: transform_column(data, column, settings), target_columns, source_data)
-  target_data = target_data.selectExpr(*[column.alias or column.name for column in target_columns if not column.drop])
-  if target_model.query is not None and len(target_model.query) > 0: target_data = reduce(lambda data, func: invoke_query_function(data, func), target_model.query, target_data)
-  if target_model.agg: target_data = aggregate(target_data, AggregationSettings(**target_model.agg))
-  return target_data
-
-def transform_column(data: DataFrame, target_column: ColumnSettings, settings: dict[str, Any]) -> DataFrame:
-  col_name = target_column.name
-  if col_name not in data.columns:
-    print(f'Column "{col_name}" does not exist, try to create an empty column.')
-    data = data.withColumn(col_name, lit(None).cast(target_column.type))
-
-  if target_column.funcs:
-    data = reduce(lambda data, func: data.withColumn(col_name, invoke_column_function(col(col_name), func, settings)), target_column.funcs, data)
-
-  if target_column.alias: data = data.withColumnRenamed(target_column.name, target_column.alias)
-
-  return data
 
 def invoke_column_function(column: Column, func: str, settings: dict[str, Any]) -> Column:
   (name, args) = string_utils.parse_function_name_and_arguments(func)
@@ -46,22 +24,11 @@ def invoke_query_function(data: DataFrame, func) -> DataFrame:
   (name, args) = string_utils.parse_function_name_and_arguments(func)
   # predefined spark functions
   if name == 'where' or name == 'filter': return data.where(args[0])
-  elif name == 'drop_duplicates': return data.dropDuplicates(args)
+  elif name == 'drop_duplicates': return data.drop_duplicates(args)
   elif name == 'fillna': return data.fillna(args[0], args[1:])
   else:
     print(f'Function "{name}" is not defined.')
     return data
-
-def aggregate(data: DataFrame, agg: AggregationSettings) -> DataFrame:
-  if agg.type == 'group_by': return group_by(data, agg)
-  elif agg.type == 'partition_by': return partition_by(data, agg)
-  else:
-    print(f'"{agg.type}" is not defined.')
-    return data
-
-def group_by(data: DataFrame, agg: AggregationSettings) -> DataFrame:
-  agg_columns: list[Column] = [invoke_group_by_function(ColumnSettings(**metric)) for metric in agg.metrics]
-  return data.groupby(agg.dimensions).agg(*agg_columns)
 
 def invoke_group_by_function(target_column: ColumnSettings) -> Column:
   col_name = target_column.name
@@ -79,18 +46,6 @@ def invoke_group_by_function(target_column: ColumnSettings) -> Column:
   else:
     print(f'Function "{name}" is not defined.')
     return col(col_name)
-
-def partition_by(data: DataFrame, agg: AggregationSettings) -> DataFrame:
-  partition = Window.partitionBy(*agg.dimensions)
-  order_columns = [invoke_order_by_column(func) for func in agg.order_by]
-  data = data.withColumn('rn', row_number().over(partition.orderBy(*order_columns)))
-
-  if agg.metrics:
-    data = reduce(lambda data, metric: invoke_partition_by_column(data, metric.name, metric.funcs[0], partition, order_columns), agg.metrics, data)
-
-  data = data.where('rn = 1')
-
-  return data.selectExpr(*[metric.name for metric in agg.metrics]) if agg.metrics else data.drop('rn')
 
 def invoke_order_by_column(func: str) -> Column:
   (order, col_name) = string_utils.parse_function_name_and_arguments(func)

@@ -1,14 +1,13 @@
-{{insert_into("{{datastore.location}}/device_profile")}}
 with combine as (
   select  product_id, install_id
         , media_source, campaign, campaign_id, country_code, platform
         , install_time
-  from {{source("{{datastore.location}}/devices/installs/event_date={{event_date}}")}}
+  from installs
   union (
     select  product_id, install_id
           , media_source, campaign, campaign_id, country_code, platform
           , install_time
-    from {{source("{{datastore.location}}/device_profile")}}
+    from device_profile
   )
 )
 , qualify as (
