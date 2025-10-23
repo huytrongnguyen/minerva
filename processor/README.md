@@ -37,13 +37,6 @@ processor/
   pip3 install -r requirements.txt
   ```
 
-**Work with Python 3.14**
-
-- Set up a virtual environment: `python3 -m venv myenv`
-- Start the virtual environment: `source myenv/bin/activate`
-- Install your package: `pip3 install -r requirements.txt`
-- Deactivate when finished: `deactivate`
-
 ### Install Colima and Docker CLI:
 - Install Colima: `brew install colima`
 - Install Docker CLI: `brew install docker`
@@ -51,3 +44,48 @@ processor/
   - Adjust CPU/memory based on your system.
   - Use --mount if volume access issues occur (see Troubleshooting).
 - Verify Docker is running: `docker ps`
+
+## Troubleshoot
+
+### Work with Python 3.14
+
+- Set up a virtual environment: `python3 -m venv myenv`
+- Start the virtual environment: `source myenv/bin/activate`
+- Install your package: `pip3 install -r requirements.txt`
+- Deactivate when finished: `deactivate`
+
+### Work with MinIO
+
+
+
+S3A filesystem (spark.hadoop.fs.s3a.*), need to be set before the SparkContext is created, as they are used by the Hadoop filesystem layer and cannot be modified dynamically after the SparkContext is initialized
+
+```sh
+SPARK_LOCAL_HOSTNAME=localhost spark-submit \
+  --conf spark.hadoop.fs.s3a.endpoint=http://localhost:9000 \
+  --conf spark.hadoop.fs.s3a.access.key=admin \
+  --conf spark.hadoop.fs.s3a.secret.key=password \
+  --conf spark.hadoop.fs.s3a.path.style.access=true \
+  --conf spark.hadoop.fs.s3a.connection.ssl.enabled=false \
+  --conf spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
+  --conf spark.hadoop.fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
+  --conf spark.hadoop.fs.s3a.connection.timeout=60 \
+  --conf spark.hadoop.fs.s3a.connection.establish.timeout=60 \
+  --conf spark.hadoop.fs.s3a.threads.keepalivetime=60 \
+  --conf spark.hadoop.fs.s3a.multipart.purge.age=86400 \
+  --conf spark.hadoop.fs.obs.multipart.purge.age=86400 \
+  --jars ../../../libs/hadoop-aws-3.3.4.jar,../../../libs/aws-java-sdk-bundle-1.12.262.jar \
+  src/app.py
+```
+
+**Override all of S3A's built-in "60s" string defaults with pure longs in seconds**
+
+```sh
+--conf spark.hadoop.fs.s3a.connection.timeout=60 \
+--conf spark.hadoop.fs.s3a.connection.establish.timeout=60 \
+--conf spark.hadoop.fs.s3a.threads.keepalivetime=60 \
+--conf spark.hadoop.fs.s3a.multipart.purge.age=86400 \
+--conf spark.hadoop.fs.obs.multipart.purge.age=86400 \
+```
+
+Reference: https://github.com/open-metadata/OpenMetadata/issues/22843
