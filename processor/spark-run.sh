@@ -1,1 +1,11 @@
-python3 src/app.py product_id=tos event_date=2024-05-22 action=standardize models=shared/std/installs.sql config_dir=../products
+#!/bin/bash
+
+product=$1
+event_date=$2
+action=$3
+models=$4
+
+# SPARK_LOCAL_HOSTNAME=localhost spark-submit \
+#   --name "minerva::$product::$event_date::$action::$models" \
+#   --master local[*] \
+python3 src/app.py product=$product event_date=$event_date action=$action models=$models config_dir=../products

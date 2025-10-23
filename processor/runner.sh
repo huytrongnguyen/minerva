@@ -1,0 +1,1 @@
+sh spark-run.sh tos 2024-05-22 standardize shared/std/installs.sql
