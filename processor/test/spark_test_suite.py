@@ -21,7 +21,7 @@ def test_should_load_data_success(spark: SparkSession):
     'event_date': '2024-05-22',
   })
   # file_path = f'{root_dir}/data/{settings.product_id}/devices/installs/event_date={settings.event_date}'
-  file_path = f'{root_dir}/data/{settings.product}/cons/daily_installs'
+  file_path = f'{root_dir}/data/{settings.product_id}/cons/daily_installs'
   df = spark.read.parquet(file_path)
   df.printSchema()
   df.where("media_source = 'na'").show(5, False)

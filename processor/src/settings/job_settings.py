@@ -5,7 +5,7 @@ from typing import Optional
 @dataclass
 class JobSettings:
   connector: Optional[str] = 'spark'
-  product: Optional[str] = ''
+  product_id: Optional[str] = ''
   event_date: Optional[str] = ''
   action: Optional[str] = ''
   models: Optional[str] = ''

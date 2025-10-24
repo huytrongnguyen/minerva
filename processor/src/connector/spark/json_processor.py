@@ -12,8 +12,8 @@ from .data_store import load_data, save_data, merge_data
 from .functions import invoke_column_function, invoke_group_by_function, invoke_order_by_column, invoke_partition_by_column, invoke_query_function
 
 def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
-  settings = product_settings.__dict__ | {
-    'product_id': job_settings.product,
+  vars = product_settings.__dict__ | {
+    'product_id': job_settings.product_id,
     'event_date': job_settings.event_date
   }
 
@@ -21,14 +21,14 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
     print('multi sources')
   else: # single source to multi targets
     source_model = ModelSettings(**model.sources[0])
-    source_data = load_data(spark, source_model, settings)
+    source_data = load_data(spark, source_model, vars)
     if source_data == None:
       return
 
     for target in model.targets:
       target_model = ModelSettings(**target)
       if target_model.merge and target_model.sql_model: # merge source into target
-        target_data = load_data(spark, target_model, settings)
+        target_data = load_data(spark, target_model, vars)
         if target_data == None:
           return
 
@@ -36,27 +36,27 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
         target_data.createOrReplaceTempView(target_model.name)
         sql = file_utils.load_text(f'{job_settings.config_dir}/{target_model.sql_model}')
         target_data = execute_query(spark, sql)
-        merge_data(spark, target_data, target_model, settings)
+        merge_data(spark, target_data, target_model, vars)
       else:
-        target_data = transform_dataset(source_data, target_model, settings)
-        save_data(target_data, target_model, settings)
+        target_data = transform_dataset(source_data, target_model, vars)
+        save_data(target_data, target_model, vars)
 
-def transform_dataset(source_data: DataFrame, target_model: ModelSettings, settings: dict[str, Any]) -> DataFrame:
+def transform_dataset(source_data: DataFrame, target_model: ModelSettings, vars: dict[str, Any]) -> DataFrame:
   target_columns = [ColumnSettings(**column) for column in target_model.columns]
-  target_data = reduce(lambda data, column: transform_column(data, column, settings), target_columns, source_data)
+  target_data = reduce(lambda data, column: transform_column(data, column, vars), target_columns, source_data)
   target_data = target_data.selectExpr(*[column.alias or column.name for column in target_columns if not column.drop])
   if target_model.query is not None and len(target_model.query) > 0: target_data = reduce(lambda data, func: invoke_query_function(data, func), target_model.query, target_data)
   if target_model.agg: target_data = aggregate(target_data, AggregationSettings(**target_model.agg))
   return target_data
 
-def transform_column(data: DataFrame, target_column: ColumnSettings, settings: dict[str, Any]) -> DataFrame:
+def transform_column(data: DataFrame, target_column: ColumnSettings, vars: dict[str, Any]) -> DataFrame:
   col_name = target_column.name
   if col_name not in data.columns:
     print(f'Column "{col_name}" does not exist, try to create an empty column.')
     data = data.withColumn(col_name, lit(None).cast(target_column.type))
 
   if target_column.funcs:
-    data = reduce(lambda data, func: data.withColumn(col_name, invoke_column_function(col(col_name), func, settings)), target_column.funcs, data)
+    data = reduce(lambda data, func: data.withColumn(col_name, invoke_column_function(col(col_name), func, vars)), target_column.funcs, data)
 
   if target_column.alias: data = data.withColumnRenamed(target_column.name, target_column.alias)
 

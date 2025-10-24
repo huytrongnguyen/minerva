@@ -1,5 +1,9 @@
-{{insert_into("{{datastore.location}}/devices/installs/event_date={{event_date}}")}}
-select  {{product_id}}
+{{
+  insert_into({
+    'location': '{{datastore.location}}/devices/installs/event_date={{event_date}}',
+  })
+}}
+select  '{{product_id}}' as product_id
       , appsflyer_id as install_id
       , cast(install_time as timestamp)
       , media_source
@@ -11,4 +15,13 @@ select  {{product_id}}
       , country_code
       , platform
       , to_date(event_time) as event_date
-from {{source("{{inputs.appsflyer.location}}/install_reports/event_date={{event_date}}")}}
+from {{
+  source({
+    'name': 'install_reports',
+    'location': '{{inputs.appsflyer.location}}/install_reports/event_date={{event_date}}',
+    'type': 'csv',
+    'options': {
+      'header': 'true'
+    }
+  })
+}}

@@ -2,12 +2,15 @@
 
 ## vNext
 
+## v0.0.5
+> 2025-10-24
+
 **Features**
 
-- Supports to load and save data via sql model
+- Supports to load, transform then save data via sql model
 
 ## v0.0.4
-> 2024-10-18
+> 2025-10-18
 
 **Features**
 
@@ -16,7 +19,7 @@
 - Supports to merge source into target
 
 ## v0.0.3
-> 2024-10-15
+> 2025-10-15
 
 **Features**
 

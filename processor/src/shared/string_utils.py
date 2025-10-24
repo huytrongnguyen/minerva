@@ -3,9 +3,11 @@ from functools import reduce
 from typing import Any
 from jinja2 import Environment
 
-def parse(template: str, context: dict[str, Any]):
+jinja_env = Environment()
+
+def parse(template: str, vars: dict[str, Any]):
   try:
-    return Environment().from_string(template).render(**context)
+    return jinja_env.from_string(template).render(**vars)
   except Exception as ex:
     print(f'Cannot parse "{template}" caused by: ${ex}')
     return template
