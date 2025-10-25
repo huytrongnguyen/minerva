@@ -2,6 +2,13 @@
 
 ## vNext
 
+## 1.0.0
+> 2025-10-25
+
+**Features**
+
+- Release sql models
+
 ## v0.0.5
 > 2025-10-24
 

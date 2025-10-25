@@ -3,8 +3,7 @@
     'location': '{{datastore.location}}/devices/installs/event_date={{event_date}}',
   })
 }}
-select  '{{product_id}}' as product_id
-      , appsflyer_id as install_id
+select  appsflyer_id as install_id
       , cast(install_time as timestamp)
       , media_source
       , campaign
@@ -14,6 +13,7 @@ select  '{{product_id}}' as product_id
       , af_cost_currency as cost_currency
       , country_code
       , platform
+      , '{{product_id}}' as product_id
       , to_date(event_time) as event_date
 from {{
   source({
