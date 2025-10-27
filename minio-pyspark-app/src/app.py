@@ -11,6 +11,7 @@ spark: SparkSession = (
   .config("spark.sql.catalog.lakehouse", "org.apache.iceberg.spark.SparkCatalog")
   .config("spark.sql.catalog.lakehouse.type", "hadoop")
   .config("spark.sql.catalog.lakehouse.warehouse", "s3a://lakehouse")
+  .config("spark.sql.sources.partitionOverwriteMode", "dynamic") # Required for overwriting ONLY the required partitioned folders, and not the entire root folder
   .getOrCreate() # Gets an existing SparkSession or creates a new one
 )
 
@@ -27,6 +28,11 @@ hadoop_conf.set("fs.s3a.connection.timeout", "60") # Overrides for timeouts, etc
 hadoop_conf.set("fs.s3a.connection.establish.timeout", "60")
 hadoop_conf.set("fs.s3a.threads.keepalivetime", "60")
 hadoop_conf.set("fs.s3a.multipart.purge.age", "86400")
+
+# Register UDF
+udf_path = f'{path.dirname(__file__)}/udf.py'
+spark.sparkContext.addPyFile(udf_path)
+spark.udf.register("deserialize_xml", deserialize_xml, StringType())
 
 # Sample DataFrame
 data = [("Alice", 34), ("Bob", 45), ("Charlie", 29)]
