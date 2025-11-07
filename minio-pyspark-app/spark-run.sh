@@ -1,1 +1,1 @@
-python3 src/app.py
+AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT='true' SPARK_LOCAL_HOSTNAME=localhost python3 src/app.py
