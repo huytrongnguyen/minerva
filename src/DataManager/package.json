@@ -1,0 +1,32 @@
+{
+  "name": "data-manager",
+  "version": "0.0.1",
+  "description": "Data Manager",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huytrongnguyen/minerva.git"
+  },
+  "bugs": "https://github.com/huytrongnguyen/minerva/issues",
+  "scripts": {
+  },
+  "dependencies": {
+    "jquery": "3.7.1",
+    "rosie-ui": "0.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-router-dom": "7.7.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "@types/react-router-dom": "5.3.3",
+    "esbuild": "0.27.1",
+    "sass": "1.94.2",
+    "typescript": "5.9.3"
+  },
+  "alias": {
+    "minerva/components": "./ClientApp/ts/components",
+    "minerva/core": "./ClientApp/ts/core"
+  }
+}

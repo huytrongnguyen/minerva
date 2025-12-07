@@ -1,0 +1,10 @@
+@page
+@{
+  ViewData["ActivePage"] = "Administration";
+}
+
+<div id="react-root" class="fullscreen"></div>
+
+@section Scripts {
+  <script src="/admin.js?dc=@(DateTime.Now.Ticks)"></script>
+}

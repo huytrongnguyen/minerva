@@ -1,4 +1,19 @@
+# MacOS
 .DS_Store
+
+# Python
 .pytest_cache
 __pycache__
+
+# CSharp
+bin
+obj
+launchSettings.json
+appsettings.Development.json
+
+# JavaScript
+node_modules
+package-lock.json
+
+# Others
 sample/data
