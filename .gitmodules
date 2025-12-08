@@ -1,0 +1,3 @@
+[submodule "src/DataManager/ClientApp/rosie"]
+	path = src/DataManager/ClientApp/rosie
+	url = https://github.com/huytrongnguyen/rosie
