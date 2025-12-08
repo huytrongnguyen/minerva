@@ -9,6 +9,11 @@
   },
   "bugs": "https://github.com/huytrongnguyen/minerva/issues",
   "scripts": {
+    "css-watch": "sass --watch ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
+    "css-build": "sass ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
+    "rosie-css-build": "cd ClientApp/rosie && npm run css && cd ../../ && npm run css-build",
+    "fonts-copy": "cp -r node_modules/rosie-ui/dist/webfonts wwwroot",
+    "bootstrap-copy": "cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js wwwroot && cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js.map wwwroot"
   },
   "dependencies": {
     "jquery": "3.7.1",

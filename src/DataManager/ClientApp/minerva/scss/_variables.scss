@@ -1,0 +1,73 @@
+@forward '../../rosie/scss/variables';
+
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Color system (6)
+
+// scss-docs-start gray-color-variables
+// $gray-100: #f3f4f7;
+// $gray-600:    #777;
+// $gray-900:    #333;
+// scss-docs-end gray-color-variables
+
+// scss-docs-start color-variables
+// $indigo:  #6610f2;
+// $purple:  #6f42c1;
+// $pink:    #d63384;
+// $red:     #dc3545;
+// $orange:  #fd7e14;
+// $yellow:  #ffc107;
+// $green:   #198754;
+// $teal:    #20c997;
+// $cyan:    #0dcaf0;
+// scss-docs-end color-variables
+
+// scss-docs-start theme-color-variables
+// $secondary:     $gray-600;
+// $success:       $green;
+// $info:          $cyan;
+// $warning:       $yellow;
+// $danger:        $red;
+// $light:         $gray-100;
+// $dark:          $gray-900;
+// scss-docs-end theme-color-variables
+
+// Body (433)
+//
+// Settings for the `<body>` element.
+
+// $body-color: #3f434a;
+$body-bg:    #f1f1f1;
+// $body-tertiary-bg:          $gray-100;
+
+// Links (449)
+//
+// Style anchor elements.
+
+// $link-hover-color: #ed95ac;
+
+// Components (528)
+//
+// Define common padding and border radius sizes and more.
+
+
+
+// Typography (600)
+//
+// Font, line-height, and color for body text, headings, and more.
+
+// $font-family-base: Effra, Roboto, Helvetica, Open-Sans, Arial, sans-serif;
+// $font-weight-base: 300;
+
+// Navs (1156)
+
+
+
+// Navbar (1187)
+
+
+
+// Breadcrumb (1631)
