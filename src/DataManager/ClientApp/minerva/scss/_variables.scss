@@ -8,7 +8,8 @@
 // Color system (6)
 
 // scss-docs-start gray-color-variables
-// $gray-100: #f3f4f7;
+$gray-100: #f3f4f7;
+$gray-300: #d0d0d0;
 // $gray-600:    #777;
 // $gray-900:    #333;
 // scss-docs-end gray-color-variables
@@ -40,7 +41,7 @@
 // Settings for the `<body>` element.
 
 // $body-color: #3f434a;
-$body-bg:    #f1f1f1;
+// $body-bg:    #e0e0e0;
 // $body-tertiary-bg:          $gray-100;
 
 // Links (449)
@@ -53,7 +54,10 @@ $body-bg:    #f1f1f1;
 //
 // Define common padding and border radius sizes and more.
 
-
+$border-color:                $gray-300;
+// $component-active-color:      $white !default;
+// $component-active-bg:         $primary !default;
+// $component-hover-bg:          $primary !default;
 
 // Typography (600)
 //
@@ -62,12 +66,22 @@ $body-bg:    #f1f1f1;
 // $font-family-base: Effra, Roboto, Helvetica, Open-Sans, Arial, sans-serif;
 // $font-weight-base: 300;
 
+//
 // Navs (1156)
+//
 
+$nav-tabs-link-hover-border-color:  #b5b5b5;
 
-
+//
 // Navbar (1187)
+//
 
+//
+// Cards (1339)
+//
 
+// $card-border-color:                 #d0d0d0;
 
+//
 // Breadcrumb (1631)
+//

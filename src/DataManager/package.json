@@ -9,6 +9,8 @@
   },
   "bugs": "https://github.com/huytrongnguyen/minerva/issues",
   "scripts": {
+    "simulation-watch": "esbuild ClientApp/simulation/ts/app.tsx --bundle --outfile=wwwroot/simulation.js --loader:.tsx=tsx --format=iife --watch",
+    "simulation-build": "esbuild ClientApp/simulation/ts/app.tsx --bundle --outfile=wwwroot/simulation.js --loader:.tsx=tsx --format=iife --minify",
     "css-watch": "sass --watch ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "css-build": "sass ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "rosie-css-build": "cd ClientApp/rosie && npm run css && cd ../../ && npm run css-build",
@@ -31,7 +33,7 @@
     "typescript": "5.9.3"
   },
   "alias": {
-    "minerva/components": "./ClientApp/ts/components",
-    "minerva/core": "./ClientApp/ts/core"
+    "minerva/components": "./ClientApp/minerva/ts/components",
+    "minerva/core": "./ClientApp/minerva/ts/core"
   }
 }

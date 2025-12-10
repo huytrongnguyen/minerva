@@ -1,0 +1,10 @@
+@page
+@{
+  ViewData["ActivePage"] = "Simulation";
+}
+
+<div id="react-root" class="fullscreen"></div>
+
+@section Scripts {
+  <script src="/simulation.js?dc=@(DateTime.Now.Ticks)"></script>
+}

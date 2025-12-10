@@ -1,9 +1,19 @@
 @use 'variables' as *;
 
-@import '../../rosie/scss/base';
+@use 'base' as *;
 
-@import '../../rosie/scss/reset';
+@use 'reset' as *;
 
-@import '../../rosie/scss/mixin';
-@import '../../rosie/scss/utilities';
-@import '../../rosie/scss/components';
+aside {
+  width: 15rem;
+  background-color: #f9f8f7;
+  .nav-link {
+    &:hover {
+      // background-color: $component-hover-bg;
+    }
+    &.active {
+      // color: $component-active-color;
+      // background-color: $component-active-bg;
+    }
+  }
+}

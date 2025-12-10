@@ -9,8 +9,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "minerva/components": ["ClientApp/ts/components"],
-      "minerva/core": ["ClientApp/ts/core"]
+      "minerva/components": ["ClientApp/minerva/ts/components"],
+      "minerva/core": ["ClientApp/minerva/ts/core"]
     },
     "jsx": "react-jsx",
     "esModuleInterop": true,
