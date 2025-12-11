@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "rosie/core": ["ClientApp/rosie/ts/core"],
       "minerva/components": ["ClientApp/minerva/ts/components"],
       "minerva/core": ["ClientApp/minerva/ts/core"]
     },

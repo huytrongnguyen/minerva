@@ -50,7 +50,7 @@ app.Use(async (context, next) => {
 app.UseRouting();
 
 // custom jwt auth middleware
-// app.UseMiddleware<AuthMiddleware>();
+app.UseMiddleware<AuthMiddleware>();
 
 app.UseAuthorization();
 
