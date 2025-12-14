@@ -1,35 +1,41 @@
 using DataManager.Auth;
+using DataManager.Infrastructure;
+using DataManager.Shared;
+using DataManager.Simulation;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// var connStringBuilder = new NpgsqlConnectionStringBuilder {
-//   SslMode = SslMode.VerifyFull,
-//   Host = builder.Configuration["Db:Host"],
-//   Port = builder.Configuration["Db:Port"].ParseInt(),
-//   Database = builder.Configuration["Db:Name"],
-//   Username = builder.Configuration["Db:User"],
-//   Password = builder.Configuration["Db:Pass"]
-// };
+var connStringBuilder = new NpgsqlConnectionStringBuilder {
+  SslMode = SslMode.VerifyFull,
+  Host = builder.Configuration["Db:Host"],
+  Port = builder.Configuration["Db:Port"].ParseInt(),
+  Database = builder.Configuration["Db:Name"],
+  Username = builder.Configuration["Db:User"],
+  Password = builder.Configuration["Db:Pass"]
+};
 
-// var dataSourceBuilder = new NpgsqlDataSourceBuilder(connStringBuilder.ConnectionString);
-// dataSourceBuilder.EnableDynamicJson();
-// var dataSource = dataSourceBuilder.Build();
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connStringBuilder.ConnectionString);
+dataSourceBuilder.EnableDynamicJson();
+var dataSource = dataSourceBuilder.Build();
 
 // Add services to the container.
 var services = builder.Services;
 
 services
-    // .AddDbContext<VenusDbContext>(options => {
-    //   options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention();
-    // })
+    .AddDbContext<DataManagerDbContext>(options => {
+      options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention();
+    })
     // .AddScoped<UserService>()
     .AddScoped<AuthService>()
+    .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
     .AddCors()
     .AddControllers();
 
-services.AddRazorPages();
-
+services.AddSignalR();
 services.AddHealthChecks();
+services.AddRazorPages();
 
 AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
@@ -58,6 +64,8 @@ app.UseAuthorization();
 //   var error = context.Features.Get<IExceptionHandlerPathFeature>().Error;
 //   await context.Response.WriteAsJsonAsync(new { message = error.Message, trace = error.StackTrace });
 // }));
+
+app.MapHub<EventHub>("/hub/event");
 
 app.UseHealthChecks("/health");
 

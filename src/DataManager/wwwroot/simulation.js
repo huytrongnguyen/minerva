@@ -24614,7 +24614,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/simulation/ts/views/app.view.tsx
-  var import_react5 = __toESM(require_react());
+  var import_react6 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-C37GKA54.mjs
   var React = __toESM(require_react(), 1);
@@ -35156,30 +35156,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   })();
   var DataModel = (function(_super) {
-    __extends(DataModel2, _super);
-    function DataModel2(config) {
+    __extends(DataModel3, _super);
+    function DataModel3(config) {
       var _this = _super.call(this) || this;
       _this.config = config;
       return _this;
     }
-    DataModel2.prototype.get = function(fieldName) {
+    DataModel3.prototype.get = function(fieldName) {
       var _a;
       return (_a = this.value) === null || _a === void 0 ? void 0 : _a[fieldName];
     };
-    DataModel2.prototype.loadData = function(data2) {
+    DataModel3.prototype.loadData = function(data2) {
       data2 && _super.prototype.next.call(this, data2);
       return this;
     };
-    DataModel2.prototype.load = function(params, onError, onComplete) {
+    DataModel3.prototype.load = function(params, onError, onComplete) {
       var _this = this;
       this.fetch(params, onError, onComplete).then(function(value) {
         return value && _this.loadData(value);
       });
     };
-    DataModel2.prototype.fetch = function(params, onError, onComplete) {
+    DataModel3.prototype.fetch = function(params, onError, onComplete) {
       return ajaxRequest(this.config, params).catch(onError).finally(onComplete);
     };
-    return DataModel2;
+    return DataModel3;
   })(Subject);
 
   // node_modules/rosie-ui/dist/js/core/index.js
@@ -35213,6 +35213,74 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // node_modules/rosie-ui/dist/js/components/grid/grid-cell.component.js
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var import_react2 = __toESM(require_react());
+  var __assign2 = function() {
+    __assign2 = Object.assign || function(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+      }
+      return t;
+    };
+    return __assign2.apply(this, arguments);
+  };
+  var __rest = function(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+      t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+          t[p[i]] = s[p[i]];
+      }
+    return t;
+  };
+  function GridCell(props) {
+    var _a;
+    var field = props.field, headerName = props.headerName, className = props.className, renderer = props.renderer, rowIndex = props.rowIndex, colIndex = props.colIndex, header = props.header, others = __rest(props, ["field", "headerName", "className", "renderer", "rowIndex", "colIndex", "header"]), cellCls = Rosie.classNames("rosie-grid-cell p-1", className);
+    if (header) {
+      return (0, import_jsx_runtime3.jsx)("div", __assign2({ className: cellCls }, others, { children: headerName !== null && headerName !== void 0 ? headerName : field }));
+    }
+    var _b = (0, import_react2.useState)((_a = props.record) === null || _a === void 0 ? void 0 : _a.get(field)), fieldValue = _b[0], setFieldValue = _b[1];
+    (0, import_react2.useEffect)(function() {
+      var _a2;
+      setFieldValue((_a2 = props.record) === null || _a2 === void 0 ? void 0 : _a2.get(field));
+    }, [props.record]);
+    function getDisplayValue() {
+      if (renderer)
+        return renderer(fieldValue, props.record, rowIndex, colIndex);
+      return fieldValue;
+    }
+    return (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: (0, import_jsx_runtime3.jsx)("div", __assign2({ className: Rosie.classNames(cellCls) }, others, { children: getDisplayValue() })) });
+  }
+
+  // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
+  var __assign3 = function() {
+    __assign3 = Object.assign || function(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+      }
+      return t;
+    };
+    return __assign3.apply(this, arguments);
+  };
+  function GridColumn(_) {
+    return null;
+  }
+  function Grid(props) {
+    var gridId = (0, import_react3.useState)(Rosie.guid("rosie-grid-"))[0], _a = (0, import_react3.useState)([]), records = _a[0], setRecords = _a[1], _b = (0, import_react3.useState)([]), columns = _b[0], setColumns = _b[1];
+    (0, import_react3.useEffect)(function() {
+      var columns2 = import_react3.Children.toArray(props.children).map(function(child) {
+        return child.props;
+      });
+      setColumns(columns2);
+    }, [props.children]);
+    return (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: (0, import_jsx_runtime4.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered d-flex flex-row", { fullscreen: props.fitScreen }, props.className), children: (0, import_jsx_runtime4.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [(0, import_jsx_runtime4.jsx)("div", { className: Rosie.classNames("rosie-grid-header d-flex flex-column overflow-hidden bg-light"), children: (0, import_jsx_runtime4.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [columns.map(function(col, index) {
+      return (0, import_jsx_runtime4.jsx)(GridCell, __assign3({ header: true }, col), index);
+    }), (0, import_jsx_runtime4.jsx)("div", { style: { width: Rosie.SCROLLBAR_WIDTH } })] }) }), (0, import_jsx_runtime4.jsx)("div", { className: Rosie.classNames("rosie-grid-body d-flex flex-column", { "fullscreen overflow-x-auto overflow-y-scroll": props.fitScreen }), children: (0, import_jsx_runtime4.jsx)("div", { children: !(records === null || records === void 0 ? void 0 : records.length) && (0, import_jsx_runtime4.jsx)("div", { className: "border-top p-2", children: "No record found." }) }) })] }) }) });
+  }
 
   // ClientApp/minerva/ts/components/app-navigator.component.tsx
   var import_react4 = __toESM(require_react());
@@ -35307,21 +35375,93 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }];
 
   // ClientApp/simulation/ts/views/ads-manager.view.tsx
+  var import_react5 = __toESM(require_react());
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   function AdsManagerView() {
+    const [campaigns, setCampaigns] = (0, import_react5.useState)([]), [selectedCampaigns, setSelectedCampaigns] = (0, import_react5.useState)([]), [showModal2, setShowModal] = (0, import_react5.useState)(false);
+    (0, import_react5.useEffect)(() => {
+      fetchCampaigns();
+    }, []);
+    async function fetchCampaigns() {
+      beforeProcessing();
+    }
+    ;
+    async function bulkGenerate() {
+    }
+    ;
+    function openNew() {
+    }
+    function openEdit(id) {
+    }
+    function toggleActive(id) {
+    }
+    function deleteCampaign(id) {
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("ol", { className: "breadcrumb", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { className: "breadcrumb-item active", children: "Ads Manager" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("main", { className: "fullscreen" })
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("ol", { className: "breadcrumb", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("li", { className: "breadcrumb-item active", children: "Ads Manager" }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "ms-auto", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "btn btn-sm btn-info me-1", onClick: () => {
+            bulkGenerate();
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "fa fa-circle-plus me-1" }),
+            " Bulk Create"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "btn btn-sm btn-secondary me-1", disabled: selectedCampaigns.length === 0, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "fa fa-pause me-1" }),
+            " Pause Selected Campaign"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "btn btn-sm btn-primary", onClick: () => {
+            openNew();
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "fa fa-plus me-1" }),
+            " Create Campaign"
+          ] })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("main", { className: "fullscreen", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Grid, { fitScreen: true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Objective", field: "objective", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Campaign Name", field: "campaignName", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Status", field: "isActive", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Budget", field: "lifetimeBudgetUsd", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Spend", field: "spendTodayUsd", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Installs", field: "installsToday", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "ROAS", field: "roas", style: { flex: 1 } }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(GridColumn, { headerName: "Actions", field: "id", style: { flex: 1 }, renderer: (id, record) => {
+            return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { role: "button", className: "text-primary text-decoration-underline", onClick: () => {
+                openEdit(id);
+              }, children: "Edit" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { role: "button", className: "text-primary text-decoration-underline", onClick: () => {
+                toggleActive(id);
+              }, children: "Pause" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { role: "button", className: "text-primary text-decoration-underline", onClick: () => {
+                deleteCampaign(id);
+              }, children: "Edit" })
+            ] });
+          } })
+        ] }),
+        showModal2 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "bg-gray-800 p-6 rounded-lg w-96 max-h-96 overflow-y-auto", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-4", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "block text-sm font-medium text-gray-300 mb-1", children: "Objective" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "block text-sm font-medium text-gray-300 mb-1", children: "Platform" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "block text-sm font-medium text-gray-300 mb-1", children: "Campaign Name" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("label", { className: "block text-sm font-medium text-gray-300 mb-1", children: "Budget Type" }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "flex justify-end gap-3 mt-6", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { onClick: () => setShowModal(false), className: "px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-md", children: "Cancel" }) })
+        ] }) })
+      ] })
     ] });
   }
 
   // ClientApp/simulation/ts/views/app.view.tsx
   var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react5.useEffect)(() => {
+    (0, import_react6.useEffect)(() => {
     }, []);
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AppLayout, { navigator: navigator2, routes: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Route, { path: "/ads-manager", element: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(RequireAuth, { component: AdsManagerView, title: "User groups" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Route, { path: "/ads-manager", element: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(RequireAuth, { component: AdsManagerView, title: "Ads Manager" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Navigate, { to: "/ads-manager" }) })
     ] }) }) });
   }

@@ -34,6 +34,7 @@
     "typescript": "5.9.3"
   },
   "alias": {
+    "simulation/core": "./ClientApp/simulation/ts/core",
     "rosie/core": "./ClientApp/rosie/ts/core",
     "minerva/components": "./ClientApp/minerva/ts/components",
     "minerva/core": "./ClientApp/minerva/ts/core"
