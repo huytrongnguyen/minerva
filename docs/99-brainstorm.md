@@ -1093,3 +1093,7 @@ Slack/Teams alert that fires if any of these happen:
 - Crash rate >3%
 - Revenue drops >20% day-over-day
 - Payback on any UA channel >180 days
+
+## MLOps Architecture
+
+![MLOps Architecture](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*Y2RtKptDoSAgNYFJhZ_iNg.png)

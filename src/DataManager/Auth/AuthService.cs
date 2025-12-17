@@ -81,7 +81,7 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
   private AuthUserInfoResponse GetUserInfo(string idToken, string accessToken) {
     // var userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + accessToken;
     // var userInfoHeader = new Dictionary<string, string> { { "Authorization", $"Bearer {idToken}" } };
-    return new AuthUserInfoResponse("1", "test", "test@venus.com"); // mock user info
+    return new AuthUserInfoResponse("1", "test", "test@minerva.com"); // mock user info
   }
 
   private string GenerateToken(Dictionary<string, string> authInfo) {

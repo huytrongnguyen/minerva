@@ -35350,7 +35350,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       params = params ?? {};
       if (!params.headers) params.headers = {};
       params.headers[AUTH_TOKEN] = LocalCache.get(AUTH_TOKEN);
-      beforeProcessing();
+      // beforeProcessing();
       return super.fetch(params, onError ?? onAjaxError, onComplete ?? afterProcessing);
     }
   };
@@ -35383,7 +35383,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       fetchCampaigns();
     }, []);
     async function fetchCampaigns() {
-      beforeProcessing();
+      // beforeProcessing();
     }
     ;
     async function bulkGenerate() {

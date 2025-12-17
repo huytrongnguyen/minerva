@@ -16,7 +16,7 @@ export function AdsManagerView() {
   }, []);
 
   async function fetchCampaigns() {
-    beforeProcessing();
+    // beforeProcessing();
 
     // try {
     //   const res = await axios.get("/api/campaigns");
