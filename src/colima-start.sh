@@ -1,1 +1,1 @@
-colima start --cpu 4 --memory 8
+colima start --cpu 4 --memory 8 --disk 100
