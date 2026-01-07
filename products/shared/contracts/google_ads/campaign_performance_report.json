@@ -1,0 +1,26 @@
+{
+  "source": {},
+  "target": {
+    "location": "s3a://data/raw/google_ads/campaign_performance_report",
+    "schema": [
+      {"name": "campaign_id"},
+      {"name": "campaign"},
+      {"name": "campaign_state"},
+      {"name": "start_date"},
+      {"name": "end_date"},
+      {"name": "day"},
+      {"name": "device"},
+      {"name": "impressions"},
+      {"name": "clicks"},
+      {"name": "cost"},
+      {"name": "advertising_channel"},
+      {"name": "advertising_sub_channel"},
+      {"name": "customer_id"},
+      {"name": "client_name"},
+      {"name": "country_code"},
+      {"name": "adgroup_id"},
+      {"name": "adgroup_name"},
+      {"name": "currency_code"}
+    ]
+  }
+}

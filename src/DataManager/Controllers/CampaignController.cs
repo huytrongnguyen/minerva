@@ -5,5 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace DataManager.Controllers;
 
 [Route("api/campaigns")] [ApiController] [AuthFilter] public class CampaignController(CampaignService campaignService) : ControllerBase {
-  [HttpGet] public List<CampaignInfo> List() => campaignService.List();
+  [HttpGet] public IEnumerable<CampaignInfo> List() => campaignService.List();
+  [HttpPost("generate")] public Task<IEnumerable<CampaignInfo>> Generate() => campaignService.Generate();
 }

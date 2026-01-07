@@ -1,77 +1,90 @@
 services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-with-iceberg-and-aistor/
-  minio:
-    image: minio/minio
-    container_name: minio
-    command: server --console-address ":9001" /data
-    environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=password
-      - MINIO_DOMAIN=minio
-    ports:
-      - '9000:9000'
-      - '9001:9001'
-    volumes:
-      - ./data/minio:/data # Mount local ./data/minio directory to /data
-    networks:
-      iceberg_net:
-        aliases:
-          - lakehouse.minio
+  # event-logs:
+  #   image: postgres:16
+  #   container_name: event-logs
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: event_logs
+  #     POSTGRES_USER: simuser
+  #     POSTGRES_PASSWORD: simpassword  # Change in prod!
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
 
-  rest:
-    image: apache/iceberg-rest-fixture
-    container_name: iceberg-rest
-    environment:
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
-      - CATALOG_WAREHOUSE=s3://lakehouse/
-      - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
-      - CATALOG_S3_ENDPOINT=http://minio:9000
-    ports:
-      - 8181:8181
-    networks:
-      iceberg_net:
+  # minio:
+  #   image: minio/minio
+  #   container_name: minio
+  #   command: server --console-address ":9001" /data
+  #   environment:
+  #     - MINIO_ROOT_USER=admin
+  #     - MINIO_ROOT_PASSWORD=password
+  #     - MINIO_DOMAIN=minio
+  #   ports:
+  #     - '9000:9000'
+  #     - '9001:9001'
+  #   volumes:
+  #     - ./data/minio:/data # Mount local ./data/minio directory to /data
+  #   networks:
+  #     iceberg_net:
+  #       aliases:
+  #         - lakehouse.minio
 
-  jupyter:
-    image: tabulario/spark-iceberg
-    container_name: jupyter
-    depends_on:
-      - rest
-      - minio
-    environment:
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
-    volumes:
-      - ./warehouse:/home/iceberg/warehouse
-      - ./notebooks:/home/iceberg/notebooks
-    ports:
-      - 8888:8888
-      - 8080:8080
-      - 10000:10000
-      - 10001:10001
-    networks:
-      iceberg_net:
+  # rest:
+  #   image: apache/iceberg-rest-fixture
+  #   container_name: iceberg-rest
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #     - CATALOG_WAREHOUSE=s3://lakehouse/
+  #     - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
+  #     - CATALOG_S3_ENDPOINT=http://minio:9000
+  #   ports:
+  #     - 8181:8181
+  #   networks:
+  #     iceberg_net:
 
-  mc:
-    depends_on:
-      - minio
-    image: minio/mc
-    container_name: mc
-    networks:
-      iceberg_net:
-    environment:
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
-    entrypoint: >
-      /bin/sh -c "
-      until (/usr/bin/mc config host add minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
-      /usr/bin/mc rm -r --force minio/lakehouse;
-      /usr/bin/mc mb minio/lakehouse;
-      /usr/bin/mc policy set public minio/lakehouse;
-      tail -f /dev/null
-      "
+  # jupyter:
+  #   image: tabulario/spark-iceberg
+  #   container_name: jupyter
+  #   depends_on:
+  #     - rest
+  #     - minio
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #   volumes:
+  #     - ./warehouse:/home/iceberg/warehouse
+  #     - ./notebooks:/home/iceberg/notebooks
+  #   ports:
+  #     - 8888:8888
+  #     - 8080:8080
+  #     - 10000:10000
+  #     - 10001:10001
+  #   networks:
+  #     iceberg_net:
+
+  # mc:
+  #   depends_on:
+  #     - minio
+  #   image: minio/mc
+  #   container_name: mc
+  #   networks:
+  #     iceberg_net:
+  #   environment:
+  #     - AWS_ACCESS_KEY_ID=admin
+  #     - AWS_SECRET_ACCESS_KEY=password
+  #     - AWS_REGION=us-east-1
+  #   entrypoint: >
+  #     /bin/sh -c "
+  #     until (/usr/bin/mc config host add minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
+  #     /usr/bin/mc rm -r --force minio/lakehouse;
+  #     /usr/bin/mc mb minio/lakehouse;
+  #     /usr/bin/mc policy set public minio/lakehouse;
+  #     tail -f /dev/null
+  #     "
 
 networks:
   iceberg_net:

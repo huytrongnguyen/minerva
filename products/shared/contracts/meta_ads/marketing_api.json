@@ -1,0 +1,21 @@
+{
+  "source": {},
+  "target": {
+    "location": "s3a://data/raw/meta_ads/marketing_api",
+    "schema": [
+      { "name": "id", "constraints": { "not_null": true } },
+      { "name": "name", "constraints": { "not_null": true } },
+      { "name": "objective", "constraints": { "enum": ["APP_INSTALLS", "CONVERSIONS"] } },
+      { "name": "status", "constraints": { "enum": ["ACTIVE", "PAUSED"] } },
+      { "name": "adset_name" },
+      { "name": "adset_id" },
+      { "name": "ad_name" },
+      { "name": "ad_id" },
+      { "name": "daily_budget" },
+      { "name": "lifetime_budget" },
+      { "name": "total_spend" },
+      { "name": "targeting" },
+      { "name": "bid_strategy", "constraints": { "enum": ["LOWEST_COST_WITHOUT_CAP"] } }
+    ]
+  }
+}

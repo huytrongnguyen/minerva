@@ -7,15 +7,15 @@
 aside {
   width: 15rem;
   background-color: #f9f8f7;
-  .nav-link {
-    &:hover {
-      // background-color: $component-hover-bg;
-    }
-    &.active {
-      // color: $component-active-color;
-      // background-color: $component-active-bg;
-    }
-  }
+//   .nav-link {
+//     &:hover {
+//       // background-color: $component-hover-bg;
+//     }
+//     &.active {
+//       // color: $component-active-color;
+//       // background-color: $component-active-bg;
+//     }
+//   }
 }
 
 #dotnet-compile-error { display: none !important; }

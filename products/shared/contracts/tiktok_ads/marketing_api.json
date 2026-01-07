@@ -1,0 +1,17 @@
+{
+  "source": {},
+  "target": {
+    "location": "s3a://data/raw/tiktok_ads/marketing_api",
+    "schema": [
+      { "name": "campaign_id", "constraints": { "not_null": true } },
+      { "name": "campaign_name", "constraints": { "not_null": true } },
+      { "name": "objective_type", "constraints": { "not_null": true, "enum": ["TRAFFIC"] } },
+      { "name": "objective", "constrains": { "enum": ["LANDING_PAGE"] } },
+      { "name": "status", "constrains": { "enum": ["CAMPAIGN_STATUS_DISABLE"] } },
+      { "name": "budget" },
+      { "name": "budget_mode", "constrains": { "enum": ["BUDGET_MODE_INFINITE", "BUDGET_MODE_DAY"] } },
+      { "name": "create_time" },
+      { "name": "modify_time" }
+    ]
+  }
+}

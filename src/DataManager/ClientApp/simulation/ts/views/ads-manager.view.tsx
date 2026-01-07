@@ -1,35 +1,22 @@
 import { useEffect, useState } from 'react';
 import { DataModel, Grid, GridColumn } from 'rosie-ui';
 
-import { beforeProcessing } from 'minerva/core';
-import { Campaign } from 'simulation/core';
+import { afterProcessing } from 'minerva/core';
+import { CampaignGenerationModel, CampaignInfo, CampaignInfoStore } from 'simulation/core';
 
 export function AdsManagerView() {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]),
-        [selectedCampaigns, setSelectedCampaigns] = useState<Campaign[]>([]), // For bulk actions
+  const [selectedCampaigns, setSelectedCampaigns] = useState<CampaignInfo[]>([]), // For bulk actions
         [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    fetchCampaigns();
-    // const interval = setInterval(fetchCampaigns, 8000);
-    // return () => clearInterval(interval);
+    CampaignInfoStore.loadWithSplashScreen();
   }, []);
 
-  async function fetchCampaigns() {
-    // beforeProcessing();
-
-    // try {
-    //   const res = await axios.get("/api/campaigns");
-    //   setCampaigns(res.data);
-    // } catch (err) {
-    //   console.error("Failed to load campaigns", err);
-    // }
-  };
-
   async function bulkGenerate() {
-    // if (bulkCount < 1 || bulkCount > 50) return alert("1–50");
-    // await axios.post("/api/campaigns/bulk", { count: bulkCount, template: form });
-    // fetchCampaigns();
+    const campaigns = await CampaignGenerationModel.fetch();
+    afterProcessing();
+    console.log({campaigns});
+    CampaignInfoStore.loadData(campaigns);
   };
 
   function openNew() {}
@@ -44,27 +31,20 @@ export function AdsManagerView() {
     <ol className="breadcrumb">
       <li className="breadcrumb-item active">Ads Manager</li>
       <div className="ms-auto">
-        <button className="btn btn-sm btn-info me-1" onClick={() => { bulkGenerate() }}>
-          <span className="fa fa-circle-plus me-1" /> Bulk Create
+        <button className="btn btn-sm btn-outline-secondary me-1" onClick={() => { bulkGenerate() }}>
+          <span className="fa fa-circle-plus me-1" /> Generate
         </button>
-        <button className="btn btn-sm btn-secondary me-1" disabled={selectedCampaigns.length === 0}>
+        <button className="btn btn-sm btn-outline-secondary me-1" disabled={selectedCampaigns.length === 0}>
           <span className="fa fa-pause me-1" /> Pause Selected Campaign
         </button>
-        <button className="btn btn-sm btn-primary" onClick={() => { openNew() }}>
+        <button className="btn btn-sm btn-outline-secondary" onClick={() => { openNew() }}>
           <span className="fa fa-plus me-1" /> Create Campaign
         </button>
       </div>
     </ol>
     <main className="fullscreen">
-      <Grid fitScreen>
-        <GridColumn headerName="Objective" field="objective" style={{flex:1}} />
-        <GridColumn headerName="Campaign Name" field="campaignName" style={{flex:1}} />
-        <GridColumn headerName="Status" field="isActive" style={{flex:1}} />
-        <GridColumn headerName="Budget" field="lifetimeBudgetUsd" style={{flex:1}} />
-        <GridColumn headerName="Spend" field="spendTodayUsd" style={{flex:1}} />
-        <GridColumn headerName="Installs" field="installsToday" style={{flex:1}} />
-        <GridColumn headerName="ROAS" field="roas" style={{flex:1}} />
-        <GridColumn headerName="Actions" field="id" style={{flex:1}} renderer={(id: number, record: DataModel<Campaign>) => {
+      <Grid fitScreen store={CampaignInfoStore}>
+        <GridColumn headerName="Actions" field="id" style={{width:150}} renderer={(id: number, record: DataModel<CampaignInfo>) => {
           return <>
             <span role="button" className="text-primary text-decoration-underline" onClick={() => { openEdit(id) }}>
               Edit
@@ -73,10 +53,16 @@ export function AdsManagerView() {
               Pause
             </span>
             <span role="button" className="text-primary text-decoration-underline" onClick={() => { deleteCampaign(id) }}>
-              Edit
+              Delete
             </span>
           </>
         }} />
+        <GridColumn headerName="Objective" field="objective" style={{width:150}} />
+        <GridColumn headerName="Campaign Name" field="campaignName" style={{width:450}} />
+        <GridColumn headerName="Status" field="status" style={{width:100}} />
+        <GridColumn headerName="Budget" field="budget" style={{width:100}} />
+        <GridColumn headerName="Start" field="startTime" style={{width:100}} renderer={(value: string) => Date.parseDate(value).format()} />
+        <GridColumn headerName="End" field="endTime" style={{width:100}} renderer={(value: string) => Date.parseDate(value).format()} />
       </Grid>
       {/* Modal (FB-Style Creation Flow) */}
       {showModal && (

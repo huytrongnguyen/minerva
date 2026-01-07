@@ -1,5 +1,5 @@
 from typing import Any, Optional
-from pyspark.sql import SparkSession, DataFrame
+from pyspark.sql import SparkSession, DataFrame, DataFrameWriter
 
 from settings.model_settings import ModelSettings
 from shared import string_utils
@@ -26,7 +26,7 @@ def save_data(data: DataFrame, model: ModelSettings, vars: dict[str, Any]):
   path = string_utils.parse(model.location, vars)
   print(f'Save data to "{path}" as {model.type}, num_partitions = {model.num_partitions}, partition_by = {model.partition_by}, columns = {"|".join(data.columns)}')
 
-  writer = data.coalesce(model.num_partitions).write.format(model.type).options(**model.options).mode('overwrite')
+  writer: DataFrameWriter = data.coalesce(model.num_partitions).write.format(model.type).options(**model.options).mode('overwrite')
   if len(model.partition_by) > 0:
     writer = writer.partitionBy(model.partition_by)
 

@@ -1,4 +1,4 @@
-import { Ajax, AjaxError, DataModel, HttpParams, LocalCache, ProxyConfig } from 'rosie-ui';
+import { Ajax, AjaxError, DataModel, DataStore, HttpParams, LocalCache, ProxyConfig } from 'rosie-ui';
 import { afterProcessing, beforeProcessing } from './shared';
 
 const loginUrl = `/login`,
@@ -39,3 +39,20 @@ export class AuthDataModel<T> extends DataModel<T> {
 }
 
 export const Model = <T = any>(config?: ProxyConfig) => new AuthDataModel<T>(config);
+
+export class AuthDataStore<T> extends DataStore<T> {
+  loadWithSplashScreen(params?: HttpParams) {
+    beforeProcessing();
+    return super.load(params, onAjaxError, afterProcessing);
+  }
+
+  fetch(params: HttpParams = {}, onError?: (_reason: AjaxError) => T[], onComplete?: () => void) {
+    params = params ?? {};
+    if (!params.headers) params.headers = {};
+    params.headers[AUTH_TOKEN] = LocalCache.get(AUTH_TOKEN);
+
+    return super.fetch(params, onError ?? onAjaxError, onComplete);
+  }
+}
+
+export const Store = <T = any>(config?: ProxyConfig) => new AuthDataStore<T>(config);

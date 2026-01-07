@@ -1,1 +1,19 @@
-{}
+{
+  "sources": {
+    "appsflyer": {
+      "location": "../../../lakehouse/appsflyer"
+    }
+  },
+  "targets": {
+    "warehouse": {
+      "location": "../../../lakehouse"
+    },
+    "reporting": {
+      "type": "postgres",
+      "location": "../../../lakehouse/cred"
+    }
+  },
+  "vars": {
+    "app_ids": "{id123456789,com.appsflyer.referrersender}"
+  }
+}

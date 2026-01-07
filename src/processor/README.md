@@ -1,6 +1,6 @@
-# Mercury Processor
+# Processor
 
-This project is a Spark 3.5.3 application built with Python 3.9 and Java 17. It reads and writes data to a MinIO bucket. The application is deployed using Docker Compose with Colima as the Docker runtime on macOS or Linux.
+This project is a Spark 3.5.3 application built with Python 3.9 and Java 17. It reads and writes data to a MinIO bucket. The application is deployed using Docker Compose with Colima as the Docker runtime on macOS or Linux. It offers a centralised and participative source of truth for analytics, reporting and experimentation across the company. Marketing might calculate it one way, the product team another, leading to a battle of conflicting dashboards and eroding trust in the data itself. By creating a single, governed source of truth for business logic, a metrics store ensures that when anyone asks a question about the data, they get one consistent, reliable answer.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ processor/
 ### Install Colima and Docker CLI:
 - Install Colima: `brew install colima`
 - Install Docker CLI: `brew install docker`
-- Start Colima with sufficient resources for Spark and MinIO: `colima start --cpu 10 --memory 24 --disk 128`
+- Start Colima with sufficient resources for Spark and MinIO: `colima start --cpu 4 --memory 8`
   - Adjust CPU/memory based on your system.
   - Use --mount if volume access issues occur (see Troubleshooting).
 - Verify Docker is running: `docker ps`

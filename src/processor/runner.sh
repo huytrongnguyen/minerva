@@ -1,1 +1,1 @@
-sh spark-run.sh tos 2024-05-22 standardize shared/std/installs.sql
+sh spark-run.sh gem 2024-06-30 standardize shared/curated/daily_installs.json

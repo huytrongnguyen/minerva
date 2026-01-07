@@ -1,0 +1,37 @@
+{
+  "source": {},
+  "target": {
+    "location": "s3a://data/raw/meta_ads/insight_ad",
+    "schema": [
+      {"name": "date_stop"},
+      {"name": "date_start"},
+      {"name": "account_id"},
+      {"name": "account_name"},
+      {"name": "campaign_id"},
+      {"name": "campaign_name"},
+      {"name": "adset_id"},
+      {"name": "adset_name"},
+      {"name": "ad_id"},
+      {"name": "ad_name"},
+      {"name": "impressions"},
+      {"name": "clicks"},
+      {"name": "spend"},
+      {"name": "objective"},
+      {"name": "impression_device"},
+      {"name": "country"},
+      {"name": "reach"},
+      {"name": "inline_post_engagement"},
+      {"name": "video_30_sec_watched_actions"},
+      {"name": "video_avg_time_watched_actions"},
+      {"name": "video_p100_watched_actions"},
+      {"name": "video_p25_watched_actions"},
+      {"name": "video_p50_watched_actions"},
+      {"name": "video_p75_watched_actions"},
+      {"name": "video_p95_watched_actions"},
+      {"name": "video_play_actions"},
+      {"name": "cost_per_inline_post_engagement"},
+      {"name": "engagement_rate_ranking"},
+      {"name": "currency"}
+    ]
+  }
+}

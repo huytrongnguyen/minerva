@@ -19,21 +19,22 @@ class AggregationSettings:
 @dataclass
 class ModelSettings:
   location: str
-  name: Optional[str] = None
+  # name: Optional[str] = None
   type: Optional[str] = 'parquet'
   # load options
   case_sensitive: Optional[bool] = False
   options: Optional[dict[str, str]] = field(default_factory=dict)
+  preprocess: Optional[str] = ''
   # save options
   num_partitions: Optional[int] = 1
   partition_by: Optional[list[str]] = field(default_factory=list)
   merge: Optional[bool] = False
-  temp_location: Optional[str] = None
+  # temp_location: Optional[str] = None
   # transform options
   sql_model: Optional[str] = None
   columns: Optional[list[ColumnSettings]] = field(default_factory=list)
   query: Optional[list[str]] = field(default_factory=list)
-  agg: Optional[AggregationSettings] = field(default_factory=list)
+  aggregation: Optional[AggregationSettings] = field(default_factory=list)
 
 @dataclass
 class ModelLayout:

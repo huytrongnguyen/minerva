@@ -1,0 +1,34 @@
+{
+  "sources": [{
+    "type": "csv",
+    "options": {
+      "header": "true"
+    },
+    "location": "{{targets.warehouse.location}}/{{product_id}}/appsflyer/installs_report/app_id={{vars.app_ids}}/event_date={{event_date}}"
+  }],
+  "targets": [{
+    "type": "parquet",
+    "partition_by": ["event_date"],
+    "location": "{{targets.warehouse.location}}/{{product_id}}/reporting/installs",
+    "columns": [
+      {"name": "product_id", "funcs": ["set(product_id)"]},
+      {"name": "event_date", "funcs": ["set(event_date)"]},
+      {"name": "af_prt", "alias": "agency"},
+      {"name": "media_source"},
+      {"name": "af_c_id", "alias": "campaign_id"},
+      {"name": "country_code", "funcs": ["upper"]},
+      {"name": "platform", "funcs": ["lower"]},
+      {"name": "appsflyer_id"},
+      {"name": "install_time", "funcs": ["to_date"], "alias": "install_date"},
+      {"name": "d", "funcs": ["datediff(event_date,install_date)"]}
+    ],
+    "query": ["where(d = 0)","fillna(na,agency,media_source,campaign_id,country_code,platform)"],
+    "aggregation": {
+      "aggType": "groupBy",
+      "fields": ["product_id","event_date","agency","media_source","campaign_id","country_code","platform"],
+      "aggs": [
+        {"colName": "installs", "funcs": ["countDistinct(appsflyer_id)"]}
+      ]
+    }
+  }]
+}

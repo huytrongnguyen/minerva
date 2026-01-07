@@ -1,6 +1,8 @@
 from typing import Any
 from pyspark.sql import DataFrame, Column, Window
-from pyspark.sql.functions import lit, to_date, col, expr
+from pyspark.sql.functions import to_date, upper, lower
+from pyspark.sql.functions import lit, to_date, col, expr, upper, lower, datediff
+from pyspark.sql.functions import datediff
 from pyspark.sql.functions import count, sum, avg, min, max, count_distinct, collect_list, collect_set, first, last
 
 from settings.model_settings import ColumnSettings
@@ -11,11 +13,13 @@ def invoke_column_function(column: Column, func: str, settings: dict[str, Any]) 
   # predefined spark functions
   if name == 'cast': return column.cast(args[0])
   elif name == 'to_date': return to_date(column)
+  elif name == 'upper': return upper(column)
+  elif name == 'lower': return lower(column)
   elif name == 'col': return col(args[0])
   elif name == 'expr': return expr(args[0])
+  elif name == 'datediff': return datediff(args[0], args[1])
   # custom functions
-  elif name == 'set_product_id': return lit(settings.get('product_id'))
-  elif name == 'set_event_date': return lit(settings.get('event_date'))
+  elif name == 'set': return lit(settings.get(args[0]))
   else:
     print(f'Function "{name}" is not defined.')
     return column
