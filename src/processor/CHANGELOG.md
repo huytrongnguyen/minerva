@@ -2,6 +2,10 @@
 
 ## vNext
 
+**Improvements**
+
+- Update `ModelSettings`
+
 ## 1.0.0
 > 2025-10-25
 

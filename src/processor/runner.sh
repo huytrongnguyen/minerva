@@ -1,1 +1,1 @@
-sh spark-run.sh gem 2024-06-30 standardize shared/curated/daily_installs.json
+sh spark-run.sh gem 2024-05-20 standardize shared/curated/daily_installs.json

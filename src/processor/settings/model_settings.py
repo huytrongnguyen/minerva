@@ -13,7 +13,7 @@ class ColumnSettings:
 class AggregationSettings:
   type: str
   dimensions: list[str]
-  metrics: list[ColumnSettings]
+  measures: list[ColumnSettings]
   order_by: Optional[list[str]] = field(default_factory=list)
 
 @dataclass

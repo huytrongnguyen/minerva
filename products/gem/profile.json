@@ -1,16 +1,16 @@
 {
   "sources": {
     "appsflyer": {
-      "location": "../../../lakehouse/appsflyer"
+      "location": "../../../../lakehouse/appsflyer"
     }
   },
   "targets": {
     "warehouse": {
-      "location": "../../../lakehouse"
+      "location": "../../../../lakehouse"
     },
     "reporting": {
       "type": "postgres",
-      "location": "../../../lakehouse/cred"
+      "location": "../../../../lakehouse/cred"
     }
   },
   "vars": {

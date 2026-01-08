@@ -22,12 +22,12 @@
       {"name": "install_time", "funcs": ["to_date"], "alias": "install_date"},
       {"name": "d", "funcs": ["datediff(event_date,install_date)"]}
     ],
-    "query": ["where(d = 0)","fillna(na,agency,media_source,campaign_id,country_code,platform)"],
+    "query": ["where(d = 0)"],
     "aggregation": {
-      "aggType": "groupBy",
-      "fields": ["product_id","event_date","agency","media_source","campaign_id","country_code","platform"],
-      "aggs": [
-        {"colName": "installs", "funcs": ["countDistinct(appsflyer_id)"]}
+      "type": "group_by",
+      "dimensions": ["product_id","event_date","agency","media_source","campaign_id","country_code","platform"],
+      "measures": [
+        {"name": "installs", "funcs": ["count_distinct(appsflyer_id)"]}
       ]
     }
   }]
