@@ -8,7 +8,7 @@ from settings.product_settings import ProductSettings
 from settings.model_settings import ModelLayout, ModelSettings, ColumnSettings, AggregationSettings
 from shared import file_utils, string_utils
 
-from .data_store import load_data, save_data, merge_data
+from .adapter import load_data, save_data, merge_data
 from .functions import invoke_column_function, invoke_group_by_function, invoke_order_by_column, invoke_partition_by_column, invoke_query_function
 
 def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
@@ -44,7 +44,7 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
   #       merge_data(spark, target_data, target_model, vars)
       else:
         target_data = transform_dataset(source_data, target_model, vars)
-        save_data(target_data, target_model, vars)
+        save_data(target_data, target_model, vars, job_settings)
 
 def transform_dataset(source_data: DataFrame, target_model: ModelSettings, vars: dict[str, Any]) -> DataFrame:
   if 'columns' not in target_model.__dict__:

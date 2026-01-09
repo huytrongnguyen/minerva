@@ -5,6 +5,8 @@
 **Improvements**
 
 - Update `ModelSettings`
+- Supports to save data to external db
+- Supports to run sql query in external db as a postprocess
 
 ## 1.0.0
 > 2025-10-25

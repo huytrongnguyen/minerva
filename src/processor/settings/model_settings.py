@@ -29,6 +29,7 @@ class ModelSettings:
   num_partitions: Optional[int] = 1
   partition_by: Optional[list[str]] = field(default_factory=list)
   merge: Optional[bool] = False
+  postprocess: Optional[str] = ''
   # temp_location: Optional[str] = None
   # transform options
   sql_model: Optional[str] = None

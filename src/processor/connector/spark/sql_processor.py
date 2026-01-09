@@ -8,7 +8,7 @@ from settings.product_settings import ProductSettings
 from settings.model_settings import ModelLayout, ModelSettings
 from shared.string_utils import jinja_env, parse
 
-from .data_store import load_data, save_data
+from .adapter import load_data, save_data
 
 def run(sql_model: str, spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
   model = ModelLayout([], [])

@@ -10,3 +10,4 @@ class JobSettings:
   event_date: Optional[str] = ''
   action: Optional[str] = ''
   config_dir: Optional[str] = path.dirname(__file__) + '/../../../products'
+  libs: Optional[str] = ''

@@ -7,12 +7,13 @@
     "location": "{{targets.warehouse.location}}/{{product_id}}/appsflyer/installs_report/app_id={{vars.app_ids}}/event_date={{event_date}}"
   }],
   "targets": [{
-    "type": "parquet",
+    "type": "jdbc",
+    "postprocess": "shared/curated/f_daily_installs.sql",
     "partition_by": ["event_date"],
-    "location": "{{targets.warehouse.location}}/{{product_id}}/reporting/installs",
+    "location": "{{targets.reporting.location}}/{{product_id}}.json",
     "columns": [
       {"name": "product_id", "funcs": ["set(product_id)"]},
-      {"name": "event_date", "funcs": ["set(event_date)"]},
+      {"name": "event_date", "funcs": ["set(event_date)", "to_date"]},
       {"name": "af_prt", "alias": "agency"},
       {"name": "media_source"},
       {"name": "af_c_id", "alias": "campaign_id"},
@@ -22,7 +23,7 @@
       {"name": "install_time", "funcs": ["to_date"], "alias": "install_date"},
       {"name": "d", "funcs": ["datediff(event_date,install_date)"]}
     ],
-    "query": ["where(d = 0)"],
+    "query": ["where(d = 0)","fillna(na,agency,media_source,campaign_id,country_code,platform)"],
     "aggregation": {
       "type": "group_by",
       "dimensions": ["product_id","event_date","agency","media_source","campaign_id","country_code","platform"],
