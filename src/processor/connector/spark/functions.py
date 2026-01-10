@@ -52,12 +52,14 @@ def invoke_group_by_function(target_column: ColumnSettings) -> Column:
     return col(col_name)
 
 def invoke_order_by_column(func: str) -> Column:
-  (order, col_name) = string_utils.parse_function_name_and_arguments(func)
-  if order == 'asc': return col(col_name).asc()
-  elif order == 'desc': return col(col_name).desc()
-  else: return col(col_name).asc()
+  (order, col_names) = string_utils.parse_function_name_and_arguments(func)
+  if order == 'asc': return col(col_names[0]).asc()
+  elif order == 'desc': return col(col_names[0]).desc()
+  else: return col(order).asc()
 
-def invoke_partition_by_column(data: DataFrame, col_name: str, func: str, partition: Window, order_columns: list[Column]) -> DataFrame:
+def invoke_partition_by_column(data: DataFrame, target_column: ColumnSettings, partition: Window, order_columns: list[Column]) -> DataFrame:
+  col_name = target_column.name
+  func = target_column.funcs[0]
   (name, args) = string_utils.parse_function_name_and_arguments(func)
   # predefined spark functions
   if name == 'count': return data.withColumn(col_name, count(args[0]).over(partition))

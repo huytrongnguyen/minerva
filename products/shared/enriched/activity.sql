@@ -1,26 +1,26 @@
 {{
   insert_into({
-    'location': '{{datastore.location}}/users/activity/event_date={{event_date}}',
+    'location': '{{targets.warehouse.location}}/{{product_id}}/users/activity/event_date={{event_date}}',
   })
 }}
-with installs as (
-  select  product_id, event_date, install_id, event_time as install_time
-        , media_source, campaign_id, country_code, platform
+
+with in_app_events as (
+  select *
   from {{
     source({
-      'name': 'devices_installs',
-      'location': '{{datastore.location}}/devices/installs/event_date={{date_range(7,1)}}',
+      'name': 'in_app_events',
+      'type': 'csv',
+      'options': {
+        'header': 'true'
+      },
+      'location': '{{targets.warehouse.location}}/{{product_id}}/appsflyer/in_app_events_report/app_id={{vars.app_ids}}/event_date={{event_date}}',
     })
   }}
 )
 , registration as (
   select  product_id, event_date, user_id, event_time as registration_time, install_id
-  from {{
-    source({
-      'name': 'users_registration',
-      'location': '{{datastore.location}}/users/registration/event_date={{event_date}}',
-    })
-  }}
+  from in_app_events
+  where event_name = 'registration'
 )
 , new_user as (
   select  product_id, event_date, user_id, install_time, registration_time, matching_time

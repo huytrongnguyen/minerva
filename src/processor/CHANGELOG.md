@@ -4,9 +4,15 @@
 
 **Improvements**
 
+## 1.0.1
+> 2026-01-10
+
+**Features**
+
 - Update `ModelSettings`
 - Supports to save data to external db
 - Supports to run sql query in external db as a postprocess
+- Supports to aggregate data with Window functions
 
 ## 1.0.0
 > 2025-10-25

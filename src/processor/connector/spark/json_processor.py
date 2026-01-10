@@ -32,19 +32,8 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
 
     for target in model.targets:
       target_model = ModelSettings(**target)
-      if target_model.merge and target_model.sql_model: # merge source into target
-  #       target_data = load_data(spark, target_model, vars)
-  #       if target_data == None:
-          return
-
-  #       source_data.createOrReplaceTempView(source_model.name)
-  #       target_data.createOrReplaceTempView(target_model.name)
-  #       sql = file_utils.load_text(f'{job_settings.config_dir}/{target_model.sql_model}')
-  #       target_data = execute_query(spark, sql)
-  #       merge_data(spark, target_data, target_model, vars)
-      else:
-        target_data = transform_dataset(source_data, target_model, vars)
-        save_data(target_data, target_model, vars, job_settings)
+      target_data = transform_dataset(source_data, target_model, vars)
+      save_data(target_data, target_model, vars, job_settings)
 
 def transform_dataset(source_data: DataFrame, target_model: ModelSettings, vars: dict[str, Any]) -> DataFrame:
   if 'columns' not in target_model.__dict__:
@@ -92,11 +81,11 @@ def partition_by(data: DataFrame, aggregation: AggregationSettings) -> DataFrame
   data = data.withColumn('rn', row_number().over(partition.orderBy(*order_columns)))
 
   if aggregation.measures:
-    data = reduce(lambda data, measure: invoke_partition_by_column(data, measure.name, measure.funcs[0], partition, order_columns), aggregation.measures, data)
+    data = reduce(lambda data, measure: invoke_partition_by_column(data, ColumnSettings(**measure), partition, order_columns), aggregation.measures, data)
 
   data = data.where('rn = 1')
 
-  return data.selectExpr(*[measure.name for measure in aggregation.measures]) if aggregation.measures else data.drop('rn')
+  return data.selectExpr(*aggregation.dimensions, *[measure['name'] for measure in aggregation.measures]) if aggregation.measures else data.drop('rn')
 
 # def execute_query(spark: SparkSession, query: str) -> DataFrame:
 #   target_data = spark.sql(query)
