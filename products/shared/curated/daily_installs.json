@@ -8,6 +8,7 @@
   }],
   "targets": [{
     "type": "jdbc",
+    "name": "ztmp_daily_installs",
     "postprocess": "shared/curated/f_daily_installs.sql",
     "partition_by": ["event_date"],
     "location": "{{targets.reporting.location}}/{{product_id}}.json",

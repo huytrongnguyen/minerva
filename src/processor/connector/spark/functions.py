@@ -2,7 +2,7 @@ from typing import Any
 from pyspark.sql import DataFrame, Column, Window
 from pyspark.sql.functions import to_date, upper, lower
 from pyspark.sql.functions import lit, to_date, col, expr, upper, lower, datediff
-from pyspark.sql.functions import datediff
+from pyspark.sql.functions import datediff, regexp_replace
 from pyspark.sql.functions import count, sum, avg, min, max, count_distinct, collect_list, collect_set, first, last
 
 from settings.model_settings import ColumnSettings
@@ -18,6 +18,7 @@ def invoke_column_function(column: Column, func: str, settings: dict[str, Any]) 
   elif name == 'col': return col(args[0])
   elif name == 'expr': return expr(args[0])
   elif name == 'datediff': return datediff(args[0], args[1])
+  elif name == 'regexp_replace': return regexp_replace(column, args[0], args[1])
   # custom functions
   elif name == 'set': return lit(settings.get(args[0]))
   else:

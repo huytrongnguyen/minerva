@@ -4,6 +4,8 @@
 
 **Improvements**
 
+- Supports to load multiple sources then process with sql file to target
+
 ## 1.0.1
 > 2026-01-10
 

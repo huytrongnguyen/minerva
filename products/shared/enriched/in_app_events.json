@@ -61,6 +61,25 @@
     }
   }, {
     "partition_by": ["event_date"],
+    "location": "{{targets.warehouse.location}}/{{product_id}}/users/level",
+    "columns": [
+      {"name": "product_id", "funcs": ["set(product_id)"]},
+      {"name": "event_time"},
+      {"name": "event_date", "funcs": ["col(event_time)","to_date"]},
+      {"name": "event_name"},
+      {"name": "level", "funcs": ["col(event_name)","regexp_replace(af_level_,)","cast(int)"]},
+      {"name": "customer_user_id", "alias": "user_id"}
+    ],
+    "query": ["where(event_name like 'af_level_%' and user_id is not null)"],
+    "aggregation": {
+      "type": "group_by",
+      "dimensions": ["product_id","event_date","user_id"],
+      "measures": [
+        {"name": "level", "funcs": ["max(level)"]}
+      ]
+    }
+  }, {
+    "partition_by": ["event_date"],
     "location": "{{targets.warehouse.location}}/{{product_id}}/users/purchase",
     "columns": [
       {"name": "product_id", "funcs": ["set(product_id)"]},

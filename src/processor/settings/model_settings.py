@@ -19,7 +19,7 @@ class AggregationSettings:
 @dataclass
 class ModelSettings:
   location: str
-  # name: Optional[str] = None
+  name: Optional[str] = None
   type: Optional[str] = 'parquet'
   # load options
   case_sensitive: Optional[bool] = False

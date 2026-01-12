@@ -52,10 +52,10 @@ def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: dict[str, A
   options = {
     'driver': cred['driver'],
     'url': cred['url'],
-    'dbtable': cred['dbtable'],
+    'dbtable': model.name,
     'user': cred['user'],
     'password': cred['password'],
-    'batchsize': cred['batchsize'],
+    'batchsize': '10000',
   }
   data.write.format(model.type).options(**options).mode('overwrite').save()
 

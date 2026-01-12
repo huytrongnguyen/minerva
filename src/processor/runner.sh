@@ -1,1 +1,1 @@
-sh spark-run.sh gem 2024-05-21 standardize shared/enriched/in_app_events.json
+sh spark-run.sh gem 2024-05-21 shared/enriched/user_snapshot.json #libs/postgresql-42.7.8.jar

@@ -1,0 +1,17 @@
+{
+  "sources": [{
+    "name": "complete_registration",
+    "location": "{{targets.warehouse.location}}/{{product_id}}/users/complete_registration/event_date={{event_date}}"
+  }, {
+    "name": "login",
+    "location": "{{targets.warehouse.location}}/{{product_id}}/users/login/event_date={{event_date}}"
+  }, {
+    "name": "purchase",
+    "location": "{{targets.warehouse.location}}/{{product_id}}/users/purchase/event_date={{event_date}}"
+  }],
+  "targets": [{
+    "partition_by": ["event_date"],
+    "location": "{{targets.warehouse.location}}/{{product_id}}/users/snapshot",
+    "sql_model": "shared/enriched/sql/user_snapshot.sql"
+  }]
+}

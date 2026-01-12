@@ -2,6 +2,7 @@ from typing import Any
 from functools import reduce
 from pyspark.sql import SparkSession, DataFrame, Column, Window
 from pyspark.sql.functions import lit, col, row_number
+from pyspark.sql.types import StructType
 
 from settings.job_settings import JobSettings
 from settings.product_settings import ProductSettings
@@ -18,7 +19,17 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
   }
 
   if len(model.sources) > 1: # multi sources to single target
-    return
+    for source in model.sources:
+      source_model = ModelSettings(**source)
+      source_data = load_data(spark, source_model, vars)
+      if source_data == None: source_data = spark.createDataFrame([], StructType([]))
+      source_data.createOrReplaceTempView(source_model.name)
+
+    target_model = ModelSettings(**model.targets[0])
+    sql_file = string_utils.parse(f'{job_settings.config_dir}/{target_model.sql_model}', vars)
+    sql_query = file_utils.load_text(sql_file)
+    target_data = spark.sql(sql_query)
+    save_data(target_data, target_model, vars, job_settings)
   else: # single source to multi targets
     source_model = ModelSettings(**model.sources[0])
     source_data = load_data(spark, source_model, vars)
@@ -87,6 +98,3 @@ def partition_by(data: DataFrame, aggregation: AggregationSettings) -> DataFrame
 
   return data.selectExpr(*aggregation.dimensions, *[measure['name'] for measure in aggregation.measures]) if aggregation.measures else data.drop('rn')
 
-# def execute_query(spark: SparkSession, query: str) -> DataFrame:
-#   target_data = spark.sql(query)
-#   return target_data
