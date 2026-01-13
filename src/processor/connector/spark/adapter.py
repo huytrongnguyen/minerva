@@ -59,7 +59,7 @@ def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: dict[str, A
   }
   data.write.format(model.type).options(**options).mode('overwrite').save()
 
-  print(f"Save data to {cred['dbtable']}")
+  print(f"Save data to {model.name}")
 
   if model.postprocess:
     sql_file = string_utils.parse(f'{job_settings.config_dir}/{model.postprocess}', vars)

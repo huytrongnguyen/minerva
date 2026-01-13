@@ -16,7 +16,6 @@ node_modules
 package-lock.json
 
 # Others
-sample/data
-theme-gray-all_1.css
 minio
+airflow/logs
 .ipynb_checkpoints

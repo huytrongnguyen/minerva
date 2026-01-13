@@ -1,91 +1,160 @@
 services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-with-iceberg-and-aistor/
-  # event-logs:
-  #   image: postgres:16
-  #   container_name: event-logs
-  #   restart: unless-stopped
-  #   environment:
-  #     POSTGRES_DB: event_logs
-  #     POSTGRES_USER: simuser
-  #     POSTGRES_PASSWORD: simpassword  # Change in prod!
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-
   minio:
     image: minio/minio
     container_name: minio
     command: server --console-address ":9001" /data
     environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=password
-      - MINIO_DOMAIN=minio
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+      MINIO_DOMAIN: minio
     ports:
-      - '9000:9000'
-      - '9001:9001'
+      - 9000:9000 # API
+      - 9001:9001 # Console
     volumes:
-      - ../minio:/data # Mount local ../minio directory to /data
-    networks:
-      iceberg_net:
+      - ../../../minio:/data # Mount local ../minio directory to /data
+    # networks:
+    #   iceberg_net:
         # aliases:
         #   - warehouse.minio
 
-  rest:
-    image: apache/iceberg-rest-fixture
-    container_name: iceberg-rest
-    environment:
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
-      - CATALOG_WAREHOUSE=s3://warehouse/
-      - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
-      - CATALOG_S3_ENDPOINT=http://minio:9000
+  postgres:
+    image: postgres:16
+    container_name: postgres
     ports:
-      - 8181:8181
-    networks:
-      iceberg_net:
-
-  jupyter:
-    image: tabulario/spark-iceberg
-    container_name: jupyter
-    # depends_on:
-    #   - rest
-    #   - minio
+      - 5432:5432
     environment:
-      - JUPYTER_ENABLE_LAB=yes
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres # Default DB; init script creates others
     volumes:
-      - ../notebooks:/home/iceberg/notebooks
-      - ../../../lakehouse:/home/iceberg/warehouse
-    ports:
-      - 8888:8888
-      # - 8080:8080
-      # - 10000:10000
-      # - 10001:10001
-    networks:
-      iceberg_net:
+      - ../../../postgres:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
-  # mc:
-  #   depends_on:
-  #     - minio
-  #   image: minio/mc
-  #   container_name: mc
-  #   networks:
-  #     iceberg_net:
+  # rest:
+  #   image: apache/iceberg-rest-fixture
+  #   container_name: iceberg-rest
   #   environment:
   #     - AWS_ACCESS_KEY_ID=admin
   #     - AWS_SECRET_ACCESS_KEY=password
   #     - AWS_REGION=us-east-1
-  #   entrypoint: >
-  #     /bin/sh -c "
-  #     until (/usr/bin/mc config host add minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
-  #     /usr/bin/mc rm -r --force minio/lakehouse;
-  #     /usr/bin/mc mb minio/lakehouse;
-  #     /usr/bin/mc policy set public minio/lakehouse;
-  #     tail -f /dev/null
-  #     "
+  #     - CATALOG_WAREHOUSE=s3://warehouse/
+  #     - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
+  #     - CATALOG_S3_ENDPOINT=http://minio:9000
+  #   ports:
+  #     - 8181:8181
+  #   networks:
+  #     iceberg_net:
 
-networks:
-  iceberg_net:
+  jupyter:
+    image: tabulario/spark-iceberg
+    container_name: jupyter
+    depends_on:
+    #   - rest
+      - minio
+      - postgres
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: iceberg  # Iceberg catalog DB
+    volumes:
+      - ../notebooks:/home/iceberg/notebooks        # For notebooks/local files
+      # - ../../../lakehouse:/home/iceberg/warehouse  # Local CSV/JSON/Parquet files
+      # - ../airflow/jobs:/home/iceberg/jobs          # PySpark scripts
+    ports:
+      - 8888:8888 # JupyterLab
+    # networks:
+    #   iceberg_net:
+
+  airflow:
+    image: apache/airflow:2.8.0
+    container_name: airflow
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+      AIRFLOW__CORE__FERNET_KEY: 'gVqOwBQL2OeREGfnmwnuhR5QliF0yRHcXYr5x7cyxPU='
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    volumes:
+      - ../airflow/dags:/opt/airflow/dags
+      - ../airflow/logs:/opt/airflow/logs
+      - ../airflow/plugins:/opt/airflow/plugins
+    command: >
+      bash -c "
+      airflow db init &&
+      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin || true &&
+      airflow webserver &
+      airflow scheduler
+      "
+
+  # airflow-db:
+  #   image: postgres:15
+  #   container_name: airflow-db
+  #   environment:
+  #     POSTGRES_USER: airflow
+  #     POSTGRES_PASSWORD: airflow
+  #     POSTGRES_DB: airflow
+  #   volumes:
+  #     - ../airflow/db:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 10
+  #     start_period: 10s
+
+  # airflow:
+  #   image: apache/airflow:2.10.4
+  #   container_name: airflow
+  #   depends_on:
+  #     airflow-db:
+  #       condition: service_healthy
+  #     minio:
+  #       condition: service_started
+  #   environment:
+  #     AIRFLOW_HOME: /opt/airflow
+  #     AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+  #     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+  #     AIRFLOW__CORE__FERNET_KEY: ''
+  #     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+  #     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+  #     AIRFLOW__LOGGING__REMOTE_LOGGING: 'false'
+  #   volumes:
+  #     - ../airflow/dags:/opt/airflow/dags
+  #     - ../airflow/jobs:/opt/airflow/jobs
+  #     - ../airflow/requirements.txt:/requirements.txt
+  #   ports:
+  #     - 8080:8080
+  #   entrypoint: /bin/bash
+  #   command: >
+  #     -c "
+  #     set -e;
+  #     echo 'Installing requirements...';
+  #     pip install --no-cache-dir -r /requirements.txt 2>/dev/null || echo 'No requirements or already installed';
+  #     echo 'Initializing database...';
+  #     airflow db migrate;
+  #     echo 'Creating admin user...';
+  #     airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin 2>/dev/null || echo 'Admin user already exists';
+  #     echo 'Starting Airflow webserver and scheduler...';
+  #     airflow webserver --port 8080 > /tmp/webserver.log 2>&1 &
+  #     WEBSERVER_PID=$$!;
+  #     airflow scheduler > /tmp/scheduler.log 2>&1 &
+  #     SCHEDULER_PID=$$!;
+  #     wait
+  #     "
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
+
+# networks:
+#   iceberg_net:

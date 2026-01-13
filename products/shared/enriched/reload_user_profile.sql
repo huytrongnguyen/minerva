@@ -18,7 +18,7 @@ with qualify as (
   from {{
     source({
       'name': 'users_snapshot',
-      'location': '{{targets.warehouse.location}}/{{product_id}}/users/snapshot/event_date={{event_date}}',
+      'location': '{{targets.warehouse.location}}/{{product_id}}/users/snapshot',
     })
   }}
 )
