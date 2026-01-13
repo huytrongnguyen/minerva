@@ -8,6 +8,5 @@ class JobSettings:
   connector: Optional[str] = 'spark'
   product_id: Optional[str] = ''
   event_date: Optional[str] = ''
-  action: Optional[str] = ''
   config_dir: Optional[str] = path.dirname(__file__) + '/../../../products'
   libs: Optional[str] = ''

@@ -9,7 +9,7 @@ from settings.product_settings import ProductSettings
 from settings.model_settings import ModelLayout, ModelSettings, ColumnSettings, AggregationSettings
 from shared import file_utils, string_utils
 
-from .adapter import load_data, save_data, merge_data
+from .adapter import load_data, save_data
 from .functions import invoke_column_function, invoke_group_by_function, invoke_order_by_column, invoke_partition_by_column, invoke_query_function
 
 def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettings, job_settings: JobSettings):
@@ -27,7 +27,8 @@ def run(model: ModelLayout, spark: SparkSession, product_settings: ProductSettin
 
     target_model = ModelSettings(**model.targets[0])
     sql_file = string_utils.parse(f'{job_settings.config_dir}/{target_model.sql_model}', vars)
-    sql_query = file_utils.load_text(sql_file)
+    sql_model = file_utils.load_text(sql_file)
+    sql_query = string_utils.parse(sql_model, vars)
     target_data = spark.sql(sql_query)
     save_data(target_data, target_model, vars, job_settings)
   else: # single source to multi targets

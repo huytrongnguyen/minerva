@@ -19,25 +19,22 @@ def run(sql_model: str, spark: SparkSession, product_settings: ProductSettings, 
   }
 
   jinja_env.globals['source'] = lambda params: source(spark, ModelSettings(**params), vars)
-  jinja_env.globals['insert_into'] = lambda params: insert_into(model, ModelSettings(**params))
-  jinja_env.globals['date_range'] = lambda minus_days, plus_days: date_range(job_settings.event_date, minus_days, plus_days)
+  jinja_env.globals['create_or_replace_table'] = lambda params: create_or_replace_table(model, ModelSettings(**params))
+  # jinja_env.globals['date_range'] = lambda minus_days, plus_days: date_range(job_settings.event_date, minus_days, plus_days)
 
   sql_query = parse(sql_model, vars)
-  # print(f'sql_query = {sql_query}')
-
+  print(f'sql_query = {sql_query}')
   target_data = spark.sql(sql_query)
-
-  save_data(target_data, model.targets[0], vars)
+  save_data(target_data, model.targets[0], vars, job_settings)
 
 def source(spark: SparkSession, source_model: ModelSettings, vars: dict[str, Any]) -> str:
   source_data = load_data(spark, source_model, vars)
   if source_data == None: source_data = spark.createDataFrame([], StructType([]))
 
   source_data.createOrReplaceTempView(source_model.name)
-
   return source_model.name
 
-def insert_into(model: ModelLayout, target_model: ModelSettings) -> str:
+def create_or_replace_table(model: ModelLayout, target_model: ModelSettings) -> str:
   model.targets.append(target_model)
   return ''
 
