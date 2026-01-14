@@ -43,10 +43,11 @@ services:
     volumes:
       - ../notebooks:/home/iceberg/notebooks # for Jupyter work
       - ./processor:/home/iceberg/processor
-      - ../products:/home/iceberg/data/products
+
     ports:
       - 8888:8888 # Jupyter
       - 7077:7077 # Spark master
+      - 8585:8080 # Spark UI
 
   airflow:
     build:
@@ -64,9 +65,12 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ../airflow/dags:/opt/airflow/dags
+      - ../airflow/dags:/opt/airflow/dags # DAG files (Python DAG definitions)
       - ../airflow/jobs:/opt/airflow/jobs
       - ../airflow/logs:/opt/airflow/logs
+      - ../settings:/opt/airflow/settings
+      - ./processor:/opt/airflow/processor # The container that actually runs spark-submit needs access to the .py file
+      - ../../../data:/opt/airflow/data # Local CSV files(very important!)
     command: |
       bash -c "
       airflow db init

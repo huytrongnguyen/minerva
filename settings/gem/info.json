@@ -1,0 +1,20 @@
+{
+  "ingested": {
+    "location": "/opt/airflow/data"
+  },
+  "lakehouse": {
+    "location": "s3a://lakehouse"
+  },
+  "sources": {
+    "appsflyer": {
+      "location": "/opt/airflow/data"
+    }
+  },
+  "targets": {
+    "reporting": {
+      "type": "postgres",
+      "location": "../../../../lakehouse/cred"
+    }
+  },
+  "app_ids": "{id123456789,com.appsflyer.referrersender}"
+}
