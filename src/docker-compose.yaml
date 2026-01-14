@@ -1,4 +1,4 @@
-services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-with-iceberg-and-aistor/
+services:
   minio:
     image: minio/minio
     container_name: minio
@@ -12,10 +12,6 @@ services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-w
       - 9001:9001 # Console
     volumes:
       - ../../../minio:/data # Mount local ../minio directory to /data
-    # networks:
-    #   iceberg_net:
-        # aliases:
-        #   - warehouse.minio
 
   postgres:
     image: postgres:16
@@ -30,26 +26,10 @@ services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-w
       - ../../../postgres:/var/lib/postgresql/data
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
-  # rest:
-  #   image: apache/iceberg-rest-fixture
-  #   container_name: iceberg-rest
-  #   environment:
-  #     - AWS_ACCESS_KEY_ID=admin
-  #     - AWS_SECRET_ACCESS_KEY=password
-  #     - AWS_REGION=us-east-1
-  #     - CATALOG_WAREHOUSE=s3://warehouse/
-  #     - CATALOG_IO__IMPL=org.apache.iceberg.aws.s3.S3FileIO
-  #     - CATALOG_S3_ENDPOINT=http://minio:9000
-  #   ports:
-  #     - 8181:8181
-  #   networks:
-  #     iceberg_net:
-
   jupyter:
     image: tabulario/spark-iceberg
     container_name: jupyter
     depends_on:
-    #   - rest
       - minio
       - postgres
     environment:
@@ -61,16 +41,17 @@ services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-w
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: iceberg  # Iceberg catalog DB
     volumes:
-      - ../notebooks:/home/iceberg/notebooks        # For notebooks/local files
-      # - ../../../lakehouse:/home/iceberg/warehouse  # Local CSV/JSON/Parquet files
-      # - ../airflow/jobs:/home/iceberg/jobs          # PySpark scripts
+      - ../notebooks:/home/iceberg/notebooks # for Jupyter work
+      - ./processor:/home/iceberg/processor
+      - ../products:/home/iceberg/data/products
     ports:
-      - 8888:8888 # JupyterLab
-    # networks:
-    #   iceberg_net:
+      - 8888:8888 # Jupyter
+      - 7077:7077 # Spark master
 
   airflow:
-    image: apache/airflow:2.8.0
+    build:
+      context: ..
+      dockerfile: src/Dockerfile.airflow
     container_name: airflow
     restart: always
     environment:
@@ -84,77 +65,12 @@ services: # https://blog.min.io/the-definitive-guide-to-lakehouse-architecture-w
       - postgres
     volumes:
       - ../airflow/dags:/opt/airflow/dags
+      - ../airflow/jobs:/opt/airflow/jobs
       - ../airflow/logs:/opt/airflow/logs
-      - ../airflow/plugins:/opt/airflow/plugins
-    command: >
+    command: |
       bash -c "
-      airflow db init &&
-      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin || true &&
-      airflow webserver &
+      airflow db init
+      airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password password || true
+      airflow webserver --port 8080 &
       airflow scheduler
       "
-
-  # airflow-db:
-  #   image: postgres:15
-  #   container_name: airflow-db
-  #   environment:
-  #     POSTGRES_USER: airflow
-  #     POSTGRES_PASSWORD: airflow
-  #     POSTGRES_DB: airflow
-  #   volumes:
-  #     - ../airflow/db:/var/lib/postgresql/data
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 10
-  #     start_period: 10s
-
-  # airflow:
-  #   image: apache/airflow:2.10.4
-  #   container_name: airflow
-  #   depends_on:
-  #     airflow-db:
-  #       condition: service_healthy
-  #     minio:
-  #       condition: service_started
-  #   environment:
-  #     AIRFLOW_HOME: /opt/airflow
-  #     AIRFLOW__CORE__EXECUTOR: SequentialExecutor
-  #     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
-  #     AIRFLOW__CORE__FERNET_KEY: ''
-  #     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-  #     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-  #     AIRFLOW__LOGGING__REMOTE_LOGGING: 'false'
-  #   volumes:
-  #     - ../airflow/dags:/opt/airflow/dags
-  #     - ../airflow/jobs:/opt/airflow/jobs
-  #     - ../airflow/requirements.txt:/requirements.txt
-  #   ports:
-  #     - 8080:8080
-  #   entrypoint: /bin/bash
-  #   command: >
-  #     -c "
-  #     set -e;
-  #     echo 'Installing requirements...';
-  #     pip install --no-cache-dir -r /requirements.txt 2>/dev/null || echo 'No requirements or already installed';
-  #     echo 'Initializing database...';
-  #     airflow db migrate;
-  #     echo 'Creating admin user...';
-  #     airflow users create --username admin --firstname Admin --lastname User --role Admin --email admin@example.com --password admin 2>/dev/null || echo 'Admin user already exists';
-  #     echo 'Starting Airflow webserver and scheduler...';
-  #     airflow webserver --port 8080 > /tmp/webserver.log 2>&1 &
-  #     WEBSERVER_PID=$$!;
-  #     airflow scheduler > /tmp/scheduler.log 2>&1 &
-  #     SCHEDULER_PID=$$!;
-  #     wait
-  #     "
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 60s
-
-# networks:
-#   iceberg_net:
