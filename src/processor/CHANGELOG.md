@@ -4,8 +4,9 @@
 
 **Improvements**
 
-- Supports to load multiple sources then process with sql file to target
-- Supports to ingest data stored in Airflow server to MinIO lakehouse in parquet format
+- Load multiple sources then process with sql file to target
+- Ingest data stored in Airflow server to MinIO lakehouse in parquet format
+- Add `spark-defaults.conf` to `spark-master` container to supports Jupyter read data from MinIO
 
 ## 1.0.1
 > 2026-01-10
@@ -13,9 +14,9 @@
 **Features**
 
 - Update `ModelSettings`
-- Supports to save data to external db
-- Supports to run sql query in external db as a postprocess
-- Supports to aggregate data with Window functions
+- Save data to external db
+- Run sql query in external db as a postprocess
+- Aggregate data with Window functions
 
 ## 1.0.0
 > 2025-10-25
@@ -29,23 +30,23 @@
 
 **Features**
 
-- Supports to load, transform then save data via sql model
+- Load, transform then save data via sql model
 
 ## v0.0.4
 > 2025-10-18
 
 **Features**
 
-- Supports to query data via json configuration
-- Supports to aggregate data via json configuration
-- Supports to merge source into target
+- Query data via json configuration
+- Aggregate data via json configuration
+- Merge source into target
 
 ## v0.0.3
 > 2025-10-15
 
 **Features**
 
-- Supports to transform data via json configuration
+- Transform data via json configuration
 - Restructure codebase
 
 ## v0.0.2
@@ -53,7 +54,7 @@
 
 **Features**
 
-- Supports to load and save data via json configuration
+- Load and save data via json configuration
 
 ## v0.0.1
 > 2025-10-04
