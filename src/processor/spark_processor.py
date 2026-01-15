@@ -34,7 +34,7 @@ class ModelSettings:
   case_sensitive: Optional[bool] = False
   options: Optional[Dict[str, str]] = field(default_factory=dict)
   preprocess: Optional[str] = ''
-  default_when_blank: Optional[bool] = True
+  default_when_blank: Optional[bool] = False
   # save options
   num_partitions: Optional[int] = 1
   partition_by: Optional[List[str]] = field(default_factory=list)

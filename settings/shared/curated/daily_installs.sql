@@ -1,11 +1,10 @@
 {{
-  insert_into({
-    'type': 'jdbc',
-    'postprocess': 'shared/curated/f_daily_installs.sql',
-    'location': '{{targets.reporting.location}}/{{product_id}}.json',
+  create_or_replace_table({
+    'partition_by': ['event_date'],
+    'location': '{{lakehouse.location}}/{{product_id}}/curated/daily/installs',
   })
 }}
-with installs_report as (
+with install as (
   select  '{{product_id}}' as product_id
         , to_date('{{event_date}}') as event_date
         , coalesce(af_prt, 'na') as agency
@@ -14,19 +13,17 @@ with installs_report as (
         , coalesce(upper(country_code), 'na') as country_code
         , coalesce(lower(platform), 'na') as platform
         , appsflyer_id
-        , to_date('{{install_time}}') as install_date
+        , to_date(install_time) as install_date
   from {{
     source({
-      'type': 'csv',
-      'option': { 'header': 'true' },
-      'name': 'installs_report',
-      'location': '{{targets.warehouse.location}}/{{product_id}}/appsflyer/installs_report/app_id={{vars.app_ids}}/event_date={{event_date}}',
+      'name': 'appsflyer_install',
+      'location': '{{lakehouse.location}}/{{product_id}}/raw/appsflyer/event_name=install/event_date={{event_date}}',
     })
   }}
 )
 
 select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
-      , coalesce(count(distinct(install_id)), 0) as installs
-from installs_report
+      , coalesce(count(distinct(appsflyer_id)), 0) as installs
+from install
 where datediff(event_date,install_date) = 0
 group by product_id, event_date, agency, media_source, campaign_id, country_code, platform

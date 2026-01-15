@@ -11,7 +11,7 @@ libs=""
 
 if [ $# -gt 3 ]
 then
-  libs=$4
+  libs=",$4"
 fi
 
 # driver runs in Airflow → use 2g to leave room for others
@@ -20,24 +20,20 @@ fi
 
 spark-submit \
   --name "minerva::process::$product_id::$event_date::$models" \
-  --master spark://spark-master:7077 \
+  --master local[*] \
   --deploy-mode client \
   --driver-memory 2g \
   --executor-memory 2g \
-  --num-executors 2 \
-  --executor-cores 2 \
   --conf spark.hadoop.fs.s3a.endpoint=http://minio:9000 \
   --conf spark.hadoop.fs.s3a.access.key=admin \
   --conf spark.hadoop.fs.s3a.secret.key=password \
   --conf spark.hadoop.fs.s3a.path.style.access=true \
   --conf spark.hadoop.fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
-  --conf spark.dynamicAllocation.enabled=false \
+  --conf spark.hadoop.fs.s3a.connection.ssl.enabled=false \
+  --conf spark.hadoop.fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
   --conf spark.sql.shuffle.partitions=8 \
   --conf spark.sql.adaptive.enabled=true \
   --conf spark.sql.adaptive.coalescePartitions.enabled=true \
   --conf spark.sql.sources.partitionOverwriteMode=dynamic \
-  --conf spark.executor.heartbeatInterval=20s \
-  --conf spark.network.timeout=120s \
-  --conf spark.scheduler.listenerbus.eventqueue.capacity=10000 \
-  --jars $libs \
-  -- /opt/airflow/processor/spark_processor.py product_id=$product_id event_date=$event_date models=$models
+  --jars /opt/airflow/libs/hadoop-aws-3.3.4.jar,/opt/airflow/libs/aws-java-sdk-bundle-1.12.262.jar$libs \
+  /opt/airflow/processor/spark_processor.py product_id=$product_id event_date=$event_date models=$models
