@@ -56,8 +56,6 @@ processor/
 
 ### Work with MinIO
 
-
-
 S3A filesystem (spark.hadoop.fs.s3a.*), need to be set before the SparkContext is created, as they are used by the Hadoop filesystem layer and cannot be modified dynamically after the SparkContext is initialized
 
 ```sh

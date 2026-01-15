@@ -1,4 +1,4 @@
-import sys, json, logging, os
+import sys, json, logging
 from typing import Any, Optional, Dict, List
 from dataclasses import dataclass, field
 from functools import reduce
@@ -11,7 +11,7 @@ from pyspark.sql.types import StructType
 logger = logging.getLogger(__name__)
 logging.basicConfig(
   level=logging.INFO,
-  format='%(message)s'
+  format='%(levelname)s %(module)s:%(lineno)d %(message)s'
 )
 
 # Initialize Jinja
@@ -83,11 +83,11 @@ def handler(event: Dict[str, str]):
 def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], job_settings: JobSettings):
   targets: list[ModelSettings] = []
 
-  var = {
+  vars = {
     'product_id': job_settings.product_id,
     'event_date': job_settings.event_date,
   }
-  vars = {**product_info, **var}
+  vars = {**product_info, **vars}
 
   jinja_env.globals['source'] = lambda params: source(spark, ModelSettings(**params), vars)
   jinja_env.globals['create_or_replace_table'] = lambda params: target(targets, ModelSettings(**params))
@@ -99,7 +99,7 @@ def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], j
 def source(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -> str:
   data = load_data(spark, model, vars)
   if data == None and model.default_when_blank:
-    print('`default_when_blank` is enabled, try to create empty DataFrame')
+    logger.warning('`default_when_blank` is enabled, try to create empty DataFrame')
     data = spark.createDataFrame([], StructType([]))
 
   data.createOrReplaceTempView(model.name)
@@ -116,17 +116,17 @@ def load_data(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -
     spark.conf.set('spark.sql.caseSensitive', 'true')
 
   path = jinja_env.from_string(model.location).render(**vars)
-  print(f'Load {model.type} data from "{path}"')
+  logger.info(f'Load {model.type} data from "{path}"')
 
   try:
     data: DataFrame = spark.read.format(model.type).options(**model.options).load(path)
     if data.head(1):
       return data
     else:
-      print(f'Empty from "{path}"')
+      logger.warning(f'Empty from "{path}"')
       return None
   except Exception as ex:
-    print(f'Cannot load {model.type} data from "{path}" caused by: ${ex}')
+    logger.error(f'Cannot load {model.type} data from "{path}" caused by: ${ex}')
     return None
 
 def save_data(data: DataFrame, model: ModelSettings, vars: Dict[str, Any]):
@@ -134,7 +134,7 @@ def save_data(data: DataFrame, model: ModelSettings, vars: Dict[str, Any]):
     save_data_with_jdbc(data, model, vars)
   else:
     path = jinja_env.from_string(model.location).render(**vars)
-    print(f'Save data to "{path}" as {model.type}, num_partitions = {model.num_partitions}, partition_by = {model.partition_by}, columns = {"|".join(data.columns)}')
+    logger.info(f'Save data to "{path}" as {model.type}, num_partitions = {model.num_partitions}, partition_by = {model.partition_by}, columns = {"|".join(data.columns)}')
 
     writer: DataFrameWriter = data.coalesce(model.num_partitions).write.format(model.type).options(**model.options).mode('overwrite')
     if len(model.partition_by) > 0:
@@ -155,7 +155,7 @@ def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: Dict[str, A
   }
   data.write.format(model.type).options(**options).mode('overwrite').save()
 
-  print(f"Save data to {model.name}")
+  logger.info(f"Save data to {model.name}")
 #endregion
 
 #region ===== Utils =====

@@ -1,7 +1,7 @@
 {{
   create_or_replace_table({
-    'partition_by': ['event_date'],
-    'location': '{{lakehouse.location}}/{{product_id}}/devices/installs',
+    'partition_by': ['event_name','event_date'],
+    'location': '{{lakehouse.location}}/{{product_id}}/appsflyer',
   })
 }}
 select  *, to_date(event_time) as event_date

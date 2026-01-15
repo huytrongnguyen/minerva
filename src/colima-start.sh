@@ -1,1 +1,1 @@
-colima start --cpu 8 --memory 12 --disk 100
+colima start --cpu 8 --memory 12 --disk 100 --arch aarch64 --vm-type vz

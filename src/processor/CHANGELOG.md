@@ -5,6 +5,7 @@
 **Improvements**
 
 - Supports to load multiple sources then process with sql file to target
+- Supports to ingest data stored in Airflow server to MinIO lakehouse in parquet format
 
 ## 1.0.1
 > 2026-01-10

@@ -17,3 +17,15 @@
 - Postgres: Connect via DBeaver.
 - Spark UI: http://localhost:8080
 - Airflow UI: http://localhost:8081 (default login: admin/admin). Init DB first: `docker-compose exec airflow airflow db init` (creates tables in 'airflow' DB).
+
+## Resource Breakdown
+
+| Service | CPU | Memory |
+|---------|-----|--------|
+| Spark Master | 1 | 1.5GB |
+| Spark Worker 1 | 2 | 2GB |
+| Spark Worker 2 | 2 | 2GB |
+| Airflow | 1 | 1.5GB |
+| PostgreSQL | 1 | 1GB |
+| MinIO | 1 | 1GB |
+| **Total** | **8** | **9GB** |

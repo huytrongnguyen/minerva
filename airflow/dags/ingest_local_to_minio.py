@@ -13,7 +13,7 @@ with DAG(
   event_date = '{{ ds }}'
 
   spark_ingest = BashOperator(
-    task_id='run_spark_ingest_script',
-    bash_command=f'/opt/airflow/jobs/spark-runner.sh gem {event_date} shared/enriched/installs.sql',
+    task_id='spark_ingest',
+    bash_command=f'/opt/airflow/jobs/spark-ingest.sh gem {event_date} shared/raw/installs_report.sql',
     dag=dag,
   )
