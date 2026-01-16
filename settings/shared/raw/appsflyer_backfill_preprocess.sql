@@ -1,1 +1,0 @@
-select *, to_date(event_time) as event_date from {source_data}

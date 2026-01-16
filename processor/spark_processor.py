@@ -81,7 +81,7 @@ def handler(event: Dict[str, str]):
 
 #region ===== SQL Model =====
 def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], job_settings: JobSettings):
-  targets: list[ModelSettings] = []
+  targets: List[ModelSettings] = []
 
   vars = {
     'product_id': job_settings.product_id,

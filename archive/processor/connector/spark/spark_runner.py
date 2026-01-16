@@ -18,6 +18,11 @@ def run(product_settings: ProductSettings, job_settings: JobSettings):
     # 'spark.executor.cores': '4',
     'spark.sql.adaptive.enabled': 'true',
     'spark.sql.sources.partitionOverwriteMode': 'dynamic',
+    # 'spark.jars': '../libs/hadoop-aws-3.3.6.jar,../libs/aws-java-sdk-bundle-1.12.792.jar',
+    # 'spark.sql.extensions': 'org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions',
+    # 'spark.sql.catalog.lakehouse': 'org.apache.iceberg.spark.SparkCatalog',
+    # 'spark.sql.catalog.lakehouse.type': 'hadoop',
+    # 'spark.sql.catalog.lakehouse.warehouse': 's3a://lakehouse',
   }
 
   if job_settings.libs:
@@ -31,6 +36,20 @@ def run(product_settings: ProductSettings, job_settings: JobSettings):
     .config(map=config)
     .getOrCreate() # Gets an existing SparkSession or creates a new one
   )
+
+  # # Now set S3A configs directly on Hadoop conf
+  # hadoop_conf = spark._jsc.hadoopConfiguration()
+  # hadoop_conf.set("fs.s3a.endpoint", "http://localhost:9000")
+  # hadoop_conf.set("fs.s3a.access.key", "admin")
+  # hadoop_conf.set("fs.s3a.secret.key", "password")
+  # hadoop_conf.set("fs.s3a.path.style.access", "true")
+  # hadoop_conf.set("fs.s3a.path.connection.ssl.enabled", "false")
+  # hadoop_conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+  # hadoop_conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
+  # hadoop_conf.set("fs.s3a.connection.timeout", "60") # Overrides for timeouts, etc.
+  # hadoop_conf.set("fs.s3a.connection.establish.timeout", "60")
+  # hadoop_conf.set("fs.s3a.threads.keepalivetime", "60")
+  # hadoop_conf.set("fs.s3a.multipart.purge.age", "86400")
 
   for file_name in job_settings.models.split(','):
     file_path = f'{job_settings.config_dir}/{file_name}'

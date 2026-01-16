@@ -12,4 +12,4 @@ SPARK_LOCAL_HOSTNAME=localhost spark-submit \
   --conf spark.hadoop.fs.s3a.multipart.purge.age=86400 \
   --conf spark.hadoop.fs.obs.multipart.purge.age=86400 \
   --jars ../../../libs/hadoop-aws-3.3.4.jar,../../../libs/aws-java-sdk-bundle-1.12.262.jar \
-  src/app.py
+  app.py

@@ -15,8 +15,12 @@ appsettings.Development.json
 node_modules
 package-lock.json
 
+# Jupyter
+metastore_db
+
 # Others
 minio
 libs
 logs
+*.log
 .ipynb_checkpoints

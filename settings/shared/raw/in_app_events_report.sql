@@ -1,10 +1,10 @@
 {{
   create_or_replace_table({
-    'partition_by': ['event_date'],
+    'partition_by': ['partition_date'],
     'location': '{{lakehouse.location}}/{{product_id}}/raw/appsflyer/in_app_events_report',
   })
 }}
-select  *, to_date(event_time) as event_date
+select  *, to_date(event_time) as partition_date
 from {{
   source({
     'name': 'install_reports',
