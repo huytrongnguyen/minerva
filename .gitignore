@@ -18,5 +18,5 @@ package-lock.json
 # Others
 minio
 libs
-airflow/logs
+logs
 .ipynb_checkpoints

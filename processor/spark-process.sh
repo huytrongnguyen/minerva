@@ -36,4 +36,4 @@ spark-submit \
   --conf spark.sql.adaptive.coalescePartitions.enabled=true \
   --conf spark.sql.sources.partitionOverwriteMode=dynamic \
   --jars /opt/airflow/libs/hadoop-aws-3.3.4.jar,/opt/airflow/libs/aws-java-sdk-bundle-1.12.262.jar$libs \
-  /opt/airflow/processor/spark_processor.py product_id=$product_id event_date=$event_date models=$models
+  /opt/airflow/jobs/spark_processor.py product_id=$product_id event_date=$event_date models=$models

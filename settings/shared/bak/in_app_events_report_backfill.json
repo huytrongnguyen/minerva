@@ -1,0 +1,20 @@
+{
+  "sources": [{
+    "type": "csv",
+    "options": {
+      "delimiter": "\t",
+      "header": "true"
+    },
+    "preprocess": "shared/raw/appsflyer_backfill_preprocess.sql",
+    "location": "{{sources.appsflyer.location}}/id123456789/inapp"
+  }],
+  "targets": [{
+    "type": "csv",
+    "options": {
+      "header": "true"
+    },
+    "num_partitions": 8,
+    "partition_by": ["app_id","event_date"],
+    "location": "{{targets.warehouse.location}}/{{product_id}}/appsflyer/in_app_events_report"
+  }]
+}

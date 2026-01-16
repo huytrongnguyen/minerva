@@ -21,6 +21,6 @@ ENV PATH="${JAVA_HOME}/bin:${PATH}"
 USER airflow
 
 # Copy and install Python requirements at build time for faster container startup
-COPY --chown=airflow:root airflow/requirements.txt /tmp/requirements.txt
+COPY --chown=airflow:root processor/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt
 

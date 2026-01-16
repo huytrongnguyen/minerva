@@ -11,7 +11,7 @@ services:
       - 9000:9000 # API
       - 9001:9001 # Console
     volumes:
-      - ../../../minio:/data # Mount local ../minio directory to /data
+      - ../../../data/minio:/data # Mount local ../minio directory to /data
     networks:
       - spark-network
 
@@ -25,8 +25,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres # Default DB; init script creates others
     volumes:
-      - ../../../postgres:/var/lib/postgresql/data
-      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+      - ../../../data/postgres:/var/lib/postgresql/data
+      - ./postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - spark-network
 
@@ -52,12 +52,12 @@ services:
       SPARK_CONF_spark_sql_catalog_iceberg_s3_endpoint: http://minio:9000
     volumes:
       - ../notebooks:/home/iceberg/notebooks # for Jupyter work
-      - ./processor:/home/iceberg/processor
-      - ../libs/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
-      - ../libs/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
-      - ../libs/postgresql-42.7.8.jar:/opt/spark/jars/postgresql-42.7.8.jar
-      - ../conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
-      - ../../../data:/home/iceberg/data # Local CSV files for Jupyter work
+      - ../processor:/home/iceberg/processor
+      - ./libs/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
+      - ./libs/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
+      - ./libs/postgresql-42.7.8.jar:/opt/spark/jars/postgresql-42.7.8.jar
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../../data/lakehouse:/home/iceberg/data # Local CSV files for Jupyter work
     ports:
       - 8888:8888 # JupyterLab -> localhost:8888
     networks:
@@ -88,7 +88,7 @@ services:
   airflow:
     build:
       context: ..
-      dockerfile: src/Dockerfile.airflow
+      dockerfile: platform/Dockerfile.airflow
     container_name: airflow
     restart: always
     environment:
@@ -102,13 +102,11 @@ services:
       postgres:
         condition: service_started
     volumes:
-      - ../airflow/dags:/opt/airflow/dags # DAG files (Python DAG definitions)
-      - ../airflow/jobs:/opt/airflow/jobs
-      - ../airflow/logs:/opt/airflow/logs
+      - ./libs:/opt/airflow/libs
+      - ../pipelines:/opt/airflow/dags # DAG files (Python DAG definitions)
+      - ../processor:/opt/airflow/jobs # The container that actually runs spark-submit needs access to the .py file
       - ../settings:/opt/airflow/settings
-      - ../libs:/opt/airflow/libs
-      - ./processor:/opt/airflow/processor # The container that actually runs spark-submit needs access to the .py file
-      - ../../../data:/opt/airflow/data # Local CSV files
+      - ../../../data/lakehouse:/opt/airflow/data # Local CSV files
     networks:
       - spark-network
     command: |

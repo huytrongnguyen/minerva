@@ -1,11 +1,11 @@
 # Processor
 
-This project is a Spark 3.5.3 application built with Python 3.9 and Java 17. It reads and writes data to a MinIO bucket. The application is deployed using Docker Compose with Colima as the Docker runtime on macOS or Linux. It offers a centralised and participative source of truth for analytics, reporting and experimentation across the company. Marketing might calculate it one way, the product team another, leading to a battle of conflicting dashboards and eroding trust in the data itself. By creating a single, governed source of truth for business logic, a metrics store ensures that when anyone asks a question about the data, they get one consistent, reliable answer.
+This project is a Spark 3.5.3 application built with Python 3.8 and Java 17. It offers a centralised and participative source of truth for analytics, reporting and experimentation across the company. Marketing might calculate it one way, the product team another, leading to a battle of conflicting dashboards and eroding trust in the data itself. By creating a single, governed source of truth for business logic, a metrics store ensures that when anyone asks a question about the data, they get one consistent, reliable answer.
 
 ## Prerequisites
 
 - **Java 17**: Amazon Corretto 17.
-- **Python**: Python 3.9.
+- **Python**: Python 3.8.
 - **Colima**: Version 0.7.0 or later for Docker runtime.
 - **Docker CLI**: For running Docker commands.
 
@@ -31,19 +31,11 @@ processor/
 ### Install Python dependencies
 
 - Verify installation: `python3 --version`
-  - Ensure Python version is 3.9
+  - Ensure Python version is 3.8
 - Install dependencies
   ```sh
   pip3 install -r requirements.txt
   ```
-
-### Install Colima and Docker CLI:
-- Install Colima: `brew install colima`
-- Install Docker CLI: `brew install docker`
-- Start Colima with sufficient resources for Spark and MinIO: `colima start --cpu 4 --memory 8`
-  - Adjust CPU/memory based on your system.
-  - Use --mount if volume access issues occur (see Troubleshooting).
-- Verify Docker is running: `docker ps`
 
 ## Troubleshoot
 
@@ -87,3 +79,20 @@ SPARK_LOCAL_HOSTNAME=localhost spark-submit \
 ```
 
 Reference: https://github.com/open-metadata/OpenMetadata/issues/22843
+
+Or you can set S3A configs directly on Hadoop conf
+
+```py
+hadoop_conf = spark._jsc.hadoopConfiguration()
+hadoop_conf.set("fs.s3a.endpoint", "http://localhost:9000")
+hadoop_conf.set("fs.s3a.access.key", "admin")
+hadoop_conf.set("fs.s3a.secret.key", "password")
+hadoop_conf.set("fs.s3a.path.style.access", "true")
+hadoop_conf.set("fs.s3a.path.connection.ssl.enabled", "false")
+hadoop_conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+hadoop_conf.set("fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
+hadoop_conf.set("fs.s3a.connection.timeout", "60") # Overrides for timeouts, etc.
+hadoop_conf.set("fs.s3a.connection.establish.timeout", "60")
+hadoop_conf.set("fs.s3a.threads.keepalivetime", "60")
+hadoop_conf.set("fs.s3a.multipart.purge.age", "86400")
+```
