@@ -1,0 +1,1 @@
+sh spark-run.sh gem 2024-05-21 shared/enriched/reload_user_profile.sql #libs/postgresql-42.7.8.jar

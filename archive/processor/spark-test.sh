@@ -1,0 +1,1 @@
+python3 -m pytest --log-cli-level info -s ./test/spark_test_suite.py
