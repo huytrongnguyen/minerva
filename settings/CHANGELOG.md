@@ -11,4 +11,4 @@
 
 - Add models
   - Raw: `raw/installs_report`, `raw/in_app_events_report`
-  - Enriched: `enriched/user_activity`, `enriched/user_purchase`, `enriched/reload_user_profile`
+  - Enriched: `enriched/user_registration`, `enriched/user_activity`, `enriched/user_purchase`, `enriched/reload_user_profile`

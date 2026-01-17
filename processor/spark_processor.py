@@ -169,8 +169,12 @@ def load_text(file_path: str) -> str:
 def load_json(file_path: str) -> Dict[str, Any]:
   logger.info(f'Load json from {file_path}')
   data = {}
-  with open(file_path, 'r') as json_file:
-    data = json.load(json_file)
+  try:
+    with open(file_path, 'r') as json_file:
+      data = json.load(json_file)
+  except Exception as e:
+    logger.error(f'Error while loading json from {file_path}: {str(e)}')
+
   return data
 
 def convert_args_to_dict(args: List[str]) -> Dict[str, str]:
