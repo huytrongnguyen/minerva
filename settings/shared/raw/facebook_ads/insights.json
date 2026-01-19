@@ -1,0 +1,31 @@
+{
+  "sources": [{
+    "type": "api",
+    "location": "https://graph.facebook.com/v24.0/{{ad_account_id}}/insights",
+    "ref": "https://developers.facebook.com/docs/marketing-api/reference/ad-account/insights"
+  }],
+  "targets": [{
+    "type": "json",
+    "location": "{{ingested.location}}/facebook_ads/insights",
+    "partition_by": ["account_id","date_stop"],
+    "schema": [
+      {"name": "date_stop", "format": "date", "description": "The end date for your data. This is controlled by the date range you've selected for your reporting view."},
+      {"name": "date_start", "format": "date", "description": "The start date for your data. This is controlled by the date range you've selected for your reporting view."},
+      {"name": "account_id", "description": "The ID number of your ad account, which groups your advertising activity. Your ad account includes your campaigns, ads and billing."},
+      {"name": "account_name", "description": "The name of your ad account, which groups your advertising activity. Your ad account includes your campaigns, ads and billing."},
+      {"name": "campaign_id", "description": "The unique ID number of the ad campaign you're viewing in reporting. Your campaign contains ad sets and ads."},
+      {"name": "campaign_name", "description": "The name of the ad campaign you're viewing in reporting. Your campaign contains ad sets and ads."},
+      {"name": "adset_id", "description": "The unique ID of the ad set you're viewing in reporting. An ad set is a group of ads that share the same budget, schedule, delivery optimization and targeting."},
+      {"name": "adset_name", "description": "The name of the ad set you're viewing in reporting. An ad set is a group of ads that share the same budget, schedule, delivery optimization and targeting."},
+      {"name": "ad_id", "description": "The unique ID of the ad you're viewing in reporting."},
+      {"name": "ad_name", "description": "The name of the ad you're viewing in reporting."},
+      {"name": "impressions", "format": "numeric", "description": "The number of times your ads were on screen."},
+      {"name": "clicks", "format": "numeric", "description": "The number of clicks on your ads."},
+      {"name": "spend", "format": "numeric", "description": "The estimated total amount of money you've spent on your campaign, ad set or ad during its schedule. This metric is estimated."},
+      {"name": "objective", "description": "The objective reflecting the goal you want to achieve with your advertising. It may be different from the selected objective of the campaign in some cases."},
+      {"name": "impression_device", "description": "impression_device"},
+      {"name": "country", "description": "country"},
+      {"name": "reach", "format": "numeric", "description": "The number of Accounts Center accounts that saw your ads at least once. Reach is different from impressions, which may include multiple views of your ads by the same Accounts Center accounts. This metric is estimated."}
+    ]
+  }]
+}

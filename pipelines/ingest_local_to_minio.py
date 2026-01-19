@@ -14,7 +14,7 @@ with DAG(
 
   spark_ingest = BashOperator(
     task_id='spark_ingest',
-    bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/raw/installs_report.sql,shared/raw/in_app_events_report.sql',
+    bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/raw/appsflyer/installs_report.sql,shared/raw/appsflyer/in_app_events_report.sql',
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/enriched/user_registration.sql,shared/enriched/user_activity.sql,shared/enriched/user_purchase.sql',
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/enriched/user_profile.sql',
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-23 shared/enriched/reload_user_profile.sql',
