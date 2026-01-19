@@ -6,7 +6,7 @@
 }}
 
 with in_app_events as (
-  select *, '{{product_id}}' as product_id, customer_user_id as user_id, to_date('{{event_date}}') as partition_date
+  select *, '{{product_id}}' as product_id, substring(sha(customer_user_id), 0, 12) as user_id, to_date('{{event_date}}') as partition_date
   from {{
     source({
       'name': 'in_app_events',
