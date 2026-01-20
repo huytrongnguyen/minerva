@@ -1,9 +1,9 @@
 -- reset value to prevent issue double total value in case unique key is changed
-update daily_user_active_metrics set installs = 0
+update daily_user_metrics set installs = 0
 where event_date in (select distinct event_date from ztmp_daily_installs);
 
 -- update daily metrics
-insert into daily_user_active_metrics (
+insert into daily_user_metrics (
         product_id, event_date, agency, media_source, campaign_id, country_code, platform
       , installs, created_at
 )

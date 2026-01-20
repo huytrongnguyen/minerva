@@ -103,6 +103,7 @@ services:
         condition: service_started
     volumes:
       - ./libs:/opt/airflow/libs
+      - ./logs/airflow:/opt/airflow/logs
       - ../pipelines:/opt/airflow/dags # DAG files (Python DAG definitions)
       - ../processor:/opt/airflow/jobs # The container that actually runs spark-submit needs access to the .py file
       - ../settings:/opt/airflow/settings

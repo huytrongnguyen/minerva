@@ -2,7 +2,16 @@
 
 ## vNext
 
+**Features**
+
+- Add models
+  - Enriched: `enriched/user_profile`
+  - Curated: `curated/daily_installs`
+
 **Improvements**
+
+- Update models:
+  - Enriched: `enriched/reload_user_profile`
 
 ## 1.0.0
 > 2026-01-16

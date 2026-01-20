@@ -5,5 +5,10 @@
   "lakehouse": {
     "location": "s3a://lakehouse"
   },
+  "cred": {
+    "curated": {
+      "location": "/opt/airflow/settings"
+    }
+  },
   "app_ids": "{id123456789,com.appsflyer.referrersender}"
 }

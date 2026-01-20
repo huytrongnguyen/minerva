@@ -1,7 +1,9 @@
 {{
   create_or_replace_table({
-    'partition_by': ['event_date'],
-    'location': '{{lakehouse.location}}/{{product_id}}/curated/daily/installs',
+    'type': 'jdbc',
+    'name': 'ztmp_daily_installs',
+    'location': '{{settings_dir}}/{{product_id}}/curated_cred.json',
+    'postprocess': '{{settings_dir}}/shared/curated/f_daily_installs.sql',
   })
 }}
 with install as (
@@ -9,15 +11,15 @@ with install as (
         , to_date('{{event_date}}') as event_date
         , coalesce(af_prt, 'na') as agency
         , coalesce(media_source, 'na') as media_source
-        , coalesce(af_c_id, 'na') as campaign_id
+        , coalesce(substring(sha(af_c_id), 0, 12), 'na') as campaign_id
         , coalesce(upper(country_code), 'na') as country_code
         , coalesce(lower(platform), 'na') as platform
         , appsflyer_id
         , to_date(install_time) as install_date
   from {{
     source({
-      'name': 'appsflyer_install',
-      'location': '{{lakehouse.location}}/{{product_id}}/raw/appsflyer/event_name=install/event_date={{event_date}}',
+      'name': 'appsflyer_installs',
+      'location': '{{lakehouse.location}}/{{product_id}}/raw/appsflyer/installs_report/partition_date={{event_date}}',
     })
   }}
 )

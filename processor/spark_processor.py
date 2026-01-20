@@ -7,6 +7,8 @@ from jinja2 import Environment
 from pyspark.sql import SparkSession, DataFrame, DataFrameWriter
 from pyspark.sql.types import StructType
 
+from python_processor import execute_query
+
 # Initialize the logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -86,6 +88,7 @@ def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], j
   vars = {
     'product_id': job_settings.product_id,
     'event_date': job_settings.event_date,
+    'settings_dir': job_settings.settings_dir,
   }
   vars = {**product_info, **vars}
 
@@ -156,6 +159,11 @@ def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: Dict[str, A
   data.write.format(model.type).options(**options).mode('overwrite').save()
 
   logger.info(f"Save data to {model.name}")
+
+  if model.postprocess:
+    sql_file = jinja_env.from_string(model.postprocess).render(**vars)
+    sql_query = load_text(sql_file)
+    execute_query(sql_query, cred)
 #endregion
 
 #region ===== Utils =====

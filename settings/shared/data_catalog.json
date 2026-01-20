@@ -1,0 +1,181 @@
+{
+  "data_catalog_version": "1.0",
+  "updated_at": "2026-01-20",
+  "environment": "production",
+  "sources": [
+    {
+      "source_name": "Player Telemetry (Game Logs)",
+      "description": "In-game events from game clients/servers: sessions, levels, deaths, purchases (in-game), progression, etc.",
+      "business_purpose": "Player behavior analysis, churn prediction, session metrics, feature engineering for LTV",
+      "key_fields": [
+        {"name": "player_id", "type": "string", "nullable": false, "example": "uuid-abc123-4567-890a-bcde"},
+        {"name": "event_time", "type": "timestamp", "nullable": false, "example": "2026-01-19T14:30:45.123Z"},
+        {"name": "event_type", "type": "string", "nullable": false, "example": "level_complete"},
+        {"name": "session_id", "type": "string", "nullable": true},
+        {"name": "level_id", "type": "integer", "nullable": true},
+        {"name": "country_code", "type": "string", "nullable": true, "example": "VN"},
+        {"name": "device_type", "type": "string", "nullable": true, "example": "iPhone15,2"},
+        {"name": "custom_data", "type": "struct/json", "nullable": true, "description": "Flexible JSON payload"}
+      ],
+      "important_join_keys": ["player_id", "event_time", "session_id"],
+      "file_format": "jsonl (newline-delimited JSON)",
+      "bronze_transformation": "Convert to Parquet + repartition by recommended keys",
+      "recommended_partitioning": [
+        "game_id",
+        "date (YYYY-MM-DD extracted from event_time)",
+        "event_type (optional for very high volume)"
+      ],
+      "minio_path_pattern": "/telemetry/{game_id}/{date}/{file}",
+      "typical_volume": "Very high (millions–billions events/day)",
+      "expected_latency": "Near real-time (sub-hourly) or up to 1 hour delay"
+    },
+    {
+      "source_name": "Purchase History (App Store / Google Play Receipts)",
+      "description": "Verified in-app purchase transactions from Apple App Store and Google Play Billing",
+      "business_purpose": "Monetization tracking, revenue reconciliation, whale detection, LTV ground truth",
+      "key_fields": [
+        {"name": "player_id", "type": "string", "nullable": false},
+        {"name": "purchase_time", "type": "timestamp", "nullable": false},
+        {"name": "product_id", "type": "string", "nullable": false},
+        {"name": "purchase_token", "type": "string", "nullable": true},
+        {"name": "price_amount_micros", "type": "long", "nullable": false, "example": 9990000},
+        {"name": "currency", "type": "string", "nullable": false, "example": "USD"},
+        {"name": "platform", "type": "string", "nullable": false, "example": "google_play / apple"},
+        {"name": "order_id", "type": "string", "nullable": true}
+      ],
+      "important_join_keys": ["player_id", "purchase_time"],
+      "file_format": "jsonl",
+      "bronze_transformation": "Convert to Parquet + repartition",
+      "recommended_partitioning": ["platform", "date (YYYY-MM-DD from purchase_time)"],
+      "minio_path_pattern": "/purchases/{platform}/{date}/{file}",
+      "typical_volume": "Medium (thousands–hundreds of thousands / day)",
+      "expected_latency": "Daily batch, up to 24h delay"
+    },
+    {
+      "source_name": "AppsFlyer Raw Data (Attribution + Post-install Events)",
+      "description": "Attribution + all post-install events (installs, in-apps, ad-revenue, etc.) from AppsFlyer Pull API",
+      "business_purpose": "User acquisition attribution, campaign performance, cohort analysis, cross-platform revenue",
+      "key_fields": [
+        {"name": "appsflyer_id", "type": "string", "nullable": false},
+        {"name": "customer_user_id", "type": "string", "nullable": true, "description": "Should match player_id when set"},
+        {"name": "event_time", "type": "timestamp", "nullable": false},
+        {"name": "event_name", "type": "string", "nullable": false},
+        {"name": "media_source", "type": "string", "nullable": true},
+        {"name": "campaign", "type": "string", "nullable": true},
+        {"name": "campaign_id", "type": "string", "nullable": true},
+        {"name": "install_time", "type": "timestamp", "nullable": true},
+        {"name": "event_revenue_usd", "type": "double", "nullable": true},
+        {"name": "country_code", "type": "string", "nullable": true},
+        {"name": "platform", "type": "string", "nullable": true}
+      ],
+      "important_join_keys": ["customer_user_id → player_id", "appsflyer_id (fallback)", "event_time", "install_time"],
+      "file_format": "csv (source native) → convert to parquet in Bronze",
+      "bronze_transformation": "Convert to Parquet + repartition",
+      "recommended_partitioning": [
+        "report_type (installs_report / in_app_events_report / ad_revenue_raw)",
+        "date (YYYY-MM-DD from event_time)",
+        "media_source (optional)"
+      ],
+      "minio_path_pattern": "/appsflyer/{report_type}/{date}/{file}",
+      "typical_volume": "High (millions of events/day)",
+      "expected_latency": "Daily batch, typically 6-24h delay"
+    },
+    {
+      "source_name": "Facebook Ads Insights",
+      "description": "Performance metrics from Facebook Marketing API /insights endpoint",
+      "business_purpose": "Paid UA performance tracking, ROAS calculation, creative/ad set optimization",
+      "key_fields": [
+        {"name": "date_start", "type": "date", "nullable": false},
+        {"name": "campaign_id", "type": "string", "nullable": false},
+        {"name": "adset_id", "type": "string", "nullable": false},
+        {"name": "ad_id", "type": "string", "nullable": false},
+        {"name": "impressions", "type": "long", "nullable": false},
+        {"name": "clicks", "type": "long", "nullable": false},
+        {"name": "spend", "type": "double", "nullable": false},
+        {"name": "actions", "type": "array<struct>", "nullable": true},
+        {"name": "country", "type": "string", "nullable": true},
+        {"name": "placement", "type": "string", "nullable": true}
+      ],
+      "important_join_keys": ["campaign_id", "date_start"],
+      "file_format": "json or jsonl",
+      "bronze_transformation": "Convert to Parquet",
+      "recommended_partitioning": [
+        "ad_account_id",
+        "level (campaign / adset / ad)",
+        "date (YYYY-MM-DD from date_start)"
+      ],
+      "minio_path_pattern": "/facebook_ads/insights/{ad_account_id}/{level}/{date}/{file}",
+      "typical_volume": "Low–medium (thousands of rows/day)",
+      "expected_latency": "Daily batch"
+    },
+    {
+      "source_name": "Google Ads Performance",
+      "description": "Performance reports from Google Ads API (GAQL queries)",
+      "business_purpose": "Google UA/remarketing performance, cost reconciliation, keyword/ad group insights",
+      "key_fields": [
+        {"name": "segments.date", "type": "date", "nullable": false},
+        {"name": "campaign.id", "type": "string", "nullable": false},
+        {"name": "metrics.impressions", "type": "long", "nullable": false},
+        {"name": "metrics.clicks", "type": "long", "nullable": false},
+        {"name": "metrics.cost_micros", "type": "long", "nullable": false},
+        {"name": "metrics.conversions", "type": "long", "nullable": true}
+      ],
+      "important_join_keys": ["campaign.id", "segments.date"],
+      "file_format": "jsonl",
+      "bronze_transformation": "Convert to Parquet",
+      "recommended_partitioning": [
+        "customer_id",
+        "resource (campaign / ad_group)",
+        "date (YYYY-MM-DD from segments.date)"
+      ],
+      "minio_path_pattern": "/google_ads/{customer_id}/{resource}/{date}/{file}",
+      "typical_volume": "Low–medium",
+      "expected_latency": "Daily batch"
+    },
+    {
+      "source_name": "TikTok Ads Performance",
+      "description": "Integrated reports from TikTok Marketing API /report/integrated/get/",
+      "business_purpose": "TikTok UA performance, video creative insights, short-term ROAS",
+      "key_fields": [
+        {"name": "dimensions.stat_time_day", "type": "date", "nullable": false},
+        {"name": "dimensions.campaign_id", "type": "string", "nullable": false},
+        {"name": "metrics.impressions", "type": "long", "nullable": false},
+        {"name": "metrics.clicks", "type": "long", "nullable": false},
+        {"name": "metrics.spend", "type": "double", "nullable": false}
+      ],
+      "important_join_keys": ["dimensions.campaign_id", "dimensions.stat_time_day"],
+      "file_format": "json or jsonl",
+      "bronze_transformation": "Convert to Parquet",
+      "recommended_partitioning": [
+        "advertiser_id",
+        "data_level (AUCTION_CAMPAIGN / AUCTION_ADGROUP)",
+        "date (YYYY-MM-DD from stat_time_day)"
+      ],
+      "minio_path_pattern": "/tiktok_ads/{advertiser_id}/{data_level}/{date}/{file}",
+      "typical_volume": "Low–medium",
+      "expected_latency": "Daily batch"
+    }
+  ],
+  "global_join_recommendations": {
+    "primary_player_identifier": "player_id (your internal UUID)",
+    "attribution_bridge": [
+      "customer_user_id (AppsFlyer → player_id) as primary",
+      "appsflyer_id (fallback / anonymous users)",
+      "external attribution ids (when available)"
+    ],
+    "guest_to_registered_handling": "When a guest user registers, backfill historical events with new player_id if possible",
+    "time_join_strategy": "event_time / purchase_time / install_time with ±1h window for late attributions",
+    "campaign_join_strategy": "campaign_id / campaign (string matching + normalization; consider fuzzy matching for name variations)"
+  },
+  "sample_queries": [
+    {
+      "name": "CUID Coverage in AppsFlyer",
+      "query": "SELECT report_type, COUNT(*) AS total, COUNT(CASE WHEN customer_user_id IS NOT NULL THEN 1 END) AS with_cuid, ROUND(100.0 * COUNT(CASE WHEN customer_user_id IS NOT NULL THEN 1 END) / COUNT(*), 2) AS pct_with_cuid FROM appsflyer GROUP BY report_type"
+    },
+    {
+      "name": "Purchase Match Rate to AppsFlyer",
+      "query": "SELECT COUNT(*) AS total_purchases, COUNT(CASE WHEN af.customer_user_id IS NOT NULL THEN 1 END) AS matched_to_af FROM purchases p LEFT JOIN appsflyer af ON p.player_id = af.customer_user_id AND p.purchase_time BETWEEN af.event_time - INTERVAL 1 HOUR AND af.event_time + INTERVAL 1 HOUR"
+    }
+  ],
+  "notes": "For multi-game setups, always filter by game_id early. Convert high-volume sources to Parquet in Bronze for performance."
+}
