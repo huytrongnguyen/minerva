@@ -1,0 +1,181 @@
+{
+  "apiVersion": "v3.1.0",
+  "kind": "DataContract",
+  "id": "53581432-6c55-4ba2-a65f-72344a91553a",
+  "name": "facebook-ads-insights-raw",
+  "version": "1.0.0",
+  "status": "active",
+  "domain": "advertising",
+  "owner": "data-platform-team",
+  "description": "Raw performance data from Facebook Marketing API Insights endpoint (v24.0). Contains campaign, ad set, and ad-level metrics for UA and remarketing campaigns. One row per date + level + breakdown combination.",
+  "tags": [
+    "source:facebook",
+    "type:raw",
+    "granularity:daily",
+    "granularity:level",
+    "usage:attribution",
+    "usage:roas",
+    "usage:ltv-prediction",
+    "sensitivity:low"
+  ],
+  "schema": [
+    {
+      "name": "facebook_ads_insights_raw",
+      "physicalType": "file",
+      "description": "Raw daily performance data from Facebook Ads API (v24.0). One row per date + level + breakdown combination.",
+      "properties": [
+        {
+          "name": "date_stop",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
+          "required": true,
+          "description": "The end date for your data. This is controlled by the date range you've selected for your reporting view.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "date_start",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
+          "required": true,
+          "description": "The start date for your data. This is controlled by the date range you've selected for your reporting view.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "account_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "The ID number of your ad account, which groups your advertising activity.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "account_name",
+          "logicalType": "string",
+          "description": "The name of your ad account."
+        },
+        {
+          "name": "campaign_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "The unique ID number of the ad campaign you're viewing in reporting.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "campaign_name",
+          "logicalType": "string",
+          "description": "The name of the ad campaign you're viewing in reporting."
+        },
+        {
+          "name": "adset_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "The unique ID of the ad set you're viewing in reporting.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "adset_name",
+          "logicalType": "string",
+          "description": "The name of the ad set you're viewing in reporting."
+        },
+        {
+          "name": "ad_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "The unique ID of the ad you're viewing in reporting.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ad_name",
+          "logicalType": "string",
+          "description": "The name of the ad you're viewing in reporting."
+        },
+        {
+          "name": "impressions",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "The number of times your ads were on screen.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "clicks",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "The number of clicks on your ads.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "spend",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "The estimated total amount of money you've spent on your campaign, ad set or ad during its schedule.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) > 100000", "mustBe": 0, "severity": "warning" }
+          ]
+        },
+        {
+          "name": "objective",
+          "logicalType": "string",
+          "description": "The objective reflecting the goal you want to achieve with your advertising."
+        },
+        {
+          "name": "reach",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "The number of Accounts Center accounts that saw your ads at least once."
+        },
+        {
+          "name": "inline_post_engagement",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "The total number of actions that Accounts Center accounts take involving your ads."
+        },
+        {
+          "name": "cost_per_inline_post_engagement",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "The average cost of each inline post engagement."
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    }
+  ],
+  "slaProperties": [
+    { "property": "frequency", "value": 1, "unit": "d" }
+  ],
+  "servers": [
+    {
+      "server": "minio",
+      "type": "s3",
+      "location": "s3a://raw-data-prod/facebook_ads/insights",
+      "format": "json"
+    }
+  ],
+  "customProperties": [
+    { "name": "reference", "value": "https://developers.facebook.com/docs/marketing-api/reference/ad-account/insights/", "description": "Official API Reference" },
+    { "name": "changelog", "value": "https://developers.facebook.com/docs/graph-api/changelog/version-24.0/", "description": "Changelog v24.0" }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "apiVersion": "v3.1.0",
+  "kind": "DataContract",
+  "id": "google-ads-performance-raw",
+  "name": "Google Ads Performance Raw",
+  "version": "1.0.0",
+  "status": "active",
+  "domain": "advertising",
+  "owner": "data-platform-team",
+  "description": "Raw performance data from Google Ads API (v21/v22, 2026) using GAQL queries. Contains campaign, ad group, and keyword-level metrics. One row per date + resource + segment combination.",
+  "tags": [
+    "source:google-ads",
+    "type:raw",
+    "granularity:daily",
+    "granularity:resource",
+    "usage:attribution",
+    "usage:roas",
+    "usage:ltv-prediction",
+    "sensitivity:low"
+  ],
+  "schema": [
+    {
+      "name": "google_ads_performance_raw",
+      "physicalType": "file",
+      "description": "Raw daily performance data from Google Ads API. One row per date + campaign/ad_group + segment combination.",
+      "properties": [
+        {
+          "name": "segments_date",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
+          "required": true,
+          "description": "Report date (from segments.date)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "campaign_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "Campaign ID (from campaign.id)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "campaign_name",
+          "logicalType": "string",
+          "description": "Campaign name (from campaign.name)"
+        },
+        {
+          "name": "ad_group_id",
+          "logicalType": "string",
+          "description": "Ad group ID (from ad_group.id)"
+        },
+        {
+          "name": "ad_group_name",
+          "logicalType": "string",
+          "description": "Ad group name (from ad_group.name)"
+        },
+        {
+          "name": "impressions",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Number of impressions",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "clicks",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Number of clicks",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "cost_micros",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Cost in micros (divide by 1,000,000 for actual spend)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "conversions",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Number of conversions"
+        },
+        {
+          "name": "ctr",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Click-through rate"
+        },
+        {
+          "name": "average_cpc",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Average cost per click in micros"
+        },
+        {
+          "name": "device",
+          "logicalType": "string",
+          "description": "Device category (from segments.device)"
+        },
+        {
+          "name": "ad_network_type",
+          "logicalType": "string",
+          "description": "Ad network type (from segments.ad_network_type)"
+        },
+        {
+          "name": "customer_currency_code",
+          "logicalType": "string",
+          "description": "Currency code of the customer account"
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    }
+  ],
+  "slaProperties": [
+    { "property": "frequency", "value": 1, "unit": "d" }
+  ],
+  "servers": [
+    {
+      "server": "minio",
+      "type": "s3",
+      "location": "s3a://raw-data-prod/google_ads/{customer_id}/{resource}/{segments_date}",
+      "format": "jsonl"
+    }
+  ],
+  "customProperties": [
+    {
+      "name": "reference",
+      "value": "https://developers.google.com/google-ads/api/docs/reporting/overview",
+      "description": "Official Google Ads API Reporting Reference"
+    },
+    {
+      "name": "field_reference",
+      "value": "https://developers.google.com/google-ads/api/fields/v22/overview",
+      "description": "GAQL Field Reference (v22)"
+    }
+  ]
+}

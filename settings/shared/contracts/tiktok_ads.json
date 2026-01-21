@@ -1,0 +1,169 @@
+{
+  "apiVersion": "v3.1.0",
+  "kind": "DataContract",
+  "id": "tiktok-ads-performance-raw",
+  "name": "TikTok Ads Performance Raw",
+  "version": "1.0.0",
+  "status": "active",
+  "domain": "advertising",
+  "owner": "data-platform-team",
+  "description": "Raw performance data from TikTok Marketing API Integrated Report endpoint (/report/integrated/get/, v1.3). Contains campaign, ad group, and ad-level metrics. One row per date + level + breakdown combination.",
+  "tags": [
+    "source:tiktok",
+    "type:raw",
+    "granularity:daily",
+    "granularity:level",
+    "usage:attribution",
+    "usage:roas",
+    "usage:ltv-prediction",
+    "sensitivity:low"
+  ],
+  "schema": [
+    {
+      "name": "tiktok_ads_performance_raw",
+      "physicalType": "file",
+      "description": "Raw daily performance data from TikTok Ads API Integrated Report (v1.3). One row per date + level + breakdown combination.",
+      "properties": [
+        {
+          "name": "stat_time_day",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
+          "required": true,
+          "description": "Report date (from dimensions.stat_time_day)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "advertiser_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "TikTok advertiser account ID",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "campaign_id",
+          "logicalType": "string",
+          "description": "Campaign ID (from dimensions.campaign_id)"
+        },
+        {
+          "name": "campaign_name",
+          "logicalType": "string",
+          "description": "Campaign name (from dimensions.campaign_name)"
+        },
+        {
+          "name": "adgroup_id",
+          "logicalType": "string",
+          "description": "Ad group ID (from dimensions.adgroup_id)"
+        },
+        {
+          "name": "adgroup_name",
+          "logicalType": "string",
+          "description": "Ad group name (from dimensions.adgroup_name)"
+        },
+        {
+          "name": "ad_id",
+          "logicalType": "string",
+          "description": "Ad ID (from dimensions.ad_id)"
+        },
+        {
+          "name": "ad_name",
+          "logicalType": "string",
+          "description": "Ad name (from dimensions.ad_name)"
+        },
+        {
+          "name": "impressions",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Number of impressions",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "clicks",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Number of clicks",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "spend",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "required": true,
+          "description": "Amount spent in account currency",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) > 100000", "mustBe": 0, "severity": "warning" }
+          ]
+        },
+        {
+          "name": "cpm",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Cost per 1,000 impressions"
+        },
+        {
+          "name": "cpc",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Cost per click"
+        },
+        {
+          "name": "ctr",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Click-through rate"
+        },
+        {
+          "name": "conversions",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Number of conversions"
+        },
+        {
+          "name": "video_views",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "description": "Number of video views"
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    }
+  ],
+  "slaProperties": [
+    { "property": "frequency", "value": 1, "unit": "d" }
+  ],
+  "servers": [
+    {
+      "server": "minio",
+      "type": "s3",
+      "location": "s3a://raw-data-prod/tiktok_ads/{advertiser_id}/{data_level}/{stat_time_day}",
+      "format": "json"
+    }
+  ],
+  "customProperties": [
+    {
+      "name": "reference",
+      "value": "https://business-api.tiktok.com/portal/docs?id=1751454162042882",
+      "description": "Official TikTok Marketing API Report Reference"
+    },
+    {
+      "name": "documentation",
+      "value": "https://business-api.tiktok.com/portal/docs",
+      "description": "TikTok Business API Documentation"
+    }
+  ]
+}
