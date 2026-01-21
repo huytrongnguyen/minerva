@@ -2,11 +2,14 @@
 
 ## vNext
 
+## 1.0.1
+> 2026-01-21
+
 **Features**
 
 - Add models
   - Enriched: `enriched/user_profile`
-  - Curated: `curated/daily_installs`
+  - Curated: `curated/daily_installs`, `curated/daily_activity`, `curated/daily_retention`, `curated/daily_ltv`
 
 **Improvements**
 

@@ -21,6 +21,13 @@ def empty_operator(dag, task_id):
 def spark_submit_operator(dag: DAG, task_id: str, product_id: str, event_date: str, models: str, retries = 0, retry_delay = 15):
   return BashOperator(
     task_id = task_id,
-    bash_command = f'/opt/airflow/processor/spark-process.sh {product_id} {event_date} {models}',
+    bash_command = f'/opt/airflow/jobs/spark-process.sh {product_id} {event_date} {models}',
+    dag = dag, retries = retries, retry_delay = timedelta(minutes = retry_delay)
+  )
+
+def spark_submit_operator_with_postgres(dag: DAG, task_id: str, product_id: str, event_date: str, models: str, retries = 0, retry_delay = 15):
+  return BashOperator(
+    task_id = task_id,
+    bash_command = f'/opt/airflow/jobs/spark-process.sh {product_id} {event_date} {models} /opt/airflow/libs/postgresql-42.7.8.jar',
     dag = dag, retries = retries, retry_delay = timedelta(minutes = retry_delay)
   )

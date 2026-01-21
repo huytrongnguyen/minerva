@@ -1,12 +1,12 @@
 import sys, json, logging
 from typing import Any, Optional, Dict, List
-from dataclasses import dataclass, field
 from functools import reduce
-from jinja2 import Environment
 
 from pyspark.sql import SparkSession, DataFrame, DataFrameWriter
 from pyspark.sql.types import StructType
 
+from entity import JobSettings, ModelSettings
+from utils import date_range, jinja_env
 from python_processor import execute_query
 
 # Initialize the logger
@@ -15,34 +15,6 @@ logging.basicConfig(
   level=logging.INFO,
   format='%(levelname)s %(module)s:%(lineno)d %(message)s'
 )
-
-# Initialize Jinja
-jinja_env = Environment()
-
-#region ===== Helper Classes =====
-@dataclass
-class JobSettings:
-  models: str
-  product_id: Optional[str] = ''
-  event_date: Optional[str] = ''
-  settings_dir: Optional[str] = '/opt/airflow/settings'
-
-@dataclass
-class ModelSettings:
-  location: str
-  name: Optional[str] = None
-  type: Optional[str] = 'parquet'
-  # load options
-  case_sensitive: Optional[bool] = False
-  options: Optional[Dict[str, str]] = field(default_factory=dict)
-  preprocess: Optional[str] = ''
-  default_when_blank: Optional[bool] = False
-  # save options
-  num_partitions: Optional[int] = 1
-  partition_by: Optional[List[str]] = field(default_factory=list)
-  merge: Optional[bool] = False
-  postprocess: Optional[str] = ''
-#endregion
 
 def handler(event: Dict[str, str]):
   """
@@ -94,6 +66,7 @@ def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], j
 
   jinja_env.globals['source'] = lambda params: source(spark, ModelSettings(**params), vars)
   jinja_env.globals['create_or_replace_table'] = lambda params: target(targets, ModelSettings(**params))
+  jinja_env.globals['date_range'] = lambda before, after = 0: f"{{{','.join(date_range(job_settings.event_date, before, after))}}}"
 
   sql_query = jinja_env.from_string(sql_model).render(**vars)
   target_data = spark.sql(sql_query)

@@ -6,6 +6,7 @@
     'postprocess': '{{settings_dir}}/shared/curated/f_daily_installs.sql',
   })
 }}
+
 with install as (
   select  '{{product_id}}' as product_id
         , to_date('{{event_date}}') as event_date

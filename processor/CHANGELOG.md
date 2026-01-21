@@ -7,6 +7,7 @@
 - Load multiple sources then process with sql file to target
 - Ingest data stored in Airflow server to MinIO lakehouse in parquet format
 - Add `spark-defaults.conf` to `spark-master` container to supports Jupyter read data from MinIO
+- Load data in date range
 
 ## 1.0.1
 > 2026-01-10

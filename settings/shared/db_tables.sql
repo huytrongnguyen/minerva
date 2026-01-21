@@ -14,8 +14,6 @@ create table daily_user_metrics (
   npu bigint default 0,
   dau bigint default 0,
   pu bigint default 0,
-  mau bigint default 0,
-  mpu bigint default 0,
 
   ruser01 bigint default 0,
   ruser07 bigint default 0,
