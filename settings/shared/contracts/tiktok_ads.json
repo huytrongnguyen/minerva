@@ -1,84 +1,101 @@
 {
   "apiVersion": "v3.1.0",
   "kind": "DataContract",
-  "id": "tiktok-ads-performance-raw",
-  "name": "TikTok Ads Performance Raw",
+  "id": "tiktok_ads",
+  "name": "TikTok Ads Report",
   "version": "1.0.0",
   "status": "active",
   "domain": "advertising",
-  "owner": "data-platform-team",
   "description": "Raw performance data from TikTok Marketing API Integrated Report endpoint (/report/integrated/get/, v1.3). Contains campaign, ad group, and ad-level metrics. One row per date + level + breakdown combination.",
-  "tags": [
-    "source:tiktok",
-    "type:raw",
-    "granularity:daily",
-    "granularity:level",
-    "usage:attribution",
-    "usage:roas",
-    "usage:ltv-prediction",
-    "sensitivity:low"
-  ],
   "schema": [
     {
-      "name": "tiktok_ads_performance_raw",
+      "name": "tiktok_ads",
       "physicalType": "file",
-      "description": "Raw daily performance data from TikTok Ads API Integrated Report (v1.3). One row per date + level + breakdown combination.",
       "properties": [
         {
-          "name": "stat_time_day",
+          "name": "advertiser_name",
           "logicalType": "string",
-          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
-          "required": true,
-          "description": "Report date (from dimensions.stat_time_day)",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 }
-          ]
+          "transformLogic": "metrics.advertiser_name as advertiser_name",
+          "description": "Advertiser account name"
         },
         {
           "name": "advertiser_id",
           "logicalType": "string",
-          "required": true,
-          "description": "TikTok advertiser account ID",
+          "transformLogic": "metrics.advertiser_id as advertiser_id",
+          "description": "Advertiser account ID",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 }
           ]
         },
         {
-          "name": "campaign_id",
-          "logicalType": "string",
-          "description": "Campaign ID (from dimensions.campaign_id)"
-        },
-        {
           "name": "campaign_name",
           "logicalType": "string",
-          "description": "Campaign name (from dimensions.campaign_name)"
+          "transformLogic": "metrics.campaign_name as campaign_name",
+          "description": "Campaign name"
         },
         {
-          "name": "adgroup_id",
+          "name": "campaign_id",
           "logicalType": "string",
-          "description": "Ad group ID (from dimensions.adgroup_id)"
+          "transformLogic": "metrics.campaign_id as campaign_id",
+          "description": "Campaign ID",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "objective_type",
+          "logicalType": "string",
+          "transformLogic": "metrics.objective_type as objective_type",
+          "description": "Advertising objective"
         },
         {
           "name": "adgroup_name",
           "logicalType": "string",
-          "description": "Ad group name (from dimensions.adgroup_name)"
+          "transformLogic": "metrics.adgroup_name as adgroup_name",
+          "description": "Ad group name"
         },
         {
-          "name": "ad_id",
+          "name": "adgroup_id",
           "logicalType": "string",
-          "description": "Ad ID (from dimensions.ad_id)"
+          "transformLogic": "metrics.adgroup_id as adgroup_id",
+          "description": "Ad group ID",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
         },
         {
           "name": "ad_name",
           "logicalType": "string",
-          "description": "Ad name (from dimensions.ad_name)"
+          "transformLogic": "metrics.ad_name as ad_name",
+          "description": "Ad name"
+        },
+        {
+          "name": "ad_id",
+          "logicalType": "string",
+          "transformLogic": "metrics.ad_id as ad_id",
+          "description": "Ad ID",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "spend",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" },
+          "transformLogic": "metrics.spend as spend",
+          "description": "Sum of your total ad spend.",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0 },
+            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) > 100000", "mustBe": 0, "severity": "warning" }
+          ]
         },
         {
           "name": "impressions",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of impressions",
+          "transformLogic": "metrics.impressions as impressions",
+          "description": "Number of times your ads were shown.",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 },
             { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
@@ -88,54 +105,19 @@
           "name": "clicks",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of clicks",
+          "transformLogic": "metrics.clicks as clicks",
+          "description": "Number of clicks from your ads to a specified destination.",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 },
             { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
           ]
         },
         {
-          "name": "spend",
+          "name": "reach",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Amount spent in account currency",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) > 100000", "mustBe": 0, "severity": "warning" }
-          ]
-        },
-        {
-          "name": "cpm",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Cost per 1,000 impressions"
-        },
-        {
-          "name": "cpc",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Cost per click"
-        },
-        {
-          "name": "ctr",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Click-through rate"
-        },
-        {
-          "name": "conversions",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Number of conversions"
-        },
-        {
-          "name": "video_views",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Number of video views"
+          "transformLogic": "metrics.reach as reach",
+          "description": "Number of unique users who saw your ads at least once."
         }
       ],
       "quality": [
@@ -150,7 +132,7 @@
     {
       "server": "minio",
       "type": "s3",
-      "location": "s3a://raw-data-prod/tiktok_ads/{advertiser_id}/{data_level}/{stat_time_day}",
+      "location": "s3a://lakehouse/tiktok_ads/{advertiser_id}/{stat_time_day}",
       "format": "json"
     }
   ],
@@ -159,6 +141,11 @@
       "name": "reference",
       "value": "https://business-api.tiktok.com/portal/docs?id=1751454162042882",
       "description": "Official TikTok Marketing API Report Reference"
+    },
+    {
+      "name": "dimension_grouping",
+      "value": "https://business-api.tiktok.com/portal/docs?id=1751443956638721",
+      "description": "The supported dimension grouping."
     },
     {
       "name": "documentation",

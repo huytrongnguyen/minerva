@@ -1,44 +1,23 @@
 {
   "apiVersion": "v3.1.0",
   "kind": "DataContract",
-  "id": "google-ads-performance-raw",
-  "name": "Google Ads Performance Raw",
+  "id": "google_ads",
+  "name": "Google Ads Performance",
   "version": "1.0.0",
   "status": "active",
   "domain": "advertising",
-  "owner": "data-platform-team",
-  "description": "Raw performance data from Google Ads API (v21/v22, 2026) using GAQL queries. Contains campaign, ad group, and keyword-level metrics. One row per date + resource + segment combination.",
-  "tags": [
-    "source:google-ads",
-    "type:raw",
-    "granularity:daily",
-    "granularity:resource",
-    "usage:attribution",
-    "usage:roas",
-    "usage:ltv-prediction",
-    "sensitivity:low"
-  ],
+  "description": "Raw performance data from Google Ads API (v22) using GAQL queries. Contains campaign, ad group, and keyword-level metrics. One row per date + resource + segment combination.",
   "schema": [
     {
-      "name": "google_ads_performance_raw",
+      "name": "google_ads",
       "physicalType": "file",
       "description": "Raw daily performance data from Google Ads API. One row per date + campaign/ad_group + segment combination.",
       "properties": [
         {
-          "name": "segments_date",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
-          "required": true,
-          "description": "Report date (from segments.date)",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 }
-          ]
-        },
-        {
           "name": "campaign_id",
           "logicalType": "string",
-          "required": true,
-          "description": "Campaign ID (from campaign.id)",
+          "transformLogic": "campaign.id as campaign_id",
+          "description": "The ID of the campaign.",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 }
           ]
@@ -46,84 +25,123 @@
         {
           "name": "campaign_name",
           "logicalType": "string",
-          "description": "Campaign name (from campaign.name)"
+          "transformLogic": "campaign.name as campaign_name",
+          "description": "The name of the campaign. This field is required and should not be empty when creating new campaigns. It must not contain any null (code point 0x0), NL line feed (code point 0xA) or carriage return (code point 0xD) characters."
         },
         {
-          "name": "ad_group_id",
+          "name": "campaign_status",
           "logicalType": "string",
-          "description": "Ad group ID (from ad_group.id)"
-        },
-        {
-          "name": "ad_group_name",
-          "logicalType": "string",
-          "description": "Ad group name (from ad_group.name)"
-        },
-        {
-          "name": "impressions",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of impressions",
+          "transformLogic": "campaign.status as campaign_status",
+          "description": "The status of the campaign. When a new campaign is added, the status defaults to ENABLED.",
           "quality": [
-            { "metric": "nullValues", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+            { "metric": "invalidValues", "validValues": ["ENABLED","PAUSED","REMOVED","UNKNOWN","UNSPECIFIED"] }
           ]
         },
         {
-          "name": "clicks",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of clicks",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
-          ]
-        },
-        {
-          "name": "cost_micros",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Cost in micros (divide by 1,000,000 for actual spend)",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
-          ]
-        },
-        {
-          "name": "conversions",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Number of conversions"
-        },
-        {
-          "name": "ctr",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Click-through rate"
-        },
-        {
-          "name": "average_cpc",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Average cost per click in micros"
-        },
-        {
-          "name": "device",
-          "logicalType": "string",
-          "description": "Device category (from segments.device)"
-        },
-        {
-          "name": "ad_network_type",
-          "logicalType": "string",
-          "description": "Ad network type (from segments.ad_network_type)"
-        },
-        {
-          "name": "customer_currency_code",
-          "logicalType": "string",
-          "description": "Currency code of the customer account"
-        }
+        "name": "start_date",
+        "logicalType": "string",
+        "logicalTypeOptions": {"format": "date", "pattern": "yyyy-MM-dd"},
+        "transformLogic": "campaign.start_date as start_date",
+        "description": "The date when campaign started in serving customer's timezone in YYYY-MM-DD format."
+      },
+      {
+        "name": "end_date",
+        "logicalType": "string",
+        "logicalTypeOptions": {"format": "date", "pattern": "yyyy-MM-dd"},
+        "transformLogic": "campaign.end_date as end_date",
+        "description": "The last day of the campaign in serving customer's timezone in YYYY-MM-DD format. On create, defaults to 2037-12-30, which means the campaign will run indefinitely. To set an existing campaign to run indefinitely, set this field to 2037-12-30."
+      },
+      {
+        "name": "date",
+        "logicalType": "string",
+        "logicalTypeOptions": {"format": "date", "pattern": "yyyy-MM-dd"},
+        "transformLogic": "segments.date as date",
+        "description": "Date to which metrics apply. yyyy-MM-dd format, for example, 2018-04-17.",
+        "quality": [
+          {"metric": "nullValues", "mustBe": 0}
+        ]
+      },
+      {
+        "name": "device",
+        "logicalType": "string",
+        "transformLogic": "segments.device as device",
+        "description": "Device to which metrics apply."
+      },
+      {
+        "name": "impressions",
+        "logicalType": "string",
+        "logicalTypeOptions": { "format": "number" },
+        "transformLogic": "metrics.impressions as impressions",
+        "description": "Count of how often your ad has appeared on a search results page or website on the Google Network.",
+        "quality": [
+          { "metric": "nullValues", "mustBe": 0 },
+          { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+        ]
+      },
+      {
+        "name": "clicks",
+        "logicalType": "string",
+        "logicalTypeOptions": { "format": "number" },
+        "transformLogic": "metrics.clicks as clicks",
+        "description": "The number of clicks.",
+        "quality": [
+          { "metric": "nullValues", "mustBe": 0 },
+          { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+        ]
+      },
+      {
+        "name": "cost",
+        "logicalType": "string",
+        "logicalTypeOptions": { "format": "number" },
+        "transformLogic": "metrics.cost_micros / 1000000 as cost",
+        "description": "The sum of your cost-per-click (CPC) and cost-per-thousand impressions (CPM) costs during this period.",
+        "quality": [
+          { "metric": "nullValues", "mustBe": 0 },
+          { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
+        ]
+      },
+      {
+        "name": "advertising_channel_type",
+        "logicalType": "string",
+        "transformLogic": "campaign.advertising_channel_type as advertising_channel_type",
+        "description": "Immutable. The primary serving target for ads within the campaign. The targeting options can be refined in network_settings. This field is required and should not be empty when creating new campaigns. Can be set only when creating campaigns. After the campaign is created, the field can not be changed."
+      },
+      {
+        "name": "advertising_channel_sub_type",
+        "logicalType": "string",
+        "transformLogic": "campaign.advertising_channel_sub_type as advertising_channel_sub_type",
+        "description": "Immutable. Optional refinement to advertising_channel_type. Must be a valid sub-type of the parent channel type. Can be set only when creating campaigns. After campaign is created, the field can not be changed."
+      },
+      {
+        "name": "customer_id",
+        "logicalType": "string",
+        "transformLogic": "customer.id as customer_id",
+        "description": "The ID of the customer.",
+        "quality": [
+          { "metric": "nullValues", "mustBe": 0 }
+        ]
+      },
+      {
+        "name": "country_code",
+        "logicalType": "string",
+        "transformLogic": "segments.geo_target_country as country_code",
+        "description": "Resource name of the geo target constant that represents a country."
+      },
+      {
+        "name": "adgroup_id",
+        "logicalType": "string",
+        "transformLogic": "adgroup.id as adgroup_id",
+        "description": "The ID of the ad group.",
+        "quality": [
+          { "metric": "nullValues", "mustBe": 0 }
+        ]
+      },
+      {
+        "name": "adgroup_name",
+        "logicalType": "string",
+        "transformLogic": "adgroup.name as adgroup_name",
+        "description": "The name of the ad group. This field is required and should not be empty when creating new ad groups. It must contain fewer than 255 UTF-8 full-width characters. It must not contain any null (code point 0x0), NL line feed (code point 0xA) or carriage return (code point 0xD) characters."
+      }
       ],
       "quality": [
         { "metric": "rowCount", "mustBeGreaterThan": 0 }
@@ -137,8 +155,8 @@
     {
       "server": "minio",
       "type": "s3",
-      "location": "s3a://raw-data-prod/google_ads/{customer_id}/{resource}/{segments_date}",
-      "format": "jsonl"
+      "location": "s3a://lakehouse/google_ads/{customer_id}/{segments_date}",
+      "format": "json"
     }
   ],
   "customProperties": [

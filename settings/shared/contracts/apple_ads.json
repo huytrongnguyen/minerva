@@ -1,26 +1,15 @@
 {
   "apiVersion": "v3.1.0",
   "kind": "DataContract",
-  "id": "apple-search-ads-performance-raw",
-  "name": "Apple Search Ads Performance Raw",
+  "id": "apple_ads",
+  "name": "Apple Search Ads Report",
   "version": "1.0.0",
   "status": "active",
   "domain": "advertising",
-  "owner": "data-platform-team",
   "description": "Raw performance data from Apple Search Ads API reports (campaign_report, keyword_report, search_term_report, etc.). Contains campaign, ad group, keyword, and search term-level metrics for iOS UA campaigns. One row per date + level + breakdown combination.",
-  "tags": [
-    "source:apple-search-ads",
-    "type:raw",
-    "granularity:daily",
-    "granularity:level",
-    "usage:attribution",
-    "usage:roas",
-    "usage:ltv-prediction",
-    "sensitivity:low"
-  ],
   "schema": [
     {
-      "name": "apple_search_ads_performance_raw",
+      "name": "apple_ads",
       "physicalType": "file",
       "description": "Raw daily performance data from Apple Search Ads reports (campaign_report, keyword_report, search_term_report). One row per date + campaign/ad_group/keyword/search_term + breakdown combination.",
       "properties": [
@@ -28,52 +17,53 @@
           "name": "date",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "date", "pattern": "yyyy-MM-dd" },
-          "required": true,
           "description": "Report date",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 }
           ]
         },
         {
-          "name": "campaign_id",
+          "name": "adamId",
           "logicalType": "string",
-          "required": true,
-          "description": "Campaign ID",
+          "transformLogic": "metadata.app.adamId as adamId"
+        },
+        {
+          "name": "appName",
+          "logicalType": "string",
+          "transformLogic": "metadata.app.appName as appName"
+        },
+        {
+          "name": "countryOrRegion",
+          "logicalType": "string",
+          "transformLogic": "metadata.countryOrRegion as countryOrRegion"
+        },
+        {
+          "name": "campaignId",
+          "logicalType": "string",
+          "transformLogic": "metadata.campaignId as campaignId",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 }
           ]
         },
         {
-          "name": "campaign_name",
+          "name": "campaignName",
           "logicalType": "string",
-          "description": "Campaign name"
+          "transformLogic": "metadata.campaignName as campaignName"
         },
         {
-          "name": "ad_group_id",
+          "name": "campaignStatus",
           "logicalType": "string",
-          "description": "Ad group ID"
+          "transformLogic": "metadata.campaignStatus as campaignStatus"
         },
         {
-          "name": "ad_group_name",
+          "name": "orgId",
           "logicalType": "string",
-          "description": "Ad group name"
-        },
-        {
-          "name": "keyword_id",
-          "logicalType": "string",
-          "description": "Keyword ID (for keyword-level reports)"
-        },
-        {
-          "name": "keyword",
-          "logicalType": "string",
-          "description": "Keyword text (for keyword-level reports)"
+          "transformLogic": "metadata.orgId as orgId"
         },
         {
           "name": "impressions",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of impressions",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 },
             { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
@@ -83,30 +73,31 @@
           "name": "taps",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of taps (clicks)",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 },
             { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
           ]
         },
         {
-          "name": "installs",
+          "name": "totalInstalls",
           "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Number of installs",
-          "quality": [
-            { "metric": "nullValues", "mustBe": 0 },
-            { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS BIGINT) < 0", "mustBe": 0 }
-          ]
+          "logicalTypeOptions": { "format": "number" }
         },
         {
-          "name": "spend",
+          "name": "totalNewDownloads",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" }
+        },
+        {
+          "name": "totalRedownloads",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "number" }
+        },
+        {
+          "name": "amount",
           "logicalType": "string",
           "logicalTypeOptions": { "format": "number" },
-          "required": true,
-          "description": "Amount spent in account currency",
+          "transformLogic": "localSpend.amount as amount",
           "quality": [
             { "metric": "nullValues", "mustBe": 0 },
             { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0 },
@@ -114,38 +105,9 @@
           ]
         },
         {
-          "name": "avg_cpa",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Average cost per acquisition"
-        },
-        {
-          "name": "ttr",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Tap-through rate"
-        },
-        {
-          "name": "new_downloads",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Number of new downloads"
-        },
-        {
-          "name": "redownloads",
-          "logicalType": "string",
-          "logicalTypeOptions": { "format": "number" },
-          "description": "Number of redownloads"
-        },
-        {
-          "name": "country_code",
-          "logicalType": "string",
-          "description": "Country code (ISO 3166-1 alpha-2)"
-        },
-        {
           "name": "currency",
           "logicalType": "string",
-          "description": "Currency of spend (e.g., USD)"
+          "transformLogic": "localSpend.currency as currency"
         }
       ],
       "quality": [
@@ -160,8 +122,8 @@
     {
       "server": "minio",
       "type": "s3",
-      "location": "s3a://raw-data-prod/apple_search_ads/{org_id}/{report_type}/{date}",
-      "format": "csv"
+      "location": "s3a://lakehouse/apple_ads/{orgId}/{date}",
+      "format": "json"
     }
   ],
   "customProperties": [
@@ -171,9 +133,9 @@
       "description": "Official Apple Search Ads API Reference"
     },
     {
-      "name": "campaign_report_fields",
-      "value": "https://developer.apple.com/documentation/apple_search_ads/campaign_report",
-      "description": "Campaign Report Fields"
+      "name": "campaign_level_reports",
+      "value": "https://developer.apple.com/documentation/apple_ads/get-campaign-level-reports",
+      "description": "Get Campaign-Level Reports"
     }
   ]
 }
