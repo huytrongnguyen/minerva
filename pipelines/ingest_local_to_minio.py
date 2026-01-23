@@ -21,6 +21,7 @@ with DAG(
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-23 shared/curated/daily_installs.sql /opt/airflow/libs/postgresql-42.7.8.jar',
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-23 shared/curated/daily_activity.sql /opt/airflow/libs/postgresql-42.7.8.jar',
     # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/curated/daily_retention.sql /opt/airflow/libs/postgresql-42.7.8.jar',
-    bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/curated/daily_ltv.sql /opt/airflow/libs/postgresql-42.7.8.jar',
+    # bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-05-24 shared/curated/daily_ltv.sql /opt/airflow/libs/postgresql-42.7.8.jar',
+    bash_command=f'/opt/airflow/jobs/spark-process.sh gem 2024-06-01 shared/bak/migrate_user_profile.sql',
     dag=dag,
   )

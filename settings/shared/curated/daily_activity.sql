@@ -41,7 +41,7 @@ with users_activity as (
   from {{
     source({
       'name': 'user_profile',
-      'location': '{{lakehouse.location}}/{{product_id}}/enriched/user_profile',
+      'location': '{{lakehouse.location}}/{{product_id}}/curated/user_profile',
     })
   }}
 )

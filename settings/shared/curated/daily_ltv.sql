@@ -27,17 +27,17 @@ with users_purchase as (
   from {{
     source({
       'name': 'user_profile',
-      'location': '{{lakehouse.location}}/{{product_id}}/enriched/user_profile',
+      'location': '{{lakehouse.location}}/{{product_id}}/curated/user_profile',
     })
   }}
   where datediff('{{event_date}}', registration_time) between 0 and 30
 )
 
 select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
-      , coalesce(sum(distinct(case when nru_datediff <= 1 then total_amount end)), 0) as rev_nru01
-      , coalesce(sum(distinct(case when nru_datediff <= 7 then total_amount end)), 0) as rev_nru07
-      , coalesce(sum(distinct(case when nru_datediff <= 30 then total_amount end)), 0) as rev_nru30
+      , coalesce(sum(case when day_since_registration <= 1 then total_amount end), 0) as rev_nru01
+      , coalesce(sum(case when day_since_registration <= 7 then total_amount end), 0) as rev_nru07
+      , coalesce(sum(case when day_since_registration <= 30 then total_amount end), 0) as rev_nru30
 from (select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
-            , datediff(purchase_date, event_date) as nru_datediff, total_amount
+            , datediff(purchase_date, event_date) as day_since_registration, total_amount
       from user_profile left join users_purchase using(product_id, user_id))
 group by product_id, event_date, agency, media_source, campaign_id, country_code, platform

@@ -1,0 +1,5 @@
+FROM tabulario/spark-iceberg
+
+# Copy and install Python requirements at build time for faster container startup
+COPY processor/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt && rm /tmp/requirements.txt

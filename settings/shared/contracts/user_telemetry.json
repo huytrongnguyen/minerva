@@ -1,0 +1,906 @@
+{
+  "apiVersion": "v3.1.0",
+  "kind": "DataContract",
+  "id": "user_telemetry",
+  "name": "Raw User Telemetry",
+  "version": "1.0.0",
+  "status": "active",
+  "domain": "game-analytics",
+  "description": "Raw user telemetry / game event logs from clients and servers. One row per event. Contains 20 core events grouped into 5 categories: Session, Progression, Monetization, Economy, Tutorial. All events follow the standard event taxonomy (v1.0.0).",
+  "schema": [
+    {
+      "name": "session_start",
+      "physicalType": "file",
+      "description": "User starts a new session (app open or foreground)",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "session_id",
+          "logicalType": "string",
+          "description": "Unique session identifier"
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "session_end",
+      "physicalType": "file",
+      "description": "User ends a session (app background or close)",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "session_id",
+          "logicalType": "string",
+          "description": "Unique session identifier"
+        },
+        {
+          "name": "session_duration",
+          "logicalType": "number",
+          "required": true,
+          "description": "Duration of the session in seconds",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "level_up",
+      "physicalType": "file",
+      "description": "User starts a level or stage",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "level",
+          "logicalType": "number",
+          "required": true,
+          "description": "Level the user achieved",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "purchase",
+      "physicalType": "file",
+      "description": "Purchase transaction completed successfully",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "revenue",
+          "logicalType": "string",
+          "description": "Value of revenue from the purchase"
+        },
+        {
+          "name": "currency",
+          "logicalType": "string",
+          "description": "The event revenue currency code reported to the SDK."
+        },
+        {
+          "name": "channel",
+          "logicalType": "string",
+          "required": true,
+          "description": "Must be one of: purchase_success_iap, ad_rewarded"
+        },
+        {
+          "name": "quantity",
+          "logicalType": "string",
+          "description": "Number of items purchased"
+        },
+        {
+          "name": "product_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "For purchase events: Product SKU. For ad events: rewarded, interstitial, banner"
+        },
+        {
+          "name": "price",
+          "logicalType": "number",
+          "required": true,
+          "description": "Price"
+        },
+        {
+          "name": "transaction_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "Transaction ID"
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 },
+        { "type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE event_name NOT IN ('purchase_attempt_iap', 'purchase_success_iap', 'offer_viewed', 'offer_claimed', 'ad_viewed', 'ad_rewarded')", "mustBe": 0 }
+      ]
+    },
+    {
+      "name": "currency_spent",
+      "physicalType": "file",
+      "description": "User spends in-game currency",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "currency_type",
+          "logicalType": "string",
+          "required": true,
+          "description": "Currency type (e.g., gold, gems)",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "amount",
+          "logicalType": "number",
+          "required": true,
+          "description": "Amount of currency",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0},
+            {"type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "source",
+          "logicalType": "string",
+          "required": true,
+          "description": "Source of currency change",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "currency_gained",
+      "physicalType": "file",
+      "description": "User gains in-game currency",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "currency_type",
+          "logicalType": "string",
+          "required": true,
+          "description": "Currency type (e.g., gold, gems)",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "amount",
+          "logicalType": "number",
+          "required": true,
+          "description": "Amount of currency",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0},
+            {"type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "source",
+          "logicalType": "string",
+          "required": true,
+          "description": "Source of currency change",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "item_acquired",
+      "physicalType": "file",
+      "description": "User receives an item (gift, drop, purchase)",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "item_id",
+          "logicalType": "string",
+          "required": true,
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "quantity",
+          "logicalType": "number",
+          "required": true,
+          "description": "Amount of items",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0},
+            {"type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "source",
+          "logicalType": "string",
+          "required": true,
+          "description": "Source of item change",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "item_consumed",
+      "physicalType": "file",
+      "description": "User uses or consumes an item",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "item_id",
+          "logicalType": "string",
+          "required": true,
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "quantity",
+          "logicalType": "number",
+          "required": true,
+          "description": "Amount of items",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0},
+            {"type": "sql", "query": "SELECT COUNT(*) FROM {object} WHERE CAST({property} AS DOUBLE) < 0", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "source",
+          "logicalType": "string",
+          "required": true,
+          "description": "Source of item change",
+          "quality": [
+            {"metric": "nullValues", "mustBe": 0}
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    },
+    {
+      "name": "tutorial_completion",
+      "physicalType": "file",
+      "description": "User completes a tutorial step",
+      "properties": [
+        {
+          "name": "user_id",
+          "logicalType": "string",
+          "required": true,
+          "description": "A unique app user ID, set by the app owner",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "event_time",
+          "logicalType": "string",
+          "logicalTypeOptions": { "format": "datetime", "pattern": "yyyy-MM-dd HH:mm:ss" },
+          "required": true,
+          "description": "Time the event occurred in UTC",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "tutorial_id",
+          "logicalType": "number",
+          "required": true,
+          "description": "Tutorial ID",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "country_code",
+          "logicalType": "string",
+          "required": true,
+          "description": "Country Code using ISO 3166 (alpha-2)",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "ip",
+          "logicalType": "string",
+          "description": "IP address being IPV4 or IPV6"
+        },
+        {
+          "name": "platform",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device platform: android, ios, pc, web"
+        },
+        {
+          "name": "os_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "Device operating system version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "device_model",
+          "logicalType": "string",
+          "required": true,
+          "description": "The commercial model name of the device. Example: xiaomi::Redmi or iPhone7",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        },
+        {
+          "name": "app_version",
+          "logicalType": "string",
+          "required": true,
+          "description": "App version",
+          "quality": [
+            { "metric": "nullValues", "mustBe": 0 }
+          ]
+        }
+      ],
+      "quality": [
+        { "metric": "rowCount", "mustBeGreaterThan": 0 }
+      ]
+    }
+  ],
+  "slaProperties": [
+    { "property": "frequency", "value": 1, "unit": "d" }
+  ],
+  "servers": [
+    {
+      "server": "minio",
+      "type": "s3",
+      "location": "s3a://lakehouse/telemetry/{game_id}/{date}",
+      "format": "json"
+    }
+  ],
+  "customProperties": [
+    {
+      "name": "event_taxonomy_reference",
+      "value": "https://internal-wiki.company.com/event-taxonomy",
+      "description": "Standard Event Taxonomy Documentation (v1.0.0)"
+    },
+    {
+      "name": "event_naming_convention",
+      "value": "https://internal-wiki.company.com/event-naming-convention",
+      "description": "Event Naming Convention Guide"
+    }
+  ]
+}

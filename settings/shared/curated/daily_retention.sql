@@ -27,17 +27,17 @@ with users_activity as (
   from {{
     source({
       'name': 'user_profile',
-      'location': '{{lakehouse.location}}/{{product_id}}/enriched/user_profile',
+      'location': '{{lakehouse.location}}/{{product_id}}/curated/user_profile',
     })
   }}
   where datediff('{{event_date}}', registration_time) in (1, 7, 30)
 )
 
 select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
-      , coalesce(count(distinct(case when nru_datediff = 1 then user_id end)), 0) as ruser01
-      , coalesce(count(distinct(case when nru_datediff = 7 then user_id end)), 0) as ruser07
-      , coalesce(count(distinct(case when nru_datediff = 30 then user_id end)), 0) as ruser30
+      , coalesce(count(distinct(case when day_since_registration = 1 then user_id end)), 0) as ruser01
+      , coalesce(count(distinct(case when day_since_registration = 7 then user_id end)), 0) as ruser07
+      , coalesce(count(distinct(case when day_since_registration = 30 then user_id end)), 0) as ruser30
 from (select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
-            , datediff(login_date, event_date) as nru_datediff, user_id
+            , datediff(login_date, event_date) as day_since_registration, user_id
       from user_profile left join users_activity using(product_id, user_id))
 group by product_id, event_date, agency, media_source, campaign_id, country_code, platform

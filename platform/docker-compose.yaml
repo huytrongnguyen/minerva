@@ -31,7 +31,9 @@ services:
       - spark-network
 
   jupyter:
-    image: tabulario/spark-iceberg
+    build:
+      context: ..
+      dockerfile: platform/Dockerfile.jupyter
     container_name: jupyter
     depends_on:
       - minio
