@@ -7,11 +7,11 @@
   })
 }}
 
-with users_activity as (
+with user_activity as (
   select  product_id, user_id, to_date(first_login_time) as login_date
   from {{
     source({
-      'name': 'users_activity',
+      'name': 'user_activity',
       'location': '{{lakehouse.location}}/{{product_id}}/enriched/user/activity/partition_date={{date_range(33,1)}}',
     })
   }}
@@ -39,5 +39,5 @@ select  product_id, event_date, agency, media_source, campaign_id, country_code,
       , coalesce(count(distinct(case when day_since_registration = 30 then user_id end)), 0) as ruser30
 from (select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
             , datediff(login_date, event_date) as day_since_registration, user_id
-      from user_profile left join users_activity using(product_id, user_id))
+      from user_profile left join user_activity using(product_id, user_id))
 group by product_id, event_date, agency, media_source, campaign_id, country_code, platform

@@ -7,20 +7,20 @@
   })
 }}
 
-with users_activity as (
+with user_activity as (
   select  product_id, user_id, to_date(first_login_time) as login_date
   from {{
     source({
-      'name': 'users_activity',
+      'name': 'user_activity',
       'location': '{{lakehouse.location}}/{{product_id}}/enriched/user/activity/partition_date={{event_date}}',
     })
   }}
 )
-, users_purchase as (
+, user_purchase as (
   select  product_id, user_id, to_date(first_purchase_time) as purchase_date, total_amount
   from {{
     source({
-      'name': 'users_purchase',
+      'name': 'user_purchase',
       'location': '{{lakehouse.location}}/{{product_id}}/enriched/user/purchase/partition_date={{event_date}}',
     })
   }}
@@ -28,7 +28,7 @@ with users_activity as (
 , user_daily_snapshot as (
   select  product_id, user_id, to_date('{{event_date}}') as event_date
         , login_date, purchase_date, total_amount
-  from users_activity full join users_purchase using (product_id, user_id)
+  from user_activity full join user_purchase using (product_id, user_id)
 )
 , user_profile as (
   select  product_id, user_id

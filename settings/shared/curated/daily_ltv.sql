@@ -7,11 +7,11 @@
   })
 }}
 
-with users_purchase as (
+with user_purchase as (
   select  product_id, user_id, to_date(first_purchase_time) as purchase_date, total_amount
   from {{
     source({
-      'name': 'users_purchase',
+      'name': 'user_purchase',
       'location': '{{lakehouse.location}}/{{product_id}}/enriched/user/purchase/partition_date={{date_range(33,1)}}',
     })
   }}
@@ -39,5 +39,5 @@ select  product_id, event_date, agency, media_source, campaign_id, country_code,
       , coalesce(sum(case when day_since_registration <= 30 then total_amount end), 0) as rev_nru30
 from (select  product_id, event_date, agency, media_source, campaign_id, country_code, platform
             , datediff(purchase_date, event_date) as day_since_registration, total_amount
-      from user_profile left join users_purchase using(product_id, user_id))
+      from user_profile left join user_purchase using(product_id, user_id))
 group by product_id, event_date, agency, media_source, campaign_id, country_code, platform
