@@ -6,8 +6,7 @@ product_id = 'gem'
 event_date = '{{ ds }}'
 
 with create_dag(
-  product_id = product_id,
-  dag_type = 'bi',
+  dag_id = f'{product_id}_bi',
   start_date = datetime(2024, 5, 24),
   schedule = '0 1 * * *',
   extend = { 'end_date': datetime(2024, 7, 1), 'tags': ['player360', 'ltv', 'attribution'] }

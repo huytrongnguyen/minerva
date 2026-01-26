@@ -58,6 +58,7 @@ services:
       - ./libs/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
       - ./libs/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
       - ./libs/postgresql-42.7.8.jar:/opt/spark/jars/postgresql-42.7.8.jar
+      - ./libs/trino-jdbc-368.jar:/opt/spark/jars/trino-jdbc-368.jar
       - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
       - ../../../data/lakehouse:/home/iceberg/data # Local CSV files for Jupyter work
     ports:
@@ -108,7 +109,7 @@ services:
       - ./logs/airflow:/opt/airflow/logs
       - ../pipelines:/opt/airflow/dags # DAG files (Python DAG definitions)
       - ../processor:/opt/airflow/jobs # The container that actually runs spark-submit needs access to the .py file
-      - ../settings:/opt/airflow/settings
+      - ../models:/opt/airflow/models
       - ../../../data/lakehouse:/opt/airflow/data # Local CSV files
     networks:
       - spark-network

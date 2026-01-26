@@ -14,6 +14,8 @@ then
   libs=",$4"
 fi
 
+model_paths="/opt/airflow/models"
+
 # driver runs in Airflow → use 2g to leave room for others
 # avoid dynamic alloc in local
 # optimized for Mac M4: 2 workers × 2 cores × 2g memory
@@ -36,4 +38,4 @@ spark-submit \
   --conf spark.sql.adaptive.coalescePartitions.enabled=true \
   --conf spark.sql.sources.partitionOverwriteMode=dynamic \
   --jars /opt/airflow/libs/hadoop-aws-3.3.4.jar,/opt/airflow/libs/aws-java-sdk-bundle-1.12.262.jar$libs \
-  /opt/airflow/jobs/spark_processor.py product_id=$product_id event_date=$event_date models=$models
+  /opt/airflow/jobs/spark_processor.py model_paths=$model_paths product_id=$product_id event_date=$event_date models=$models

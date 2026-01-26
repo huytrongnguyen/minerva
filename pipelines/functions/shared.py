@@ -6,9 +6,9 @@ from airflow import DAG
 from datetime import timedelta
 from datetime import datetime
 
-def create_dag(product_id: str, dag_type: str, start_date: datetime, schedule: str, extend: Dict[str, Any]):
+def create_dag(dag_id: str, start_date: datetime, schedule: str, extend: Dict[str, Any]):
   return DAG(
-    dag_id = f'{product_id}_{dag_type}',
+    dag_id = dag_id,
     default_args = { 'owner': 'minerva', 'start_date': start_date, 'depends_on_past': True, 'wait_for_downstream': True, **extend },
     schedule = schedule,
     tags = extend['tags'] if 'tags' in extend else [],

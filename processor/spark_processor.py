@@ -1,13 +1,39 @@
-import sys, json, logging
+import sys, json, logging, psycopg2
 from typing import Any, Optional, Dict, List
+from datetime import datetime, timedelta
 from functools import reduce
+from dataclasses import dataclass, field
+from jinja2 import Environment
+from psycopg2 import Error
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 from pyspark.sql import SparkSession, DataFrame, DataFrameWriter
 from pyspark.sql.types import StructType
 
-from entity import JobSettings, ModelSettings
-from utils import date_range, jinja_env
-from python_processor import execute_query
+#region ===== Helper Classes =====
+@dataclass
+class JobSettings:
+  models: str
+  product_id: Optional[str] = ''
+  event_date: Optional[str] = ''
+  model_paths: Optional[str] = '/opt/airflow/models'
+
+@dataclass
+class ModelSettings:
+  location: str
+  name: Optional[str] = None
+  type: Optional[str] = 'parquet'
+  # load options
+  case_sensitive: Optional[bool] = False
+  options: Optional[Dict[str, str]] = field(default_factory=dict)
+  preprocess: Optional[str] = ''
+  default_when_blank: Optional[bool] = False
+  # save options
+  num_partitions: Optional[int] = 1
+  partition_by: Optional[List[str]] = field(default_factory=list)
+  merge: Optional[bool] = False
+  postprocess: Optional[str] = ''
+#endregion
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
@@ -15,6 +41,9 @@ logging.basicConfig(
   level=logging.INFO,
   format='%(levelname)s %(module)s:%(lineno)d %(message)s'
 )
+
+# Initialize Jinja
+jinja_env = Environment()
 
 def handler(event: Dict[str, str]):
   """
@@ -28,7 +57,7 @@ def handler(event: Dict[str, str]):
 
   try:
     job_settings = JobSettings(**event)
-    product_info: Dict[str, Any] = load_json(f'{job_settings.settings_dir}/{job_settings.product_id}/info.json')
+    product_info: Dict[str, Any] = load_json(f'{job_settings.model_paths}/{job_settings.product_id}/info.json')
 
     # Initialize Spark session
     spark: SparkSession = (
@@ -39,7 +68,7 @@ def handler(event: Dict[str, str]):
     spark.sparkContext.setLogLevel('INFO') # make Spark log visible in Airflow
 
     for file_name in job_settings.models.split(','):
-      file_path = f'{job_settings.settings_dir}/{file_name}'
+      file_path = f'{job_settings.model_paths}/{file_name}'
       sql = load_text(file_path)
       process(sql, spark, product_info, job_settings)
 
@@ -60,7 +89,7 @@ def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], j
   vars = {
     'product_id': job_settings.product_id,
     'event_date': job_settings.event_date,
-    'settings_dir': job_settings.settings_dir,
+    'model_paths': job_settings.model_paths,
   }
   vars = {**product_info, **vars}
 
@@ -95,7 +124,7 @@ def load_data(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -
   logger.info(f'Load {model.type} data from "{path}"')
 
   try:
-    data: DataFrame = spark.read.format(model.type).options(**model.options).load(path)
+    data: DataFrame = load_data_with_jdbc(path) if model.type == 'jdbc' else spark.read.format(model.type).options(**model.options).load(path)
     if data.head(1):
       return data
     else:
@@ -104,6 +133,27 @@ def load_data(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -
   except Exception as ex:
     logger.error(f'Cannot load {model.type} data from "{path}" caused by: ${ex}')
     return None
+
+def load_data_with_jdbc(spark: SparkSession, path: str, model: ModelSettings, vars: Dict[str, Any]) -> DataFrame:
+  cred = load_json(path)
+
+  dbtable = model.name
+  if model.preprocess:
+    sql_file = jinja_env.from_string(f'{{{{model_paths}}}}/{model.preprocess}').render(**vars)
+    sql_query = load_text(sql_file)
+    dbtable = jinja_env.from_string(sql_query).render(**vars)
+
+  options = {
+    'driver': cred['driver'],
+    'url': cred['url'],
+    'dbtable': dbtable, # Can be table name or subquery
+    'user': cred['user'],
+    'password': cred['password'],
+    'fetchsize': '10000',
+    **model.options
+  }
+
+  return spark.read.format(model.type).options(**options).load()
 
 def save_data(data: DataFrame, model: ModelSettings, vars: Dict[str, Any]):
   if model.type == 'jdbc':
@@ -140,6 +190,28 @@ def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: Dict[str, A
 #endregion
 
 #region ===== Utils =====
+def render_template(template: str, vars: Dict[str, Any]): return jinja_env.from_string(template).render(**vars)
+
+def date_range(base: str, before: int, after: int = 0) -> List[str]:
+  base_date = datetime.strptime(base, '%Y-%m-%d')
+  return [(base_date + timedelta(days = x)).strftime('%Y-%m-%d') for x in range(-before, after + 1)]
+
+def execute_query(query: str, cred: Dict[str, str]):
+  try:
+    conn = psycopg2.connect(cred['conn_string'])
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cursor = conn.cursor()
+    cursor.execute(query)
+  except (Exception, Error) as error:
+    print('Error while connecting: ', error)
+  finally:
+    # Always close cursor and connection to avoid leaks
+    if 'cursor' in locals():
+        cursor.close()
+    if 'conn' in locals():
+      conn.close()
+      print('Connection closed.')
+
 def load_text(file_path: str) -> str:
   logger.info(f'Load text from {file_path}')
   text = ''

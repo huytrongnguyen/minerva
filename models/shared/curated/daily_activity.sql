@@ -2,8 +2,8 @@
   create_or_replace_table({
     'type': 'jdbc',
     'name': 'ztmp_daily_activity',
-    'location': '{{settings_dir}}/{{product_id}}/curated_cred.json',
-    'postprocess': '{{settings_dir}}/shared/curated/f_daily_activity.sql',
+    'location': '{{model_paths}}/{{product_id}}/curated_cred.json',
+    'postprocess': '{{model_paths}}/shared/curated/f_daily_activity.sql',
   })
 }}
 
