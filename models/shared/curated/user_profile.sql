@@ -5,7 +5,7 @@
 }}
 
 with user_registration as (
-  select  product_id, user_id, install_time, install_id
+  select  product_id, user_id, install_time, appsflyer_id
         , agency, media_source, campaign_id, country_code, platform, os_version, device_model, registration_time
   from {{
     source({
@@ -34,7 +34,7 @@ with user_registration as (
   }}
 )
 , combine as (
-  select  product_id, user_id, install_time, install_id
+  select  product_id, user_id, install_time, appsflyer_id
         , agency, media_source, campaign_id, country_code, platform, os_version, device_model
         , registration_time, first_login_time, last_login_time, session_count, level
         , first_purchase_time, last_purchase_time, total_trans, total_amount, min_amount, max_amount, first_amount, last_amount
@@ -45,7 +45,7 @@ with user_registration as (
     })
   }}
   union (
-    select  product_id, user_id, install_time, install_id
+    select  product_id, user_id, install_time, appsflyer_id
           , agency, media_source, campaign_id, country_code, platform, os_version, device_model
           , registration_time, first_login_time, last_login_time, session_count, level
           , first_purchase_time, last_purchase_time, total_trans, total_amount, min_amount, max_amount, first_amount, last_amount
@@ -55,12 +55,12 @@ with user_registration as (
   )
 )
 
-select  product_id, user_id, install_time, install_id
+select  product_id, user_id, install_time, appsflyer_id
       , agency, media_source, campaign_id, country_code, platform, os_version, device_model
       , registration_time, first_login_time, last_login_time, session_count, level
       , first_purchase_time, last_purchase_time, total_trans, total_amount, min_amount, max_amount, first_amount, last_amount
 from (
-  select  product_id, user_id, install_time, install_id
+  select  product_id, user_id, install_time, appsflyer_id
         , agency, media_source, campaign_id, country_code, platform, os_version, device_model, registration_time
         , min(first_login_time) over(partition by product_id, user_id) as first_login_time
         , max(last_login_time) over(partition by product_id, user_id) as last_login_time

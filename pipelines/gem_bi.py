@@ -1,6 +1,6 @@
+from airflow import DAG
 from datetime import datetime
 from functions.shared import create_dag, empty_operator, spark_submit_operator, spark_submit_operator_with_postgres
-# from airflow import DAG
 
 product_id = 'gem'
 event_date = '{{ ds }}'

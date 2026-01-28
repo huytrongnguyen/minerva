@@ -5,11 +5,11 @@
 }}
 
 with user_registration as (
-  select  product_id, user_id, install_time, install_id
+  select  product_id, user_id, install_time, appsflyer_id
         , agency, media_source, campaign_id, country_code, platform, os_version, device_model
         , registration_time
   from (
-    select  product_id, user_id, install_time, install_id
+    select  product_id, user_id, install_time, appsflyer_id
           , agency, media_source, campaign_id, country_code, platform, os_version, device_model
           , registration_time, row_number() over (partition by product_id, user_id order by registration_time) as rn
     from {{
@@ -59,7 +59,7 @@ with user_registration as (
   where rn = 1
 )
 
-select  product_id, user_id, install_time, install_id
+select  product_id, user_id, install_time, appsflyer_id
       , agency, media_source, campaign_id, country_code, platform, os_version, device_model
       , registration_time, first_login_time, last_login_time, session_count, level
       , first_purchase_time, last_purchase_time, total_trans, total_amount, min_amount, max_amount, first_amount, last_amount

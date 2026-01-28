@@ -4,7 +4,7 @@
 
 - Install Homebrew if not already: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 - Install Colima: `brew install colima`
-- Start Colima with resource limits: `colima start --cpu 8 --memory 12 --disk 50` (allocates 8 CPUs, 12GB RAM, 50GB disk—adjust based on your 10-core setup).
+- Start Colima with resource limits: `colima start --cpu 8 --memory 12 --disk 50` (allocates 8 CPUs, 12GB RAM, 50GB disk).
 - Install Docker CLI: `brew install docker docker-compose`
 - Verify: `docker ps` should work via Colima.
 

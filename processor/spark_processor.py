@@ -124,7 +124,7 @@ def load_data(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -
   logger.info(f'Load {model.type} data from "{path}"')
 
   try:
-    data: DataFrame = load_data_with_jdbc(path) if model.type == 'jdbc' else spark.read.format(model.type).options(**model.options).load(path)
+    data: DataFrame = load_data_with_jdbc(spark, path, model, vars) if model.type == 'jdbc' else spark.read.format(model.type).options(**model.options).load(path)
     if data.head(1):
       return data
     else:
@@ -139,9 +139,9 @@ def load_data_with_jdbc(spark: SparkSession, path: str, model: ModelSettings, va
 
   dbtable = model.name
   if model.preprocess:
-    sql_file = jinja_env.from_string(f'{{{{model_paths}}}}/{model.preprocess}').render(**vars)
+    sql_file = jinja_env.from_string(model.preprocess).render(**vars)
     sql_query = load_text(sql_file)
-    dbtable = jinja_env.from_string(sql_query).render(**vars)
+    dbtable = f'({jinja_env.from_string(sql_query).render(**vars)}) as {model.name}'
 
   options = {
     'driver': cred['driver'],
