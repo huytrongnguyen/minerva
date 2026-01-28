@@ -19,7 +19,7 @@ class JobSettings:
   model_paths: Optional[str] = '/opt/airflow/models'
 
 @dataclass
-class ModelSettings:
+class SourceOrTargetSettings:
   location: str
   name: Optional[str] = None
   type: Optional[str] = 'parquet'
@@ -33,6 +33,13 @@ class ModelSettings:
   partition_by: Optional[List[str]] = field(default_factory=list)
   merge: Optional[bool] = False
   postprocess: Optional[str] = ''
+  #transform:
+  sql_model: Optional[str] = ''
+
+@dataclass
+class JsonModel:
+  sources: List[SourceOrTargetSettings]
+  targets: List[SourceOrTargetSettings]
 #endregion
 
 # Initialize the logger
@@ -69,8 +76,14 @@ def handler(event: Dict[str, str]):
 
     for file_name in job_settings.models.split(','):
       file_path = f'{job_settings.model_paths}/{file_name}'
-      sql = load_text(file_path)
-      process(sql, spark, product_info, job_settings)
+      if file_path.endswith('.sql'):
+        sql_model = load_text(file_path)
+        process_sql_model(sql_model, spark, product_info, job_settings)
+      elif file_path.endswith('.json'):
+        json_model = JsonModel(**load_json(file_path))
+        process_json_model(json_model, spark, product_info, job_settings)
+      else:
+        print(f'Unknown file type of {file_path}')
 
     spark.stop()
 
@@ -83,8 +96,8 @@ def handler(event: Dict[str, str]):
     raise
 
 #region ===== SQL Model =====
-def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], job_settings: JobSettings):
-  targets: List[ModelSettings] = []
+def process_sql_model(model: str, spark: SparkSession, product_info: Dict[str, Any], job_settings: JobSettings):
+  targets: List[SourceOrTargetSettings] = []
 
   vars = {
     'product_id': job_settings.product_id,
@@ -93,55 +106,76 @@ def process(sql_model: str, spark: SparkSession, product_info: Dict[str, Any], j
   }
   vars = {**product_info, **vars}
 
-  jinja_env.globals['source'] = lambda params: source(spark, ModelSettings(**params), vars)
-  jinja_env.globals['create_or_replace_table'] = lambda params: target(targets, ModelSettings(**params))
+  jinja_env.globals['source'] = lambda params: source(spark, SourceOrTargetSettings(**params), vars)
+  jinja_env.globals['create_or_replace_table'] = lambda params: target(targets, SourceOrTargetSettings(**params))
   jinja_env.globals['date_range'] = lambda before, after = 0: f"{{{','.join(date_range(job_settings.event_date, before, after))}}}"
 
-  sql_query = jinja_env.from_string(sql_model).render(**vars)
+  sql_query = jinja_env.from_string(model).render(**vars)
   target_data = spark.sql(sql_query)
   save_data(target_data, targets[0], vars)
 
-def source(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -> str:
-  data = load_data(spark, model, vars)
-  if data == None and model.default_when_blank:
+def source(spark: SparkSession, source_settings: SourceOrTargetSettings, vars: Dict[str, Any]) -> str:
+  data = load_data(spark, source_settings, vars)
+  if data == None and source_settings.default_when_blank:
     logger.warning('`default_when_blank` is enabled, try to create empty DataFrame')
     data = spark.createDataFrame([], StructType([]))
 
-  data.createOrReplaceTempView(model.name)
-  return model.name
+  data.createOrReplaceTempView(source_settings.name)
+  return source_settings.name
 
-def target(targets: List[ModelSettings], target_model: ModelSettings) -> str:
+def target(targets: List[SourceOrTargetSettings], target_model: SourceOrTargetSettings) -> str:
   targets.append(target_model)
   return ''
 #endregion
 
+#region ===== JSON Model =====
+def process_json_model(model: JsonModel, spark: SparkSession, product_info: Dict[str, Any], job_settings: JobSettings):
+  vars = {
+    'product_id': job_settings.product_id,
+    'event_date': job_settings.event_date,
+    'model_paths': job_settings.model_paths,
+  }
+  vars = {**product_info, **vars}
+
+  for item in model.sources:
+    source(spark, SourceOrTargetSettings(**item), vars)
+
+  for item in model.targets:
+    target_settings = SourceOrTargetSettings(**item)
+    file_path = jinja_env.from_string(target_settings.sql_model).render(**vars)
+    sql_model = load_text(file_path)
+    sql_query = jinja_env.from_string(sql_model).render(**vars)
+    target_data = spark.sql(sql_query)
+    save_data(target_data, target_settings, vars)
+#endregion
+
 #region ===== Adapter =====
-def load_data(spark: SparkSession, model: ModelSettings, vars: Dict[str, Any]) -> Optional[DataFrame]:
-  if (model.case_sensitive):
+def load_data(spark: SparkSession, source_settings: SourceOrTargetSettings, vars: Dict[str, Any]) -> Optional[DataFrame]:
+  if (source_settings.case_sensitive):
     spark.conf.set('spark.sql.caseSensitive', 'true')
 
-  path = jinja_env.from_string(model.location).render(**vars)
-  logger.info(f'Load {model.type} data from "{path}"')
+  path = jinja_env.from_string(source_settings.location).render(**vars)
+  logger.info(f'Load "{source_settings.name}" data in "{source_settings.type}" format from "{path}"')
 
   try:
-    data: DataFrame = load_data_with_jdbc(spark, path, model, vars) if model.type == 'jdbc' else spark.read.format(model.type).options(**model.options).load(path)
+    data: DataFrame = load_data_with_jdbc(spark, path, source_settings, vars) if source_settings.type == 'jdbc' else spark.read.format(source_settings.type).options(**source_settings.options).load(path)
     if data.head(1):
       return data
     else:
-      logger.warning(f'Empty from "{path}"')
-      return None
+      logger.warning(f'Empty data when loading "{source_settings.name}" data in "{source_settings.type}" format from "{path}"')
+      return data
   except Exception as ex:
-    logger.error(f'Cannot load {model.type} data from "{path}" caused by: ${ex}')
+    logger.error(f'Cannot load "{source_settings.name}" data in "{source_settings.type}" format from "{path}" caused by: ${ex}')
     return None
 
-def load_data_with_jdbc(spark: SparkSession, path: str, model: ModelSettings, vars: Dict[str, Any]) -> DataFrame:
+def load_data_with_jdbc(spark: SparkSession, path: str, source_settings: SourceOrTargetSettings, vars: Dict[str, Any]) -> DataFrame:
   cred = load_json(path)
 
-  dbtable = model.name
-  if model.preprocess:
-    sql_file = jinja_env.from_string(model.preprocess).render(**vars)
+  dbtable = source_settings.name
+  if source_settings.preprocess:
+    sql_file = jinja_env.from_string(source_settings.preprocess).render(**vars)
     sql_query = load_text(sql_file)
-    dbtable = f'({jinja_env.from_string(sql_query).render(**vars)}) as {model.name}'
+    dbtable = f'({jinja_env.from_string(sql_query).render(**vars)}) as {source_settings.name}'
 
   options = {
     'driver': cred['driver'],
@@ -150,41 +184,41 @@ def load_data_with_jdbc(spark: SparkSession, path: str, model: ModelSettings, va
     'user': cred['user'],
     'password': cred['password'],
     'fetchsize': '10000',
-    **model.options
+    **source_settings.options
   }
 
-  return spark.read.format(model.type).options(**options).load()
+  return spark.read.format(source_settings.type).options(**options).load()
 
-def save_data(data: DataFrame, model: ModelSettings, vars: Dict[str, Any]):
-  if model.type == 'jdbc':
-    save_data_with_jdbc(data, model, vars)
+def save_data(data: DataFrame, target_settings: SourceOrTargetSettings, vars: Dict[str, Any]):
+  if target_settings.type == 'jdbc':
+    save_data_with_jdbc(data, target_settings, vars)
   else:
-    path = jinja_env.from_string(model.location).render(**vars)
-    logger.info(f'Save data to "{path}" as {model.type}, num_partitions = {model.num_partitions}, partition_by = {model.partition_by}, columns = {"|".join(data.columns)}')
+    path = jinja_env.from_string(target_settings.location).render(**vars)
+    logger.info(f'Save data to "{path}" as {target_settings.type}, num_partitions = {target_settings.num_partitions}, partition_by = {target_settings.partition_by}, columns = {"|".join(data.columns)}')
 
-    writer: DataFrameWriter = data.coalesce(model.num_partitions).write.format(model.type).options(**model.options).mode('overwrite')
-    if len(model.partition_by) > 0:
-      writer = writer.partitionBy(model.partition_by)
+    writer: DataFrameWriter = data.coalesce(target_settings.num_partitions).write.format(target_settings.type).options(**target_settings.options).mode('overwrite')
+    if len(target_settings.partition_by) > 0:
+      writer = writer.partitionBy(target_settings.partition_by)
 
     writer.save(path)
 
-def save_data_with_jdbc(data: DataFrame, model: ModelSettings, vars: Dict[str, Any]):
-  path = jinja_env.from_string(model.location).render(**vars)
+def save_data_with_jdbc(data: DataFrame, target_settings: SourceOrTargetSettings, vars: Dict[str, Any]):
+  path = jinja_env.from_string(target_settings.location).render(**vars)
   cred = load_json(path)
   options = {
     'driver': cred['driver'],
     'url': cred['url'],
-    'dbtable': model.name,
+    'dbtable': target_settings.name,
     'user': cred['user'],
     'password': cred['password'],
     'batchsize': '10000',
   }
-  data.write.format(model.type).options(**options).mode('overwrite').save()
+  data.write.format(target_settings.type).options(**options).mode('overwrite').save()
 
-  logger.info(f"Save data to {model.name}")
+  logger.info(f"Save data to {target_settings.name}")
 
-  if model.postprocess:
-    sql_file = jinja_env.from_string(model.postprocess).render(**vars)
+  if target_settings.postprocess:
+    sql_file = jinja_env.from_string(target_settings.postprocess).render(**vars)
     sql_query = load_text(sql_file)
     execute_query(sql_query, cred)
 #endregion
