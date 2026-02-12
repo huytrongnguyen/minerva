@@ -21,9 +21,9 @@ public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignServi
   private static CampaignCreate GenerateCampaign(string mediaSource, string budgetType, double budget) {
     var campaignId = snowflakeIdGen.NextId();
     return new CampaignCreate(
-      MediaSource: mediaSource, 
+      MediaSource: mediaSource,
       Objective: "APP_INSTALLS",
-      CampaignId: $"{campaignId}", 
+      CampaignId: $"{campaignId}",
       CampaignName: $"{mediaSource} | {campaignId} | {budgetType} | {budget}",
       BudgetMode: budgetType,
       Budget: budget
@@ -49,9 +49,9 @@ public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignServi
   // private static CampaignCreate GenerateCampaign(string mediaSource, string budgetType, double budget) {
   //   var campaignId = snowflakeIdGen.GenerateId();
   //   return new CampaignCreate(
-  //     MediaSource: mediaSource, 
+  //     MediaSource: mediaSource,
   //     Objective: "APP_INSTALLS",
-  //     CampaignId: $"{campaignId}", 
+  //     CampaignId: $"{campaignId}",
   //     CampaignName: $"{mediaSource} | {campaignId} | {budgetType} | {budget}",
   //     BudgetMode: budgetType,
   //     Budget: budget
@@ -59,7 +59,7 @@ public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignServi
   // }
 
 
-  public static readonly Dictionary<string, MediaSourceBaseline> MediaSourceBaselineDictionary = new() { 
+  public static readonly Dictionary<string, MediaSourceBaseline> MediaSourceBaselineDictionary = new() {
     { "facebook_ads", new(BaseImpressions: 50000, CtrMean: 0.022, CvrMean: 0.28, CpiMean: 7.0) },
     { "google_ads", new(BaseImpressions: 150000, CtrMean: 0.015, CvrMean: 0.35, CpiMean: 5.0) },
     { "titkok_ads", new(BaseImpressions: 80000, CtrMean: 0.012, CvrMean: 0.22, CpiMean: 9.0) }
@@ -67,8 +67,7 @@ public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignServi
   public static readonly SnowflakeIdGen snowflakeIdGen = Imc.NewSnowflakeId(1); // Choose a unique workerId per instance
 }
 
-public interface ICampaignStore {
-  IEnumerable<CampaignInfo> List();
+public interface ICampaignStore : IDataStore<CampaignInfo> {
   IEnumerable<CampaignInfo> GetActiveCampaigns();
   Task<IEnumerable<CampaignInfo>> Save(List<CampaignCreate> campaigns);
 }

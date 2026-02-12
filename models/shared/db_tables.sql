@@ -1,3 +1,11 @@
+create table product_info (
+  product_id text not null,
+  start_date date,
+  created_at timestamp,
+  updated_at timestamp,
+  primary key (product_id)
+);
+
 create table daily_user_metrics (
   id bigint not null default unique_rowid(),
   product_id text not null,

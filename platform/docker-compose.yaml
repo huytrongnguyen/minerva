@@ -99,6 +99,7 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
       AIRFLOW__CORE__FERNET_KEY: 'gVqOwBQL2OeREGfnmwnuhR5QliF0yRHcXYr5x7cyxPU='
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      RATELIMIT_ENABLED: 'false'
     ports:
       - 8080:8080
     depends_on:

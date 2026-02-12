@@ -1,6 +1,7 @@
 using DataManager.Auth;
 using DataManager.Campaign;
 using DataManager.Infrastructure;
+using DataManager.Product;
 using DataManager.Shared;
 using DataManager.Simulation;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
@@ -10,7 +11,7 @@ using Npgsql;
 var builder = WebApplication.CreateBuilder(args);
 
 var connStringBuilder = new NpgsqlConnectionStringBuilder {
-  SslMode = SslMode.VerifyFull,
+  SslMode = SslMode.Require,
   Host = builder.Configuration["Db:Host"],
   Port = builder.Configuration["Db:Port"].ParseInt(),
   Database = builder.Configuration["Db:Name"],
@@ -30,19 +31,21 @@ services
       options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention();
     })
     .AddScoped<ICampaignStore, CampaignStore>()
+    .AddScoped<IProductStore, ProductStore>()
     .AddScoped<CampaignService>()
+    .AddScoped<ProductService>()
     .AddScoped<AuthService>()
-    .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
+    // .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
     .AddCors()
     .AddControllers();
 
-services.AddSignalR();
+// services.AddSignalR();
 services.AddHealthChecks();
 services.AddRazorPages();
 
 AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
-StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration); 
+StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 var app = builder.Build();
 
@@ -69,7 +72,7 @@ app.UseAuthorization();
 //   await context.Response.WriteAsJsonAsync(new { message = error.Message, trace = error.StackTrace });
 // }));
 
-app.MapHub<EventHub>("/hub/event");
+// app.MapHub<EventHub>("/hub/event");
 
 app.UseHealthChecks("/health");
 

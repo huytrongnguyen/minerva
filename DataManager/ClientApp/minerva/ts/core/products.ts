@@ -1,10 +1,19 @@
-import { NavItem, Model, Store } from 'minerva/core';
+import { Model, NavItem, Store } from 'minerva/core';
 
-export const navigator: NavItem[] = [{
-  navId: 'ads-manager',
-  navName: 'Ads Manager',
-  navPath: '/ads-manager'
-}]
+export type ProductInfo = {
+  productId: string,
+  startDate: string,
+}
+
+export const ProductInfoStore = Store<ProductInfo>({ proxy: { url: '/api/products' } });
+
+export const ProductNavigatorModel = Model<NavItem[]>({
+  proxy: { url: '/api/products/{productId}/navigator', method: 'get' }
+});
+
+export const CurrentProductModel = Model<ProductInfo>({
+  proxy: { url: '/api/products/{productId}', method: 'get' }
+});
 
 export type CampaignInfo = {
   id: number,

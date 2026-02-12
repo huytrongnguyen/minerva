@@ -8,17 +8,9 @@
   <link rel="stylesheet" href="/minerva.css?_dc=@(DateTime.Now.Ticks)" />
   @RenderSection("Styles", required: false)
 </head>
-<body class="fullscreen p-2">
-  <div class="fullscreen card border-0 border-radius-0">
-    <header class="card-header bg-transparent pt-0">
-      <!-- Render the navigation partial view, passing the current page -->
-          <partial name="_Navigation" model="@(ViewData["ActivePage"]?.ToString() ?? "Index")" />
-    </header>
-    <div class="fullscreen card-body border border-top-0 rounded-bottom">
-      @RenderBody()
-    </div>
-  </div>
+<body class="fullscreen">
   <script src="/bootstrap.bundle.min.js?dc=@(DateTime.Now.Ticks)"></script>
+  @RenderBody()
   @RenderSection("Scripts", required: false)
 </body>
 </html>

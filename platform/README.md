@@ -18,3 +18,18 @@
 - Spark UI: http://localhost:8080
 - Airflow UI: http://localhost:8081 (default login: admin/admin). Init DB first: `docker-compose exec airflow airflow db init` (creates tables in 'airflow' DB).
 
+## Repo Structure
+
+```
+workspaces/
+├── data/
+│   ├── minio/
+│   │   └── lakehouse/
+│   └── postgres/
+└── minerva/
+    ├── analyses/
+    ├── model/
+    ├── pipelines/
+    └── platform/
+        └── docker-compose.yaml
+```

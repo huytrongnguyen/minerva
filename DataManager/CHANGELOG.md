@@ -4,6 +4,14 @@
 
 **Features**
 
+- Re-design layout
+- Add `Smart View > Overview` screen
+
+## v0.0.2
+> 2025-12-14
+
+**Features**
+
 - Build client app with bootstrap, react, rosie-ui
 - Add OAuth2
 - Add `Simulation` tab
