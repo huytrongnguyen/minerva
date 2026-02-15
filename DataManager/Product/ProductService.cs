@@ -2,7 +2,7 @@ using DataManager.Shared;
 
 namespace DataManager.Product;
 
-public class ProductService(IProductStore productStore) : IDataService<ProductInfo>(productStore) {
+public class ProductService(IProductStore productStore, ITrinoStore trinoStore) : IDataService<ProductInfo>(productStore) {
   public ProductInfo Get(string productId) => productStore.Get(productId);
 
   public List<NavItem> GetNavigator(string productId) {
@@ -39,6 +39,10 @@ public class ProductService(IProductStore productStore) : IDataService<ProductIn
       )
     };
     return navigator;
+  }
+
+  public Task<object> TestConnection(string productId, DataConnection connection) {
+    return trinoStore.TestConnection(connection);
   }
 }
 

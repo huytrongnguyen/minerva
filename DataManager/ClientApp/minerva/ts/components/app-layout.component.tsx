@@ -7,6 +7,10 @@ export const navigator: NavItem[] = [{
   navId: 'products',
   navName: 'Products',
   navPath: '/products'
+}, {
+  navId: 'admin',
+  navName: 'Administration',
+  navPath: '/admin'
 }]
 
 export function AppLayout(props: PropsWithChildren<any>) {
@@ -19,7 +23,7 @@ export function AppLayout(props: PropsWithChildren<any>) {
           <span className="h3 fw-bold border-0 bg-transparent">Minerva</span>
         </li>
         {navigator.map(navItem => {
-          return <li key={navItem.navId} className="nav-item">
+          return <li key={navItem.navId} className="nav-item ms-1">
             <a href={navItem.navPath} className={Rosie.classNames('nav-link', { active: (location?.pathname ?? '').startsWith(navItem.navPath) })}>{navItem.navName}</a>
           </li>
         })}

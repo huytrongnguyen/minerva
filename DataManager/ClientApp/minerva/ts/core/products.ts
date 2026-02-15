@@ -15,6 +15,10 @@ export const CurrentProductModel = Model<ProductInfo>({
   proxy: { url: '/api/products/{productId}', method: 'get' }
 });
 
+export const TestConnectionModel = Model<object>({
+  proxy: { url: '/api/products/{productId}/connections/test', method: 'post' }
+});
+
 export type CampaignInfo = {
   id: number,
   objective: 'APP_INSTALLS' | 'CONVERSIONS' | 'TRAFFIC', // FB objectives

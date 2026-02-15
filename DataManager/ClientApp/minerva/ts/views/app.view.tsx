@@ -8,6 +8,7 @@ import { AppLayout, RequireAuth } from 'minerva/components';
 // import { navigator } from '../core';
 
 import { DashboardView, ProductListView, ProductSettingsView } from './products';
+import { AdminView } from './admin.view';
 
 export function AppView() {
   useEffect(() => {
@@ -19,6 +20,7 @@ export function AppView() {
   return <Router>
     <AppLayout>
       <Routes>
+        <Route path="/admin" element={<RequireAuth component={AdminView} title="Administration" />} />
         <Route path="/products" element={<RequireAuth component={ProductListView} title="Products" />} />
         <Route path="/products/:productId/settings" element={<RequireAuth component={ProductSettingsView} title="Product Settings" />} />
         <Route path="/products/:productId/:spaceId/:viewId" element={<RequireAuth component={DashboardView} title="Dashboard" />} />
