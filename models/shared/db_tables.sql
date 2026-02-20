@@ -34,7 +34,7 @@ create table daily_user_metrics (
   rev_nru07 bigint default 0,
   rev_nru30 bigint default 0,
 
-  created_at timestamp,
+  created_at timestamp default now(),
   updated_at timestamp,
   primary key (event_date, id)
 ) partition by range (event_date) (
@@ -53,7 +53,30 @@ create table product_info (
   endpoint text,
   client_id text,
   client_secret text,
-  created_at timestamp,
+  created_at timestamp default now(),
   updated_at timestamp,
   primary key (product_id)
 );
+
+create table product_event (
+  id bigint not null default unique_rowid(),
+  product_id text not null,
+  event_name text not null,
+  event_display_name text,
+  event_semantic_name text,
+  created_at timestamp default now(),
+  primary key (id)
+);
+create unique index product_event_uniq_idx on product_event(product_id, event_name);
+
+create table product_event_field (
+  id bigint not null default unique_rowid(),
+  product_id text not null,
+  event_name text not null,
+  field_name text not null,
+  field_display_name text,
+  field_semantic_name text,
+  created_at timestamp default now(),
+  primary key (id)
+);
+create unique index product_event_field_uniq_idx on product_event_field(product_id, event_name, field_name);

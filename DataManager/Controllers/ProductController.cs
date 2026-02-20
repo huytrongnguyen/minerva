@@ -12,5 +12,7 @@ namespace DataManager.Controllers;
   [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request) => productService.Update(productId, request);
   [HttpGet("{productId}/navigator")] public List<NavItem> GetNavigator(string productId) => productService.GetNavigator(productId);
   [HttpPost("{productId}/test-connection")] public Task<DataConnectionStat> TestConnection(string productId, DataConnection connection) => productService.TestConnection(productId, connection);
-  [HttpPost("{productId}/connections/{connectionId}/execute")] public Task<List<Dictionary<string, object>>> ExecuteQuery(string productId, string connectionId) => productService.ExecuteQuery(productId, connectionId);
+  [HttpGet("{productId}/events")] public IEnumerable<ProductEvent> ListEvents(string productId) => productService.ListEvents(productId);
+  [HttpGet("{productId}/tracked-events")] public Task<IEnumerable<TrackedEvent>> ListTrackedEvents(string productId) => productService.ListTrackedEvents(productId);
+  [HttpPost("{productId}/execute")] public Task<List<Dictionary<string, object>>> ExecuteQuery(string productId, string connectionId) => productService.ExecuteQuery(productId, connectionId);
 }

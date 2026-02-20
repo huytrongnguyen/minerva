@@ -1,7 +1,9 @@
-import { Dialog, Rosie, useDialog } from 'rosie-ui';
-import { ProductLayout } from './product-layout.component';
 import { useEffect, useState } from 'react';
+import { Dialog, Rosie, useDialog } from 'rosie-ui';
 import { CurrentProductModel, ProductInfo, TestConnectionModel, UpdateProductInfoModel, alertSuccess } from 'minerva/core';
+
+import { ProductLayout } from './product-layout.component';
+import { ProductSelector } from './product-selector.component';
 
 export function ProductSettingsView() {
   const [productId, setProductId] = useState(''),
@@ -14,10 +16,10 @@ export function ProductSettingsView() {
   useEffect(() => {
     const product$ = CurrentProductModel.subscribe(value => {
       setProductId(value.productId);
-      setProductName(value.productName);
-      setDataOwner(value.dataOwner);
-      setStartDate(value.startDate);
-      setSqlDialect(value.sqlDialect);
+      setProductName(value.productName ?? '');
+      setDataOwner(value.dataOwner ?? '');
+      setStartDate(value.startDate ?? '');
+      setSqlDialect(value.sqlDialect ?? '');
     });
     return () => { product$.unsubscribe(); }
   }, []);
@@ -28,10 +30,9 @@ export function ProductSettingsView() {
   }
 
   return <ProductLayout>
-      <ol className="breadcrumb">
-      <li className="breadcrumb-item">Products</li>
+    <ProductSelector navPath='/settings'>
       <li className="breadcrumb-item active">Settings</li>
-    </ol>
+    </ProductSelector>
     <main className="fullscreen">
       <div className="container-fluid mb-2">
         <div className="row mt-2">
@@ -63,7 +64,6 @@ export function ProductSettingsView() {
             }
           </div>
         </div>
-
       </div>
     </main>
     {connectorCreationDialog.isShown && <ConnectorCreationDialog productId={productId}

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using DataManager.Product;
 using DataManager.Shared;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataManager.Infrastructure;
 
@@ -38,7 +37,12 @@ public class ProductStore(DataManagerDbContext dbContext, IDataProtectionProvide
     });
   }
 
-  protected override ProductInfo FromEntity(PRODUCT_INFO entity) {
+  public DataConnection GetDataConnection(string productId) {
+    var entity = First(x => x.ProductId == productId);
+    return ToDataConnection(entity);
+  }
+
+  protected override ProductInfo ToValue(PRODUCT_INFO entity) {
     return new(
       ProductId: entity.ProductId,
       StartDate: entity.StartDate,
@@ -48,6 +52,15 @@ public class ProductStore(DataManagerDbContext dbContext, IDataProtectionProvide
       SqlDialect: entity.SqlDialect,
       CreatedAt: entity.CreatedAt,
       UpdatedAt: entity.UpdatedAt
+    );
+  }
+
+  private DataConnection ToDataConnection(PRODUCT_INFO entity) {
+    return new(
+      SqlDialect: entity.SqlDialect,
+      Endpoint: string.IsNullOrWhiteSpace(entity.Endpoint) ? null : dataProtector.Unprotect(entity.Endpoint),
+      ClientId: string.IsNullOrWhiteSpace(entity.ClientId) ? null : dataProtector.Unprotect(entity.ClientId),
+      ClientSecret: string.IsNullOrWhiteSpace(entity.ClientSecret) ? null : dataProtector.Unprotect(entity.ClientSecret)
     );
   }
 

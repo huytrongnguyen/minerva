@@ -18,6 +18,10 @@ export const CurrentProductModel = Model<ProductInfo>({
   proxy: { url: '/api/products/{productId}', method: 'get' }
 });
 
+export const UpdateProductInfoModel = Model<ProductInfo>({
+  proxy: { url: '/api/products/{productId}', method: 'patch' }
+});
+
 export type ConnectionStats = {
   catalogs: string[],
   schemas: string[],
@@ -28,9 +32,13 @@ export const TestConnectionModel = Model<ConnectionStats>({
   proxy: { url: '/api/products/{productId}/test-connection', method: 'post' }
 });
 
-export const UpdateProductInfoModel = Model<ProductInfo>({
-  proxy: { url: '/api/products/{productId}', method: 'patch' }
-});
+export type ProductEvent = {
+  eventName: string,
+}
+
+export const ProductEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/events' } });
+
+export const TrackedEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/tracked-events' } });
 
 export type CampaignInfo = {
   id: number,

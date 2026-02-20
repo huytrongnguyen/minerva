@@ -30014,7 +30014,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react13 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -40991,6 +40991,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     function DataModel2(config) {
       var _this = _super.call(this) || this;
       _this.config = config;
+      _this.selected = false;
       return _this;
     }
     DataModel2.prototype.get = function(fieldName) {
@@ -41085,8 +41086,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_react = __toESM(require_react());
   function Dialog(props) {
     var _a;
-    var _b = props.id, id = _b === void 0 ? "dialog" : _b, _c = props.title, title = _c === void 0 ? "Dialog" : _c, _d = props.className, className = _d === void 0 ? "" : _d, _e = props.dialogClass, dialogClass = _e === void 0 ? "" : _e, disableCloseButton = props.disableCloseButton, children = props.children;
-    return (0, import_jsx_runtime2.jsx)("section", { className: "modal fade ".concat(className), id, "data-bs-backdrop": "static", tabIndex: -1, role: "dialog", children: (0, import_jsx_runtime2.jsx)("div", { className: "modal-dialog modal-dialog-centered modal-dialog-scrollable ".concat(dialogClass), role: "document", children: (0, import_jsx_runtime2.jsxs)("div", { className: Rosie.classNames("modal-content"), style: { maxHeight: (_a = props.height) !== null && _a !== void 0 ? _a : "100%" }, children: [(0, import_jsx_runtime2.jsxs)("div", { className: "modal-header", children: [(0, import_jsx_runtime2.jsx)("h5", { className: "modal-title", children: title }), !disableCloseButton && (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal" })] }), children] }) }) });
+    var _b = props.id, id = _b === void 0 ? "dialog" : _b, _c = props.title, title = _c === void 0 ? "Dialog" : _c, _d = props.className, className = _d === void 0 ? "" : _d, _e = props.dialogClass, dialogClass = _e === void 0 ? "" : _e, disableCloseButton = props.disableCloseButton, fitScreen = props.fitScreen, children = props.children;
+    return (0, import_jsx_runtime2.jsx)("section", { className: "modal fade ".concat(className), id, "data-bs-backdrop": "static", tabIndex: -1, role: "dialog", children: (0, import_jsx_runtime2.jsx)("div", { className: "modal-dialog modal-dialog-centered modal-dialog-scrollable ".concat(dialogClass), role: "document", children: (0, import_jsx_runtime2.jsxs)("div", { className: Rosie.classNames("modal-content", { fullscreen: fitScreen }), style: { maxHeight: (_a = props.height) !== null && _a !== void 0 ? _a : "100%" }, children: [(0, import_jsx_runtime2.jsxs)("div", { className: "modal-header", children: [(0, import_jsx_runtime2.jsx)("h5", { className: "modal-title", children: title }), !disableCloseButton && (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal" })] }), children] }) }) });
   }
   function useDialog(id) {
     var _a = (0, import_react.useState)(false), isShown = _a[0], setState = _a[1];
@@ -41108,16 +41109,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
+  // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  var import_react4 = __toESM(require_react());
+
   // node_modules/rosie-ui/dist/js/components/paging-toolbar.component.js
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   function PagingToolbar(props) {
     var _a = props.page, page = _a === void 0 ? 1 : _a, _b = props.size, size = _b === void 0 ? 100 : _b, _c = props.count, count = _c === void 0 ? 0 : _c, _d = props.total, total = _d === void 0 ? 0 : _d, totalPage = (total / size).floor() + (total % size > 0 ? 1 : 0);
     return (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [(0, import_jsx_runtime3.jsxs)("div", { className: "mt-1 me-auto", children: ["Display records ", !count ? 0 : (page - 1) * size + 1, " - ", Math.min(page * size, (page - 1) * size + count), " of ", total] }), (0, import_jsx_runtime3.jsxs)("ul", { className: "pagination pagination-sm mb-0", children: [(0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page <= 1 }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-backward" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page - 1 < 1 }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play fa-rotate-180" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: "page-item active", children: (0, import_jsx_runtime3.jsxs)("span", { className: "page-link", children: [!totalPage ? 0 : page, " / ", totalPage] }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page + 1 > totalPage }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page >= totalPage }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-forward" }) }) })] })] });
   }
-
-  // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
-  var import_react4 = __toESM(require_react());
 
   // node_modules/rosie-ui/dist/js/components/grid/grid-row.component.js
   var import_jsx_runtime5 = __toESM(require_jsx_runtime());
@@ -41181,9 +41182,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   function GridRow(props) {
     var record = props.record, rowIndex = props.rowIndex, columns = props.columns, checkboxSelection = props.checkboxSelection, _a = (0, import_react3.useState)(false), selected = _a[0], setSelected = _a[1];
-    return (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: (0, import_jsx_runtime5.jsx)("div", { className: Rosie.classNames("rosie-grid-row d-flex flex-row", { selected }), children: columns.map(function(col, colIndex) {
+    return (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: (0, import_jsx_runtime5.jsxs)("div", { className: Rosie.classNames("rosie-grid-row d-flex flex-row", { selected }), children: [checkboxSelection && (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: (0, import_jsx_runtime5.jsx)("div", { className: "rosie-grid-cell p-1", children: (0, import_jsx_runtime5.jsx)("div", { className: "form-check mb-0", children: (0, import_jsx_runtime5.jsx)("input", { className: "form-check-input", type: "checkbox", checked: selected, onChange: function() {
+      record.selected = !selected;
+    } }) }) }) }), columns.map(function(col, colIndex) {
       return (0, import_jsx_runtime5.jsx)(GridCell, __assign3({ record, rowIndex, colIndex }, col), colIndex);
-    }) }) });
+    })] }) });
   }
 
   // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
@@ -41230,13 +41233,67 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     })] }) }), !props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: (0, import_jsx_runtime6.jsxs)("div", { className: "ms-auto", children: ["Total records: ", (_a = records === null || records === void 0 ? void 0 : records.length) !== null && _a !== void 0 ? _a : 0] }) }) }), props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: props.pagingToolbar && (0, import_jsx_runtime6.jsx)(PagingToolbar, {}) }) })] }) }) });
   }
 
-  // node_modules/rosie-ui/dist/js/components/datepicker/date-picker.component.js
+  // node_modules/rosie-ui/dist/js/components/dropdown.component.js
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_react5 = __toESM(require_react());
+  function InputDropdown(props) {
+    var _a = props.displayField, displayField = _a === void 0 ? "name" : _a, _b = props.valueField, valueField = _b === void 0 ? "value" : _b, _c = props.multiple, multiple = _c === void 0 ? false : _c, _d = props.defaultText, defaultText = _d === void 0 ? "Select" : _d, _e = props.separator, separator = _e === void 0 ? ": " : _e, _f = props.smartButtonText, smartButtonText = _f === void 0 ? true : _f, _g = props.rightAligned, rightAligned = _g === void 0 ? false : _g, _h = props.searchBox, searchBox = _h === void 0 ? true : _h, _j = props.buttonClass, buttonClass = _j === void 0 ? "" : _j, _k = props.buttonStyle, buttonStyle = _k === void 0 ? {} : _k;
+    var _l = (0, import_react5.useState)(""), searchFilter = _l[0], setSearchFilter = _l[1], _m = (0, import_react5.useState)(props.options || []), options = _m[0], setOptions = _m[1], _o = (0, import_react5.useState)(props.value || []), selection = _o[0], setSelection = _o[1];
+    (0, import_react5.useEffect)(function() {
+      return setSelection((props === null || props === void 0 ? void 0 : props.value) || []);
+    }, [props.value]);
+    (0, import_react5.useEffect)(function() {
+      return setOptions((props === null || props === void 0 ? void 0 : props.options) || []);
+    }, [props.options]);
+    function displayText() {
+      if (!smartButtonText || !selection || !selection.length) {
+        return defaultText;
+      }
+      var names = selection.map(function(item) {
+        var _a2;
+        return (_a2 = item === null || item === void 0 ? void 0 : item[displayField]) !== null && _a2 !== void 0 ? _a2 : "";
+      }).join(",");
+      return "".concat(defaultText).concat(separator).concat(names);
+    }
+    function isSelected(opt) {
+      return selection.findIndex(function(item) {
+        return item[valueField] === opt[valueField];
+      }) > -1;
+    }
+    function select(opt) {
+      var opts = [];
+      if (!multiple) {
+        opts = [opt];
+      } else if (isSelected(opt)) {
+        opts = selection.filter(function(item) {
+          return item[valueField] !== opt[valueField];
+        });
+      } else {
+        opts = options.filter(function(item) {
+          return isSelected(item) || item[valueField] === opt[valueField];
+        });
+      }
+      setSelection(opts);
+      props.onChange && props.onChange(opts);
+    }
+    return (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [(0, import_jsx_runtime7.jsx)("button", { type: "button", className: Rosie.classNames("btn dropdown-toggle", buttonClass), style: buttonStyle, "data-bs-toggle": "dropdown", children: displayText() }), (0, import_jsx_runtime7.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", { "dropdown-menu-right": rightAligned }), children: [searchBox && (0, import_jsx_runtime7.jsx)("div", { className: "p-1 border-bottom", children: (0, import_jsx_runtime7.jsx)("input", { type: "text", className: "form-control form-control-sm", name: "searchFilter", placeholder: "Search...", value: searchFilter, onChange: function(event) {
+      return setSearchFilter(event.target.value);
+    } }) }), (0, import_jsx_runtime7.jsx)("div", { className: "dropdown-item-list", children: options.map(function(opt, index) {
+      if (searchFilter && !opt[displayField].toLowerCase().startsWith(searchFilter.toLowerCase()))
+        return null;
+      return (0, import_jsx_runtime7.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", { active: isSelected(opt) }), onClick: function() {
+        return select(opt);
+      }, children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
+    }) })] })] });
+  }
 
-  // node_modules/rosie-ui/dist/js/components/datepicker/date-range-picker.component.js
+  // node_modules/rosie-ui/dist/js/components/datepicker/date-picker.component.js
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var import_react6 = __toESM(require_react());
+
+  // node_modules/rosie-ui/dist/js/components/datepicker/date-range-picker.component.js
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+  var import_react7 = __toESM(require_react());
 
   // node_modules/rosie-ui/dist/js/components/query-builder/type.js
   var andOperator = function() {
@@ -41268,10 +41325,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // node_modules/rosie-ui/dist/js/components/query-builder/query-operation.component.js
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
-
-  // node_modules/rosie-ui/dist/js/components/dropdown.component.js
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
-  var import_react7 = __toESM(require_react());
 
   // node_modules/rosie-ui/dist/js/components/query-builder/criteria-field.component.js
   var import_jsx_runtime10 = __toESM(require_jsx_runtime());
@@ -45436,12 +45489,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var CurrentProductModel = Model({
     proxy: { url: "/api/products/{productId}", method: "get" }
   });
-  var TestConnectionModel = Model({
-    proxy: { url: "/api/products/{productId}/test-connection", method: "post" }
-  });
   var UpdateProductInfoModel = Model({
     proxy: { url: "/api/products/{productId}", method: "patch" }
   });
+  var TestConnectionModel = Model({
+    proxy: { url: "/api/products/{productId}/test-connection", method: "post" }
+  });
+  var ProductEventStore = Store({ proxy: { url: "/api/products/{productId}/events" } });
+  var TrackedEventStore = Store({ proxy: { url: "/api/products/{productId}/tracked-events" } });
   var CampaignInfoStore = Store({ proxy: { url: "/api/campaigns" } });
   var CampaignGenerationModel = Model({
     proxy: { url: "/api/campaigns/generate", method: "post" }
@@ -45477,6 +45532,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ] }) })
     ] }) }) });
   }
+
+  // ClientApp/minerva/ts/views/products/settings.view.tsx
+  var import_react13 = __toESM(require_react());
 
   // ClientApp/minerva/ts/views/products/product-layout.component.tsx
   var import_react11 = __toESM(require_react());
@@ -45543,18 +45601,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
 
-  // ClientApp/minerva/ts/views/products/settings.view.tsx
+  // ClientApp/minerva/ts/views/products/product-selector.component.tsx
   var import_react12 = __toESM(require_react());
   var import_jsx_runtime17 = __toESM(require_jsx_runtime());
-  function ProductSettingsView() {
-    const [productId, setProductId] = (0, import_react12.useState)(""), [productName, setProductName] = (0, import_react12.useState)(""), [dataOwner, setDataOwner] = (0, import_react12.useState)(""), [startDate, setStartDate] = (0, import_react12.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react12.useState)(""), connectorCreationDialog = useDialog("#connector-creation-dialog");
+  function ProductSelector(props) {
+    const [products, setProducts] = (0, import_react12.useState)([]), [selectedProduct, setSelectedProduct] = (0, import_react12.useState)(null);
     (0, import_react12.useEffect)(() => {
+      const product$ = CurrentProductModel.subscribe(setSelectedProduct);
+      loadProducts();
+      return () => {
+        product$.unsubscribe();
+      };
+    }, []);
+    async function loadProducts() {
+      var products2 = await ProductInfoStore.fetch();
+      setProducts(products2 ?? []);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("ol", { className: "breadcrumb py-0", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("li", { className: "breadcrumb-item", children: "Products" }),
+      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("li", { className: "breadcrumb-item dropdown", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+        InputDropdown,
+        {
+          options: products,
+          value: selectedProduct ? [selectedProduct] : [],
+          valueField: "productId",
+          displayField: "productId",
+          searchBox: true,
+          defaultText: "",
+          separator: "",
+          renderer: (value, item) => {
+            return /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+              Link,
+              {
+                to: `/products/${item.productId}${props.navPath}`,
+                className: Rosie.classNames("dropdown-item cursor-pointer", { active: item.productId === selectedProduct?.productId }),
+                children: value
+              }
+            );
+          }
+        }
+      ) }),
+      props.children
+    ] });
+    return;
+  }
+
+  // ClientApp/minerva/ts/views/products/settings.view.tsx
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
+  function ProductSettingsView() {
+    const [productId, setProductId] = (0, import_react13.useState)(""), [productName, setProductName] = (0, import_react13.useState)(""), [dataOwner, setDataOwner] = (0, import_react13.useState)(""), [startDate, setStartDate] = (0, import_react13.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react13.useState)(""), connectorCreationDialog = useDialog("#connector-creation-dialog");
+    (0, import_react13.useEffect)(() => {
       const product$ = CurrentProductModel.subscribe((value) => {
         setProductId(value.productId);
-        setProductName(value.productName);
-        setDataOwner(value.dataOwner);
-        setStartDate(value.startDate);
-        setSqlDialect(value.sqlDialect);
+        setProductName(value.productName ?? "");
+        setDataOwner(value.dataOwner ?? "");
+        setStartDate(value.startDate ?? "");
+        setSqlDialect(value.sqlDialect ?? "");
       });
       return () => {
         product$.unsubscribe();
@@ -45564,30 +45666,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       CurrentProductModel.loadData(product);
       Rosie.hideModal("#connector-creation-dialog");
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("ol", { className: "breadcrumb", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("li", { className: "breadcrumb-item", children: "Products" }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("li", { className: "breadcrumb-item active", children: "Settings" })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "container-fluid mb-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Product Name" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: productName, onChange: (e) => setProductName(e.target.value) }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(ProductSelector, { navPath: "/settings", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("li", { className: "breadcrumb-item active", children: "Settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "container-fluid mb-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Product Name" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: productName, onChange: (e) => setProductName(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Owner" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { type: "text", className: "form-control", value: dataOwner, onChange: (e) => setDataOwner(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Owner" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { type: "text", className: "form-control", value: dataOwner, onChange: (e) => setDataOwner(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Start Date" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { type: "text", className: "form-control", value: startDate, onChange: (e) => setStartDate(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Start Date" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { type: "text", className: "form-control", value: startDate, onChange: (e) => setStartDate(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Connection" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-6", children: sqlDialect ? /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { type: "text", readOnly: true, className: "form-control-plaintext", value: sqlDialect }) : /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("button", { className: "btn btn-outline-secondary", onClick: () => connectorCreationDialog.show(), children: "Add Connection" }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Connection" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-6", children: sqlDialect ? /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { type: "text", readOnly: true, className: "form-control-plaintext", value: sqlDialect }) : /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("button", { className: "btn btn-outline-secondary", onClick: () => connectorCreationDialog.show(), children: "Add Connection" }) })
         ] })
       ] }) }),
-      connectorCreationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+      connectorCreationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
         ConnectorCreationDialog,
         {
           productId,
@@ -45597,7 +45696,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
   function ConnectorCreationDialog(props) {
-    const { productId } = props, [dataProducer, setDataProducer] = (0, import_react12.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react12.useState)("trino"), [endpoint, setEndpoint] = (0, import_react12.useState)(""), [clientId, setClientId] = (0, import_react12.useState)(""), [clientSecret, setClientSecret] = (0, import_react12.useState)("");
+    const { productId } = props, [dataProducer, setDataProducer] = (0, import_react13.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react13.useState)("trino"), [endpoint, setEndpoint] = (0, import_react13.useState)(""), [clientId, setClientId] = (0, import_react13.useState)(""), [clientSecret, setClientSecret] = (0, import_react13.useState)("");
     async function testConnection() {
       const result = await TestConnectionModel.fetch({
         pathParams: { productId },
@@ -45614,66 +45713,148 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       result && props.onCreateSuccess(result);
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(Dialog, { id: "connector-creation-dialog", title: "Create Connection", dialogClass: "modal-lg", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "modal-body", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Data Producer" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: dataProducer, onChange: (e) => setDataProducer(e.target.value) }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(Dialog, { id: "connector-creation-dialog", title: "Create Connection", dialogClass: "modal-lg", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "modal-body", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Data Producer" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: dataProducer, onChange: (e) => setDataProducer(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-3", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Engine" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: sqlDialect, onChange: (e) => setSqlDialect(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Engine" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: sqlDialect, onChange: (e) => setSqlDialect(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-3", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Endpoint" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: endpoint, onChange: (e) => setEndpoint(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Endpoint" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: endpoint, onChange: (e) => setEndpoint(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-3", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Client ID" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: clientId, onChange: (e) => setClientId(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Client ID" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: clientId, onChange: (e) => setClientId(e.target.value) }) })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "row mt-3", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Client Secret" }),
-          /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("input", { className: "form-control", type: "text", value: clientSecret, onChange: (e) => setClientSecret(e.target.value) }) })
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "row mt-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("label", { htmlFor: "sheet_name", className: "col-2 col-form-label text-end", children: "Client Secret" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("div", { className: "col-10", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("input", { className: "form-control", type: "text", value: clientSecret, onChange: (e) => setClientSecret(e.target.value) }) })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "modal-footer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("button", { type: "button", className: "btn btn-outline-secondary me-auto", onClick: () => testConnection(), children: "Test Connection" }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Add" })
+      /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("div", { className: "modal-footer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("button", { type: "button", className: "btn btn-outline-secondary me-auto", onClick: () => testConnection(), children: "Test Connection" }),
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
+        /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Add" })
+      ] })
+    ] });
+  }
+
+  // ClientApp/minerva/ts/views/products/events.view.tsx
+  var import_react14 = __toESM(require_react());
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
+  function EventListView() {
+    const [productId, setProductId] = (0, import_react14.useState)(""), eventCreationDialog = useDialog("#event-creation-dialog");
+    (0, import_react14.useEffect)(() => {
+      const product$ = CurrentProductModel.subscribe((value) => {
+        const { productId: productId2 } = value;
+        setProductId(productId2);
+        ProductEventStore.loadWithSplashScreen({ pathParams: { productId: productId2 } });
+      });
+      return () => {
+        product$.unsubscribe();
+      };
+    }, []);
+    function onCreateEventSuccess() {
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(ProductSelector, { navPath: "/events", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("li", { className: "breadcrumb-item active", children: "Events" }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("button", { className: "btn btn-sm btn-primary", onClick: () => eventCreationDialog.show(), children: [
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("span", { className: "fa fa-plus me-1" }),
+          " Events"
+        ] }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Grid, { fitScreen: true, store: ProductEventStore, children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Event Name", field: "eventName", style: { flex: 1 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_jsx_runtime19.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Link, { to: `/products/${productId}/tables/${value}`, children: value }) }) }) }) }),
+      eventCreationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+        EventCreationDialog,
+        {
+          productId,
+          onCreateSuccess: onCreateEventSuccess
+        }
+      )
+    ] });
+  }
+  function EventCreationDialog(props) {
+    const { productId } = props, [eventName, setEventName] = (0, import_react14.useState)(""), [eventSemanticName, setEventSemanticName] = (0, import_react14.useState)(""), [selectedEvents, setSelectedEvents] = (0, import_react14.useState)([]);
+    (0, import_react14.useEffect)(() => {
+      const event$ = ProductEventStore.subscribe((data2) => setSelectedEvents(data2.map((x) => x.value)));
+      TrackedEventStore.load({ pathParams: { productId } });
+      return () => {
+        TrackedEventStore.loadData([]);
+        event$.unsubscribe();
+      };
+    }, []);
+    function onCheckChange() {
+    }
+    async function onSubmit() {
+    }
+    async function addEvent() {
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(Dialog, { id: "event-creation-dialog", title: "Create Event", dialogClass: "modal-lg", fitScreen: true, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "modal-body fullscreen p-0", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(Grid, { fitScreen: true, footer: true, store: TrackedEventStore, checkboxSelection: true, onCheckChange, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Event Name", field: "eventName", style: { flex: 1 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Semantic Name", field: "eventSemanticName", style: { width: 150 } })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "modal-footer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "me-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "input-group", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("input", { type: "text", className: "form-control", value: eventName, onChange: (e) => setEventName(e.target.value), placeholder: "Event name" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("input", { type: "text", className: "form-control", value: eventSemanticName, onChange: (e) => setEventSemanticName(e.target.value), placeholder: "Semantic name" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("button", { type: "button", className: "btn btn-outline-secondary", disabled: eventName.trim() === "", onClick: () => addEvent(), children: "Add" })
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
+        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Save" })
       ] })
     ] });
   }
 
   // ClientApp/minerva/ts/views/products/dashboard.view.tsx
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
+  var import_react15 = __toESM(require_react());
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(ProductLayout, {});
+    const [productId, setProductId] = (0, import_react15.useState)("");
+    (0, import_react15.useEffect)(() => {
+      const product$ = CurrentProductModel.subscribe((value) => {
+        setProductId(value.productId);
+      });
+      return () => {
+        product$.unsubscribe();
+      };
+    }, []);
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("main", { className: "fullscreen" })
+    ] });
   }
 
   // ClientApp/minerva/ts/views/admin.view.tsx
-  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   function AdminView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_jsx_runtime19.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_jsx_runtime21.Fragment, {});
   }
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react13.useEffect)(() => {
+    (0, import_react16.useEffect)(() => {
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Route, { path: "/products/:productId/:spaceId/:viewId", element: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Navigate, { to: "/products" }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "/products/:productId/dashboard/:spaceId/:viewId", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }
 
   // ClientApp/minerva/ts/app.tsx
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
-  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime21.jsx)(AppView, {}));
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime23.jsx)(AppView, {}));
 })();
 /*! Bundled license information:
 

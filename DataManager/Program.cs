@@ -33,6 +33,7 @@ services
     })
     .AddScoped<ICampaignStore, CampaignStore>()
     .AddScoped<IProductStore, ProductStore>()
+    .AddScoped<IProductEventStore, ProductEventStore>()
     .AddScoped<ITrinoStore, TrinoStore>()
     .AddScoped<CampaignService>()
     .AddScoped<ProductService>()

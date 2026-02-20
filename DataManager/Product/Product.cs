@@ -1,5 +1,3 @@
-using DataManager.Shared;
-
 namespace DataManager.Product;
 
 public record ProductInfo(
@@ -12,6 +10,7 @@ public record ProductInfo(
   DateTime CreatedAt,
   DateTime? UpdatedAt
 );
+
 public record ProductInfoPatchRequest(
   string? ProductName,
   string? DataOwner,
@@ -21,6 +20,20 @@ public record ProductInfoPatchRequest(
   string? ClientId,
   string? ClientSecret
 );
-public record ProductSettings(List<DataConnection> Connections, List<EventMapping> EventMappings);
 
-public record EventMapping(string EventMappingId, string TableName, string EventName);
+public record ProductEvent(
+  string ProductId,
+  string EventName,
+  string EventDisplayName,
+  string EventSemanticName
+);
+
+public record TrackedEvent(string EventName, string SemanticName);
+
+public record ProductEventField(
+  string ProductId,
+  string EventName,
+  string FieldName,
+  string FieldDisplayName,
+  string FieldSemanticName
+);
