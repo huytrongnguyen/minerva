@@ -5,7 +5,14 @@
 **Features**
 
 - Re-design layout
-- Add `Smart View > Overview` screen
+- Add `Dashboard > Smart View > Overview` screen
+- Add `Settings` screen
+  - Add POST `/api/products/{productId}/test-connection`
+  - Add PATCH `/api/products/{productId}`
+  - Implement `TrinoStore`
+  - Implement `ProductStore`
+  - Implement `ProductService`
+  - Implement `ProductController`
 
 ## v0.0.2
 > 2025-12-14

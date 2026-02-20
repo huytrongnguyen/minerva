@@ -4,6 +4,9 @@ namespace DataManager.Product;
 
 public class ProductService(IProductStore productStore, ITrinoStore trinoStore) : IDataService<ProductInfo>(productStore) {
   public ProductInfo Get(string productId) => productStore.Get(productId);
+  public ProductInfo Update(string productId, ProductInfoPatchRequest request) => productStore.Update(productId, request);
+  public Task<DataConnectionStat> TestConnection(string productId, DataConnection connection) => trinoStore.TestConnection(connection);
+  public Task<List<Dictionary<string, object>>> ExecuteQuery(string productId, string connectionId) => null;
 
   public List<NavItem> GetNavigator(string productId) {
     var navigator = new List<NavItem> {
@@ -31,21 +34,28 @@ public class ProductService(IProductStore productStore, ITrinoStore trinoStore) 
         ]
       ),
       new(
-        NavId: "settings",
-        NavName: "Settings",
+        NavId: "management",
+        NavName: "Management",
         NavIcon: null,
-        NavPath: $"/products/{productId}/settings",
-        Children: null
+        NavPath: null,
+        Children: [
+          new(
+            NavId: "settings",
+            NavName: "Settings",
+            NavIcon: null,
+            NavPath: $"/products/{productId}/settings",
+            Children: null
+          )
+        ]
       )
     };
     return navigator;
   }
 
-  public Task<object> TestConnection(string productId, DataConnection connection) {
-    return trinoStore.TestConnection(connection);
-  }
+
 }
 
 public interface IProductStore : IDataStore<ProductInfo> {
   ProductInfo Get(string productId);
+  ProductInfo Update(string productId, ProductInfoPatchRequest request);
 }

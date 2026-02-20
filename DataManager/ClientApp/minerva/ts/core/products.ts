@@ -2,7 +2,10 @@ import { Model, NavItem, Store } from 'minerva/core';
 
 export type ProductInfo = {
   productId: string,
+  productName: string,
+  dataOwner: string,
   startDate: string,
+  sqlDialect: string,
 }
 
 export const ProductInfoStore = Store<ProductInfo>({ proxy: { url: '/api/products' } });
@@ -15,8 +18,18 @@ export const CurrentProductModel = Model<ProductInfo>({
   proxy: { url: '/api/products/{productId}', method: 'get' }
 });
 
-export const TestConnectionModel = Model<object>({
-  proxy: { url: '/api/products/{productId}/connections/test', method: 'post' }
+export type ConnectionStats = {
+  catalogs: string[],
+  schemas: string[],
+  tables: string[],
+}
+
+export const TestConnectionModel = Model<ConnectionStats>({
+  proxy: { url: '/api/products/{productId}/test-connection', method: 'post' }
+});
+
+export const UpdateProductInfoModel = Model<ProductInfo>({
+  proxy: { url: '/api/products/{productId}', method: 'patch' }
 });
 
 export type CampaignInfo = {

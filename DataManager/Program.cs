@@ -4,6 +4,7 @@ using DataManager.Infrastructure;
 using DataManager.Product;
 using DataManager.Shared;
 using DataManager.Simulation;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -41,9 +42,11 @@ services
     .AddControllers();
 
 // services.AddSignalR();
+services.AddDataProtection();
 services.AddHealthChecks();
 services.AddRazorPages();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
@@ -68,10 +71,10 @@ app.UseMiddleware<AuthMiddleware>();
 
 app.UseAuthorization();
 
-// app.UseExceptionHandler(configure => configure.Run(async context => {
-//   var error = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-//   await context.Response.WriteAsJsonAsync(new { message = error.Message, trace = error.StackTrace });
-// }));
+app.UseExceptionHandler(configure => configure.Run(async context => {
+  var error = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+  await context.Response.WriteAsJsonAsync(new { message = $"{error.Message}. {error.InnerException}" });
+}));
 
 // app.MapHub<EventHub>("/hub/event");
 

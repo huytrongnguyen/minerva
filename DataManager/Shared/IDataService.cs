@@ -10,4 +10,5 @@ public interface IDataStore<T> {
 
 public record NavItem(string NavId, string NavName, string NavIcon, string NavPath, List<NavItem> Children);
 
-public record DataConnection(string? ConnectionId, string Platform, string Endpoint, string ClientId, string ClientSecret);
+public record DataConnection(string SqlDialect, string Endpoint, string ClientId, string ClientSecret);
+public record DataConnectionStat(List<string> Catalogs, List<string> Schemas, List<string> Tables);

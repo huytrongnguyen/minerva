@@ -5,11 +5,31 @@ using DataManager.Shared;
 namespace DataManager.Infrastructure;
 
 public class TrinoStore(ILogger<TrinoStore> logger) : ITrinoStore {
-  public Task<object> TestConnection(DataConnection connection) {
-    return ExecuteQueryAsync(connection, "show catalogs");
+  public async Task<DataConnectionStat> TestConnection(DataConnection connection) {
+    var result = new DataConnectionStat(Catalogs: [], Schemas: [], Tables: []);
+
+    var catalogs = await ExecuteQueryAsync(connection, "show catalogs");
+    foreach (var catalog in catalogs) {
+      var catalogName = catalog["Catalog"].ToString();
+      var schemas = await ExecuteQueryAsync(connection, $"show schemas from {catalogName}");
+      if (schemas.Count <= 0) continue;
+
+      result.Catalogs.Add(catalogName);
+      foreach(var schema in schemas) {
+        var schemaName = schema["Schema"].ToString();
+        var tables = await ExecuteQueryAsync(connection, $"show tables from {catalogName}.{schemaName}");
+        if (tables.Count <= 0) continue;
+
+        result.Schemas.Add($"{catalogName}.{schemaName}");
+        result.Tables.AddRange([..tables.Select(x => $"{catalogName}.{schemaName}.{x["Table"]}")]);
+      }
+      // result.AddRange(schemas);
+    }
+
+    return result;
   }
 
-  public async Task<object> ExecuteQueryAsync(DataConnection connection, string sql) {
+  public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(DataConnection connection, string sql) {
     var httpClient = new HttpClient();
 
     // Auth: Basic (most common for Trino LDAP/Password)
@@ -23,12 +43,13 @@ public class TrinoStore(ILogger<TrinoStore> logger) : ITrinoStore {
     var responseText = await responseMessage.Content.ReadAsStringAsync();
     logger.Console($"responseText = {responseText}");
     var response = ObjectUtils.Decode<TrinoQueryResponse>(responseText);
+
     var nextUri = response.NextUri;
 
     var columns = new List<string>();
     var result = new List<Dictionary<string, object>>();
 
-    while (!string.IsNullOrEmpty(nextUri)) {
+    while (!string.IsNullOrWhiteSpace(nextUri)) {
       responseMessage = await httpClient.GetAsync(nextUri);
       responseText = await responseMessage.Content.ReadAsStringAsync();
       logger.Console($"responseText = {responseText}");
@@ -51,7 +72,6 @@ public class TrinoStore(ILogger<TrinoStore> logger) : ITrinoStore {
 
       nextUri = response.NextUri;
     }
-    logger.Console($"Fetch {result.Count} row(s)");
 
     return result;
   }
@@ -63,6 +83,7 @@ public record TrinoQueryResponse(
   [property:JsonPropertyName("nextUri")] string NextUri,
   [property:JsonPropertyName("columns")] List<TrinoColumn> Columns,
   [property:JsonPropertyName("data")] List<List<object>> Data,
+  [property:JsonPropertyName("error")] TrinoError Error,
   [property:JsonPropertyName("stats")] Dictionary<string, object> Stats
 );
 
@@ -76,4 +97,6 @@ public record TrinoColumn(
     [property:JsonPropertyName("arguments")] List<Dictionary<string, object>> Arguments
   );
 };
+
+public record TrinoError([property:JsonPropertyName("message")] string Message);
 

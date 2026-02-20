@@ -42,3 +42,18 @@ create table daily_user_metrics (
 );
 create unique index daily_user_metrics_uniq_idx on daily_user_metrics(product_id, event_date, agency, media_source, campaign_id, country_code, platform);
 create index daily_user_metrics_event_date_index on daily_user_metrics(event_date);
+
+create table product_info (
+  product_id text not null,
+  product_name text,
+  data_owner text,
+  start_date date,
+  data_producer text,
+  sql_dialect text,
+  endpoint text,
+  client_id text,
+  client_secret text,
+  created_at timestamp,
+  updated_at timestamp,
+  primary key (product_id)
+);

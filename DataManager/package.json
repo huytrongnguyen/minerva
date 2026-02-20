@@ -11,9 +11,6 @@
   "scripts": {
     "js-watch": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --watch",
     "js-build": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --minify",
-    "simulation-watch": "esbuild ClientApp/simulation/ts/app.tsx --bundle --outfile=wwwroot/simulation.js --loader:.tsx=tsx --format=iife --watch",
-    "simulation-build": "esbuild ClientApp/simulation/ts/app.tsx --bundle --outfile=wwwroot/simulation.js --loader:.tsx=tsx --format=iife --minify",
-    "auth-build": "esbuild ClientApp/auth/ts/app.tsx --bundle --outfile=wwwroot/auth.js --loader:.tsx=tsx --format=iife --minify",
     "css-watch": "sass --watch ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "css-build": "sass ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "rosie-js-build": "cd ClientApp/rosie && npm run js && cd ../../ && rm -rf node_modules/rosie-ui/dist/js && cp -r ClientApp/rosie/dist/js node_modules/rosie-ui/dist/ && cp -r ClientApp/rosie/package.json node_modules/rosie-ui/package.json",
@@ -24,6 +21,8 @@
   },
   "dependencies": {
     "jquery": "4.0.0",
+    "toastr": "2.1.4",
+    "c3": "0.7.20",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-router-dom": "7.13.0",
@@ -33,6 +32,9 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/react-router-dom": "5.3.3",
+    "@types/jquery": "3.5.33",
+    "@types/toastr": "2.1.43",
+    "@types/c3": "0.7.11",
     "esbuild": "0.27.3",
     "sass": "1.97.3",
     "typescript": "5.9.3"

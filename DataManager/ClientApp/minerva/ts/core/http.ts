@@ -1,5 +1,5 @@
 import { Ajax, AjaxError, DataModel, DataStore, HttpParams, LocalCache, ProxyConfig } from 'rosie-ui';
-import { afterProcessing, beforeProcessing } from './shared';
+import { afterProcessing, alertError, beforeProcessing } from './shared';
 
 const loginUrl = `/login`,
       verifyUrl = '/api/auth/verify?code={code}';
@@ -18,12 +18,14 @@ export function verifyAuthUser<T = any>(code: string) {
 }
 
 export function onAjaxError(reason: AjaxError) {
-  if (reason?.response?.status === 401) {
+  const { status, data } = reason.response;
+  if (status === 401) {
     redirectToLogin();
     return;
   }
 
-  console.log(reason);
+  if (data?.message) alertError(data?.message);
+
   return null;
 }
 

@@ -1,6 +1,8 @@
 @use 'variables' as *;
 
 @use 'base' as *;
+@use '../../../node_modules/toastr/build/toastr.min.css';
+@use '../../../node_modules/c3/c3.min.css';
 
 @use 'reset' as *;
 
