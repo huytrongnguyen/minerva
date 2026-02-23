@@ -22,21 +22,28 @@ export const UpdateProductInfoModel = Model<ProductInfo>({
   proxy: { url: '/api/products/{productId}', method: 'patch' }
 });
 
-export type ConnectionStats = {
-  catalogs: string[],
-  schemas: string[],
+export const UpdateProductDataTableModel = Model<any>({
+  proxy: { url: '/api/products/{productId}/tables', method: 'patch' }
+});
+
+export type ProductDataSet = {
+  name: string,
   tables: string[],
 }
 
-export const TestConnectionModel = Model<ConnectionStats>({
-  proxy: { url: '/api/products/{productId}/test-connection', method: 'post' }
+export const ConnectionDataSetStore = Store<ProductDataSet>({
+  proxy: { url: '/api/products/{productId}/connections/datasets', method: 'post' }
+});
+
+export const ConnectionDataSetModel = Model<ProductDataSet>({
+  proxy: { url: '/api/products/{productId}/connections/datasets/{dataSetName}', method: 'post' }
 });
 
 export type ProductEvent = {
   eventName: string,
 }
 
-export const ProductEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/events' } });
+// export const ProductEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/events' } });
 
 export const TrackedEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/tracked-events' } });
 

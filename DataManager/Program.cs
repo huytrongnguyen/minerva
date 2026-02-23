@@ -33,7 +33,7 @@ services
     })
     .AddScoped<ICampaignStore, CampaignStore>()
     .AddScoped<IProductStore, ProductStore>()
-    .AddScoped<IProductEventStore, ProductEventStore>()
+    .AddScoped<IProductDataTableStore, ProductDataTableStore>()
     .AddScoped<ITrinoStore, TrinoStore>()
     .AddScoped<CampaignService>()
     .AddScoped<ProductService>()
@@ -74,7 +74,7 @@ app.UseAuthorization();
 
 app.UseExceptionHandler(configure => configure.Run(async context => {
   var error = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-  await context.Response.WriteAsJsonAsync(new { message = $"{error.Message}. {error.InnerException}" });
+  await context.Response.WriteAsJsonAsync(new { message = $"{error.Message.TrimEnd(".")}. {error.InnerException}" });
 }));
 
 // app.MapHub<EventHub>("/hub/event");

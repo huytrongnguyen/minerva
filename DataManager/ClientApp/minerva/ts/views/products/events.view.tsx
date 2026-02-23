@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ProductLayout } from './product-layout.component';
 import { ProductSelector } from './product-selector.component';
-import { CurrentProductModel, ProductEvent, ProductEventStore, TrackedEventStore } from 'minerva/core';
+import { CurrentProductModel, ProductEvent, TrackedEventStore } from 'minerva/core';
 import { Dialog, Grid, GridColumn, useDialog } from 'rosie-ui';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ export function EventListView() {
     const product$ = CurrentProductModel.subscribe(value => {
       const { productId } = value;
       setProductId(productId);
-      ProductEventStore.loadWithSplashScreen({ pathParams: { productId } });
+      // ProductEventStore.loadWithSplashScreen({ pathParams: { productId } });
     });
     return () => { product$.unsubscribe(); }
   }, []);
@@ -30,11 +30,11 @@ export function EventListView() {
       </div>
     </ProductSelector>
     <main className="fullscreen">
-      <Grid fitScreen store={ProductEventStore}>
+      {/* <Grid fitScreen store={ProductEventStore}>
         <GridColumn headerName="Event Name" field="eventName" style={{flex:1}} renderer={(value: string) => <>
           <Link to={`/products/${productId}/tables/${value}`}>{value}</Link>
         </>} />
-      </Grid>
+      </Grid> */}
     </main>
     {eventCreationDialog.isShown && <EventCreationDialog productId={productId}
         onCreateSuccess={onCreateEventSuccess} />}
@@ -48,12 +48,12 @@ function EventCreationDialog(props: { productId: string, onCreateSuccess: () => 
         [selectedEvents, setSelectedEvents] = useState<ProductEvent[]>([]);
 
   useEffect(() => {
-    const event$ = ProductEventStore.subscribe(data => setSelectedEvents(data.map(x => x.value)));
+    // const event$ = ProductEventStore.subscribe(data => setSelectedEvents(data.map(x => x.value)));
     TrackedEventStore.load({ pathParams: { productId } });
 
     return () => {
       TrackedEventStore.loadData([]);
-      event$.unsubscribe();
+      // event$.unsubscribe();
     }
   }, [])
 

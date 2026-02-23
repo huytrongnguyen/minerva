@@ -27,14 +27,14 @@ namespace DataManager.Infrastructure;
 }
 
 public class CampaignStore(DataManagerDbContext dbContext) : ICampaignStore {
-  public IEnumerable<CampaignInfo> List() => GetCampaigns(x => true);
+  public List<CampaignInfo> List() => GetCampaigns(x => true);
 
-  public IEnumerable<CampaignInfo> GetActiveCampaigns() => GetCampaigns(x => x.CampaignStatus == CampaignInfo.CampaignStatus.ACTIVE);
+  public List<CampaignInfo> GetActiveCampaigns() => GetCampaigns(x => x.CampaignStatus == CampaignInfo.CampaignStatus.ACTIVE);
 
-  private IEnumerable<CampaignInfo> GetCampaigns(Expression<Func<CAMPAIGN_INFO, bool>> predicate) => dbContext.CampaignInfo
-      .Where(predicate).AsNoTracking().Select(StoreMapper.FromCampaignInfo);
+  private List<CampaignInfo> GetCampaigns(Expression<Func<CAMPAIGN_INFO, bool>> predicate) => [..dbContext.CampaignInfo
+      .Where(predicate).AsNoTracking().Select(StoreMapper.FromCampaignInfo)];
 
-  public async Task<IEnumerable<CampaignInfo>> Save(List<CampaignCreate> campaignCreateList) {
+  public async Task<List<CampaignInfo>> Save(List<CampaignCreate> campaignCreateList) {
     var campaigns = campaignCreateList.Select(StoreMapper.ToCampaignInfo).ToList();
 
     // 1. Add the list of entities to the context using AddRange
@@ -46,7 +46,7 @@ public class CampaignStore(DataManagerDbContext dbContext) : ICampaignStore {
     await dbContext.SaveChangesAsync();
 
     // 3. The IDs are now available in your original list.
-    return campaigns.Select(StoreMapper.FromCampaignInfo);
+    return [..campaigns.Select(StoreMapper.FromCampaignInfo)];
   }
 }
 

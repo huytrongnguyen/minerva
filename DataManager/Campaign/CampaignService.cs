@@ -3,8 +3,8 @@ using DataManager.Shared;
 namespace DataManager.Campaign;
 
 public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignService> logger) {
-  public IEnumerable<CampaignInfo> List() => campaignStore.List();
-  public Task<IEnumerable<CampaignInfo>> Generate() {
+  public List<CampaignInfo> List() => campaignStore.List();
+  public Task<List<CampaignInfo>> Generate() {
     var campaigns = MediaSourceBaselineDictionary.Keys.SelectMany(mediaSource => {
       var total = Imc.RandomInt(1, 50);
       logger.Console($"Generating {total} campaigns from '{mediaSource}'");
@@ -68,6 +68,6 @@ public class CampaignService(ICampaignStore campaignStore, ILogger<CampaignServi
 }
 
 public interface ICampaignStore : IDataStore<CampaignInfo> {
-  IEnumerable<CampaignInfo> GetActiveCampaigns();
-  Task<IEnumerable<CampaignInfo>> Save(List<CampaignCreate> campaigns);
+  List<CampaignInfo> GetActiveCampaigns();
+  Task<List<CampaignInfo>> Save(List<CampaignCreate> campaigns);
 }

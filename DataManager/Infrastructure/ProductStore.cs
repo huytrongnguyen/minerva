@@ -8,7 +8,7 @@ namespace DataManager.Infrastructure;
 
 [Table("product_info")] public class PRODUCT_INFO {
   [Key] public string ProductId { get; set; }
-  public DateOnly StartDate { get; set; }
+  public DateOnly? StartDate { get; set; }
   public string? ProductName { get; set; }
   public string? DataOwner { get; set; }
   public string? DataProducer { get; set; }
@@ -24,21 +24,23 @@ public class ProductStore(DataManagerDbContext dbContext, IDataProtectionProvide
   public ProductInfo Get(string productId) => Get(x => x.ProductId == productId);
 
   public ProductInfo Update(string productId, ProductInfoPatchRequest request) {
-    return Update(x => x.ProductId == productId, entity => {
-      if (!string.IsNullOrWhiteSpace(request.ProductName)) entity.ProductName = request.ProductName;
-      if (!string.IsNullOrWhiteSpace(request.DataOwner)) entity.DataOwner = request.DataOwner;
-      if (!string.IsNullOrWhiteSpace(request.DataProducer)) entity.DataProducer = request.DataProducer;
-      if (!string.IsNullOrWhiteSpace(request.SqlDialect)) entity.SqlDialect = request.SqlDialect;
+    Update(x => x.ProductId == productId, setter => {
+      if (!string.IsNullOrWhiteSpace(request.ProductName)) setter.SetProperty(x => x.ProductName, request.ProductName);
+      if (!string.IsNullOrWhiteSpace(request.DataOwner)) setter.SetProperty(x => x.DataOwner, request.DataOwner);
+      if (!string.IsNullOrWhiteSpace(request.DataProducer)) setter.SetProperty(x => x.DataProducer, request.DataProducer);
+      if (!string.IsNullOrWhiteSpace(request.SqlDialect)) setter.SetProperty(x => x.SqlDialect, request.SqlDialect);
 
-      if (!string.IsNullOrWhiteSpace(request.Endpoint)) entity.Endpoint = dataProtector.Protect(request.Endpoint);
-      if (!string.IsNullOrWhiteSpace(request.ClientId)) entity.ClientId = dataProtector.Protect(request.ClientId);
-      if (!string.IsNullOrWhiteSpace(request.ClientSecret)) entity.ClientSecret = dataProtector.Protect(request.ClientSecret);
-      entity.UpdatedAt = DateTime.UtcNow;
+      if (!string.IsNullOrWhiteSpace(request.Endpoint)) setter.SetProperty(x => x.Endpoint, dataProtector.Protect(request.Endpoint));
+      if (!string.IsNullOrWhiteSpace(request.ClientId)) setter.SetProperty(x => x.ClientId, dataProtector.Protect(request.ClientId));
+      if (!string.IsNullOrWhiteSpace(request.ClientSecret)) setter.SetProperty(x => x.ClientSecret, dataProtector.Protect(request.ClientSecret));
+      setter.SetProperty(x => x.UpdatedAt, DateTime.UtcNow);
     });
+
+    return Get(productId);
   }
 
   public DataConnection GetDataConnection(string productId) {
-    var entity = First(x => x.ProductId == productId);
+    var entity = dbSet.First(x => x.ProductId == productId);
     return ToDataConnection(entity);
   }
 

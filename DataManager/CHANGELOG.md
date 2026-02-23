@@ -9,14 +9,18 @@
 - Add `Settings` screen
   - Add POST `/api/products/{productId}/test-connection`
   - Add PATCH `/api/products/{productId}`
+  - Add PATCH `/api/products/{productId}/tables`
+  - Add POST `/api/products/{productId}/connections/datasets`
+  - Add POST `/api/products/{productId}/connections/datasets/{dataSetName}`
 - Add `Events` screen
   - Add GET `/api/products/{productId}/events`
-  - Add GET `/api/products/{productId}/tracked-events`
 - Implement `TrinoStore`
 - Implement `ProductStore`
-- Implement `ProductEventStore`
+- Implement `ProductDataTableStore`
+- Implement `ProductDataColumnStore`
 - Implement `ProductService`
 - Implement `ProductController`
+
 
 ## v0.0.2
 > 2025-12-14

@@ -1,25 +1,50 @@
-using DataManager.Infrastructure;
 using DataManager.Shared;
 
 namespace DataManager.Product;
 
-public class ProductService(IProductStore productStore, IProductEventStore productEventStore, ITrinoStore trinoStore) : IDataService<ProductInfo>(productStore) {
+public class ProductService(IProductStore productStore,
+                            IProductDataTableStore productDataTableStore,
+                            ITrinoStore trinoStore) : IDataService<ProductInfo>(productStore) {
   public ProductInfo Get(string productId) => productStore.Get(productId);
   public ProductInfo Update(string productId, ProductInfoPatchRequest request) => productStore.Update(productId, request);
-  public Task<DataConnectionStat> TestConnection(string productId, DataConnection connection) => trinoStore.TestConnection(connection);
-  public IEnumerable<ProductEvent> ListEvents(string productId) => productEventStore.List(productId);
-  public async Task<IEnumerable<TrackedEvent>> ListTrackedEvents(string productId) {
+  public Task<List<TrackedDataSet>> ListDataSets(DataConnection connection) => trinoStore.ListDataSets(connection);
+  public Task<TrackedDataSet> GetConnectionDataSet(string dataSetName, DataConnection connection) => trinoStore.GetDataSet(dataSetName, connection);
+  public async Task<IEnumerable<object>> UpdateProductDataTables(string productId, ProductDataSetPatchRequest request) {
     var connection = productStore.GetDataConnection(productId);
     if (string.IsNullOrWhiteSpace(connection.SqlDialect)
         || string.IsNullOrWhiteSpace(connection.Endpoint)
         || string.IsNullOrWhiteSpace(connection.ClientId)
         || string.IsNullOrWhiteSpace(connection.ClientSecret)) {
-      return [];
+      return null;
     }
 
-    var stat = await trinoStore.TestConnection(connection);
-    return stat.Tables.Select(tableName => new TrackedEvent(EventName: tableName, SemanticName: ""));
+    var tables = new List<ProductDataTable>();
+    foreach(var dataSet in request.DataSets) {
+      foreach(var tableName in dataSet.Tables) {
+        var columns = await trinoStore.ListDataColumns(tableName, connection);
+        if (columns.Count == 0) continue;
+
+        var table = new ProductDataTable(
+          DataSetName: dataSet.Name,
+          Name: tableName,
+          DisplayName: null,
+          SemanticName: null,
+          Desc: null,
+          Columns: [..columns.Select(x => new ProductDataColumn(
+            Name: x.Name,
+            DisplayName: null,
+            SemanticName: null,
+            Type: x.Type,
+            Desc: x.Desc
+          ))]
+        );
+        tables.Add(table);
+      }
+    }
+
+    return productDataTableStore.BatchUpdate(productId, tables);
   }
+
   public Task<List<Dictionary<string, object>>> ExecuteQuery(string productId, string connectionId) => null;
 
   public List<NavItem> GetNavigator(string productId) {
@@ -72,8 +97,6 @@ public class ProductService(IProductStore productStore, IProductEventStore produ
     };
     return navigator;
   }
-
-
 }
 
 public interface IProductStore : IDataStore<ProductInfo> {
@@ -82,6 +105,7 @@ public interface IProductStore : IDataStore<ProductInfo> {
   DataConnection GetDataConnection(string productId);
 }
 
-public interface IProductEventStore : IDataStore<ProductEvent> {
-  IEnumerable<ProductEvent> List(string productId);
+public interface IProductDataTableStore : IDataStore<ProductDataTable> {
+  List<ProductDataTable> List(string productId);
+  List<ProductDataTable> BatchUpdate(string productId, List<ProductDataTable> tables);
 }

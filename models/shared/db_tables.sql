@@ -58,25 +58,32 @@ create table product_info (
   primary key (product_id)
 );
 
-create table product_event (
+create table product_datatable (
   id bigint not null default unique_rowid(),
   product_id text not null,
-  event_name text not null,
-  event_display_name text,
-  event_semantic_name text,
+  dataset_name text not null,
+  table_name text not null,
+  table_display_name text,
+  table_semantic_name text,
+  table_desc text,
   created_at timestamp default now(),
+  updated_at timestamp,
   primary key (id)
 );
-create unique index product_event_uniq_idx on product_event(product_id, event_name);
+create unique index product_datatable_uniq_idx on product_datatable(product_id, dataset_name, table_name);
 
-create table product_event_field (
+create table product_datacolumn (
   id bigint not null default unique_rowid(),
   product_id text not null,
-  event_name text not null,
-  field_name text not null,
-  field_display_name text,
-  field_semantic_name text,
+  dataset_name text not null,
+  table_name text not null,
+  column_name text not null,
+  column_display_name text,
+  column_semantic_name text,
+  column_type text,
+  column_desc text,
   created_at timestamp default now(),
+  updated_at timestamp,
   primary key (id)
 );
-create unique index product_event_field_uniq_idx on product_event_field(product_id, event_name, field_name);
+create unique index product_datacolumn_uniq_idx on product_datacolumn(product_id, dataset_name, table_name, column_name);
