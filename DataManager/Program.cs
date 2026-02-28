@@ -36,7 +36,6 @@ services
     .AddScoped<IProductDataTableStore, ProductDataTableStore>()
     .AddScoped<ITrinoStore, TrinoStore>()
     .AddScoped<CampaignService>()
-    .AddScoped<ProductService>()
     .AddScoped<AuthService>()
     // .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
     .AddCors()

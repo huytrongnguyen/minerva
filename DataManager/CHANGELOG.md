@@ -14,13 +14,14 @@
   - Add POST `/api/products/{productId}/connections/datasets/{dataSetName}`
 - Add `Events` screen
   - Add GET `/api/products/{productId}/events`
+- Add `Event Fields` screen
+  - Add GET `/api/products/{productId}/events/{eventName}`
 - Implement `TrinoStore`
 - Implement `ProductStore`
 - Implement `ProductDataTableStore`
 - Implement `ProductDataColumnStore`
 - Implement `ProductService`
 - Implement `ProductController`
-
 
 ## v0.0.2
 > 2025-12-14

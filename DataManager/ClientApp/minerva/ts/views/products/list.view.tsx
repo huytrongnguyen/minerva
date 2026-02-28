@@ -22,7 +22,7 @@ export function ProductListView() {
         <main className="fullscreen">
           <Grid fitScreen store={ProductInfoStore}>
             <GridColumn headerName="Product ID" field="productId" style={{flex:1}} renderer={(value: string) => <>
-              <Link to={`/products/${value}/smart-view/overview`}>{value}</Link>
+              <Link to={`/products/${value}/dashboard/smart-view/overview`}>{value}</Link>
             </>} />
             <GridColumn headerName="Start Date" field="startDate" style={{width:200}} renderer={(value: string) => Date.parseDate(value).format()} />
             <GridColumn headerName="Action" field="productId" style={{width:200}} renderer={(value: string) => <>

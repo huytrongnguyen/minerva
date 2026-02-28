@@ -29,11 +29,10 @@ export function ProductSelector(props: ProductSelectorProps) {
       <InputDropdown options={products} value={selectedProduct ? [selectedProduct] : []}
         valueField="productId" displayField="productId" searchBox defaultText="" separator=""
         renderer={(value, item: ProductInfo) => {
-          return <Link  to={`/products/${item.productId}${props.navPath}`}
-                        className={Rosie.classNames('dropdown-item cursor-pointer', { active: item.productId === selectedProduct?.productId })}>
+          return <Link  to={`/products/${item.productId}${props.navPath}`} role="button"
+                        className={Rosie.classNames('dropdown-item', { active: item.productId === selectedProduct?.productId })}>
             {value}
           </Link>
-
         }} />
     </li>
     {props.children}

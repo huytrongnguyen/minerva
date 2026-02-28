@@ -7,7 +7,7 @@ import { AppLayout, RequireAuth } from 'minerva/components';
 
 // import { navigator } from '../core';
 
-import { DashboardView, EventListView, ProductListView, ProductSettingsView } from './products';
+import { DashboardView, EventFieldListView, EventListView, ProductListView, ProductSettingsView } from './products';
 import { AdminView } from './admin.view';
 
 export function AppView() {
@@ -24,6 +24,7 @@ export function AppView() {
         <Route path="/products" element={<RequireAuth component={ProductListView} title="Products" />} />
         <Route path="/products/:productId/settings" element={<RequireAuth component={ProductSettingsView} title="Product Settings" />} />
         <Route path="/products/:productId/events" element={<RequireAuth component={EventListView} title="Events" />} />
+        <Route path="/products/:productId/events/:tableName" element={<RequireAuth component={EventFieldListView} title="Event Fields" />} />
         <Route path="/products/:productId/dashboard/:spaceId/:viewId" element={<RequireAuth component={DashboardView} title="Dashboard" />} />
         <Route path="*" element={<Navigate to="/products" />} />
       </Routes>

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { DataModel, Dialog, Grid, GridColumn } from 'rosie-ui';
-import { ProductInfo, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, UpdateProductDataTableModel } from 'minerva/core';
+import { ProductInfo, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, ImportProductDataTableModel } from 'minerva/core';
 
 export function ConnectorCreationDialog(props: { productId: string, onCreateSuccess: (productInfo: ProductInfo) => void }) {
   const { productId } = props,
         [dataProducer, setDataProducer] = useState(''),
-        [sqlDialect, setSqlDialect] = useState('trino'),
-        [endpoint, setEndpoint] = useState('https://trino.gio.vng.vn:443'),
-        [clientId, setClientId] = useState('huynt3'),
-        [clientSecret, setClientSecret] = useState('E1kOe8y3yYZqat'),
-        [dataSetName, setDataSetName] = useState('iceberg.ballistar'),
+        [sqlDialect, setSqlDialect] = useState(''),
+        [endpoint, setEndpoint] = useState(''),
+        [clientId, setClientId] = useState(''),
+        [clientSecret, setClientSecret] = useState(''),
+        [dataSetName, setDataSetName] = useState(''),
         [selectedDataSets, setSelectedDataSets] = useState<ProductDataSet[]>([]);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function ConnectorCreationDialog(props: { productId: string, onCreateSucc
       body: { sqlDialect, endpoint, clientId, clientSecret }
     });
 
-    await UpdateProductDataTableModel.fetch({
+    await ImportProductDataTableModel.fetch({
       pathParams: { productId },
       body: { dataSets: selectedDataSets }
     });

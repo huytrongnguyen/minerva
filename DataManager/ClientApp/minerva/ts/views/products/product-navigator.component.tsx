@@ -39,7 +39,7 @@ function NavItemList(props: { items: NavItem[], level: number }) {
       }
 
       return <Link key={navItem.navId} to={navItem.navPath} style={{paddingLeft: 4 + 8 * level}}
-                    className={Rosie.classNames('nav-link rounded-0 py-1 pe-1', { active: location.pathname === navItem.navPath })}>
+                    className={Rosie.classNames('nav-link rounded-0 py-1 pe-1', { active: location.pathname.startsWith(navItem.navPath) })}>
         {navItem.navIcon ? <span className={`fa fa-${navItem.navIcon} nav-icon`} /> : ''} {navItem.navName}
       </Link>
     })}

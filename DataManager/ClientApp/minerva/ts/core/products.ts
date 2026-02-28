@@ -1,5 +1,6 @@
 import { Model, NavItem, Store } from 'minerva/core';
 
+//#region API: /api/products
 export type ProductInfo = {
   productId: string,
   productName: string,
@@ -21,11 +22,42 @@ export const CurrentProductModel = Model<ProductInfo>({
 export const UpdateProductInfoModel = Model<ProductInfo>({
   proxy: { url: '/api/products/{productId}', method: 'patch' }
 });
+//#endregion
+
+//#region API: /api/products/{productId}/tables
+export type ProductDataTable = {
+  dataSetName: string,
+  name: string,
+  displayName: string,
+  semanticName: string,
+  desc: string,
+}
+
+export const ProductDataTableStore = Store<ProductDataTable>({ proxy: { url: '/api/products/{productId}/tables' } });
+
+export const ImportProductDataTableModel = Model<any>({
+  proxy: { url: '/api/products/{productId}/tables/import', method: 'patch' }
+});
 
 export const UpdateProductDataTableModel = Model<any>({
   proxy: { url: '/api/products/{productId}/tables', method: 'patch' }
 });
+//#endregion
 
+//#region API: /api/products/{productId}/tables/{tableName}
+export type ProductDataColumn = {
+  name: string,
+  displayName: string,
+  semanticName: string,
+  type: string,
+  desc: string,
+}
+
+export const ProductDataColumnStore = Store<ProductDataColumn>({ proxy: { url: '/api/products/{productId}/tables/{tableName}' } });
+
+//#endregion
+
+//#region API: /api/products/{productId}/connections/datasets
 export type ProductDataSet = {
   name: string,
   tables: string[],
@@ -38,35 +70,4 @@ export const ConnectionDataSetStore = Store<ProductDataSet>({
 export const ConnectionDataSetModel = Model<ProductDataSet>({
   proxy: { url: '/api/products/{productId}/connections/datasets/{dataSetName}', method: 'post' }
 });
-
-export type ProductEvent = {
-  eventName: string,
-}
-
-// export const ProductEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/events' } });
-
-export const TrackedEventStore = Store<ProductEvent>({ proxy: { url: '/api/products/{productId}/tracked-events' } });
-
-export type CampaignInfo = {
-  id: number,
-  objective: 'APP_INSTALLS' | 'CONVERSIONS' | 'TRAFFIC', // FB objectives
-  budgetType: 'DAILY' | 'LIFETIME', // FB budget modes
-  platform: 'facebook_ads' | 'google_ads' | 'tiktok_ads',
-  campaignId: string,
-  campaignName: string,
-  // dailyBudgetUsd: number,
-  // lifetimeBudgetUsd?: number,
-  // isActive: boolean,
-  // spendTodayUsd: number,
-  // installsToday: number,
-  // revenueToday: number,
-  // roas: number,
-  startTime: string,
-  endTime: string,
-}
-
-export const CampaignInfoStore = Store<CampaignInfo>({ proxy: { url: '/api/campaigns' } });
-
-export const CampaignGenerationModel = Model<CampaignInfo[]>({
-  proxy: { url: '/api/campaigns/generate', method: 'post' }
-});
+//#endregion

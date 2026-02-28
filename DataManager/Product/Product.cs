@@ -1,4 +1,12 @@
+using DataManager.Shared;
+
 namespace DataManager.Product;
+
+public interface IProductStore : IDataStore<ProductInfo> {
+  ProductInfo Get(string productId);
+  ProductInfo Update(string productId, ProductInfoPatchRequest request);
+  DataConnection GetDataConnection(string productId);
+}
 
 public record ProductInfo(
   string ProductId,
@@ -19,44 +27,4 @@ public record ProductInfoPatchRequest(
   string? Endpoint,
   string? ClientId,
   string? ClientSecret
-);
-
-public record ProductDataColumn(
-  string Name,
-  string DisplayName,
-  string SemanticName,
-  string Type,
-  string Desc
-);
-
-public record ProductDataTable(
-  string DataSetName,
-  string Name,
-  string DisplayName,
-  string SemanticName,
-  string Desc,
-  List<ProductDataColumn> Columns
-);
-
-public record ProductDataSetPatchRequest(List<ProductDataSetPatchRequest.DataSet> DataSets) {
-  public record DataSet(string Name, List<string> Tables);
-};
-
-
-
-public record ProductEvent(
-  string ProductId,
-  string EventName,
-  string EventDisplayName,
-  string EventSemanticName
-);
-
-public record TrackedEvent(string EventName, string SemanticName);
-
-public record ProductEventField(
-  string ProductId,
-  string EventName,
-  string FieldName,
-  string FieldDisplayName,
-  string FieldSemanticName
 );

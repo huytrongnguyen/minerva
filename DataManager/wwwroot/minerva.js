@@ -30014,7 +30014,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react17 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -31492,6 +31492,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     (!target || target === "_self") && // Let browser handle "target=_blank" etc.
     !isModifiedEvent(event);
   }
+  function createSearchParams(init = "") {
+    return new URLSearchParams(
+      typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo2, key) => {
+        let value = init[key];
+        return memo2.concat(
+          Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]
+        );
+      }, [])
+    );
+  }
+  function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
+    let searchParams = createSearchParams(locationSearch);
+    if (defaultSearchParams) {
+      defaultSearchParams.forEach((_, key) => {
+        if (!searchParams.has(key)) {
+          defaultSearchParams.getAll(key).forEach((value) => {
+            searchParams.append(key, value);
+          });
+        }
+      });
+    }
+    return searchParams;
+  }
   var _formDataSupportsSubmitter = null;
   function isFormDataSubmitterSupported() {
     if (_formDataSupportsSubmitter === null) {
@@ -32379,6 +32402,39 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         unstable_useTransitions
       ]
     );
+  }
+  function useSearchParams(defaultInit) {
+    warning(
+      typeof URLSearchParams !== "undefined",
+      `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`
+    );
+    let defaultSearchParamsRef = React10.useRef(createSearchParams(defaultInit));
+    let hasSetSearchParamsRef = React10.useRef(false);
+    let location2 = useLocation();
+    let searchParams = React10.useMemo(
+      () => (
+        // Only merge in the defaults if we haven't yet called setSearchParams.
+        // Once we call that we want those to take precedence, otherwise you can't
+        // remove a param with setSearchParams({}) if it has an initial value
+        getSearchParamsForLocation(
+          location2.search,
+          hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current
+        )
+      ),
+      [location2.search]
+    );
+    let navigate = useNavigate();
+    let setSearchParams = React10.useCallback(
+      (nextInit, navigateOptions) => {
+        const newSearchParams = createSearchParams(
+          typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit
+        );
+        hasSetSearchParamsRef.current = true;
+        navigate("?" + newSearchParams, navigateOptions);
+      },
+      [navigate, searchParams]
+    );
+    return [searchParams, setSearchParams];
   }
   var fetcherId = 0;
   var getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
@@ -40997,48 +41053,48 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   })();
   var DataModel = (function(_super) {
-    __extends(DataModel2, _super);
-    function DataModel2(config) {
+    __extends(DataModel3, _super);
+    function DataModel3(config) {
       var _this = _super.call(this) || this;
       _this.config = config;
       _this.selected = false;
       return _this;
     }
-    DataModel2.prototype.get = function(fieldName) {
+    DataModel3.prototype.get = function(fieldName) {
       var _a;
       return (_a = this.value) === null || _a === void 0 ? void 0 : _a[fieldName];
     };
-    DataModel2.prototype.loadData = function(data2) {
+    DataModel3.prototype.loadData = function(data2) {
       data2 && _super.prototype.next.call(this, data2);
       return this;
     };
-    DataModel2.prototype.select = function() {
+    DataModel3.prototype.select = function() {
       this.selected = true;
       this.refresh();
     };
-    DataModel2.prototype.unselect = function() {
+    DataModel3.prototype.unselect = function() {
       this.selected = false;
       this.refresh();
     };
-    DataModel2.prototype.toggle = function() {
+    DataModel3.prototype.toggle = function() {
       this.selected = !this.selected;
       this.refresh();
     };
-    DataModel2.prototype.load = function(params, onError, onComplete) {
+    DataModel3.prototype.load = function(params, onError, onComplete) {
       var _this = this;
       this.fetch(params, onError, onComplete).then(function(value) {
         return value && _this.loadData(value);
       });
     };
-    DataModel2.prototype.fetch = function(params, onError, onComplete) {
+    DataModel3.prototype.fetch = function(params, onError, onComplete) {
       return ajaxRequest(this.config, params).catch(onError).finally(onComplete);
     };
-    DataModel2.create = function(data2) {
-      var record = new DataModel2();
+    DataModel3.create = function(data2) {
+      var record = new DataModel3();
       record.loadData(data2);
       return record;
     };
-    return DataModel2;
+    return DataModel3;
   })(Subject);
 
   // node_modules/rosie-ui/dist/js/core/data/store.js
@@ -41258,8 +41314,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return null;
   }
   function Grid(props) {
-    var _a;
-    var gridId = (0, import_react4.useState)(Rosie.guid("rosie-grid-"))[0], _b = (0, import_react4.useState)([]), records = _b[0], setRecords = _b[1], _c = (0, import_react4.useState)([]), columns = _c[0], setColumns = _c[1];
+    var gridId = (0, import_react4.useState)(Rosie.guid("rosie-grid-"))[0], _a = (0, import_react4.useState)([]), records = _a[0], setRecords = _a[1], _b = (0, import_react4.useState)([]), columns = _b[0], setColumns = _b[1];
     (0, import_react4.useEffect)(function() {
       var _a2;
       var store$ = (_a2 = props.store) === null || _a2 === void 0 ? void 0 : _a2.subscribe(function(value) {
@@ -41279,16 +41334,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       setColumns(columns2);
     }, [props.children]);
-    return (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered rosie-grid-striped rosie-grid-hover d-flex flex-row", { fullscreen: props.fitScreen || props.fitHeight }, props.className), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [(0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-header fw-bold bg-light overflow-hidden d-flex", { "flex-column": props.fitScreen || props.fitWidth }), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [columns.map(function(col, index) {
+    return (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", { fullscreen: props.fitScreen || props.fitHeight }, props.className), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [(0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-header fw-bold bg-light overflow-hidden d-flex", { "flex-column": props.fitScreen || props.fitWidth }), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [columns.map(function(col, index) {
       return (0, import_jsx_runtime6.jsx)(GridCell, __assign4({ header: true }, col), index);
     }), (0, import_jsx_runtime6.jsx)("div", { style: { width: Rosie.SCROLLBAR_WIDTH } })] }) }), (0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-body fullscreen overflow-x-auto d-flex", { "flex-column": !props.fitHeight, "overflow-y-scroll": !props.fitWidth }), children: (0, import_jsx_runtime6.jsxs)("div", { children: [!(records === null || records === void 0 ? void 0 : records.length) && (0, import_jsx_runtime6.jsx)("div", { className: "border-top p-2", children: "No record found." }), (records === null || records === void 0 ? void 0 : records.length) > 0 && records.map(function(record, rowIndex) {
       return (0, import_jsx_runtime6.jsx)(GridRow, { record, rowIndex, columns, checkboxSelection: props.checkboxSelection, onCheckChange: props.onCheckChange }, rowIndex);
-    })] }) }), !props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: (0, import_jsx_runtime6.jsxs)("div", { className: "ms-auto", children: ["Total records: ", (_a = records === null || records === void 0 ? void 0 : records.length) !== null && _a !== void 0 ? _a : 0] }) }) }), props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: props.pagingToolbar && (0, import_jsx_runtime6.jsx)(PagingToolbar, {}) }) })] }) }) });
+    })] }) }), !props.pagingToolbar && (records === null || records === void 0 ? void 0 : records.length) && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: (0, import_jsx_runtime6.jsxs)("div", { className: "text-body-tertiary", children: [records.length, " record", records.length > 1 ? "s" : ""] }) }) }), props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: props.pagingToolbar && (0, import_jsx_runtime6.jsx)(PagingToolbar, {}) }) })] }) }) });
   }
 
   // node_modules/rosie-ui/dist/js/components/dropdown.component.js
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var import_react5 = __toESM(require_react());
+  var __assign5 = function() {
+    __assign5 = Object.assign || function(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+          t[p] = s[p];
+      }
+      return t;
+    };
+    return __assign5.apply(this, arguments);
+  };
+  function Dropdown2(props) {
+    var _a = props.className, className = _a === void 0 ? "" : _a, _b = props.buttonClass, buttonClass = _b === void 0 ? "" : _b;
+    return (0, import_jsx_runtime7.jsx)("div", { className: Rosie.classNames("dropdown", className), children: (0, import_jsx_runtime7.jsx)(InputDropdown, __assign5({}, props, { buttonClass })) });
+  }
   function InputDropdown(props) {
     var _a = props.displayField, displayField = _a === void 0 ? "name" : _a, _b = props.valueField, valueField = _b === void 0 ? "value" : _b, _c = props.multiple, multiple = _c === void 0 ? false : _c, _d = props.defaultText, defaultText = _d === void 0 ? "Select" : _d, _e = props.separator, separator = _e === void 0 ? ": " : _e, _f = props.smartButtonText, smartButtonText = _f === void 0 ? true : _f, _g = props.rightAligned, rightAligned = _g === void 0 ? false : _g, _h = props.searchBox, searchBox = _h === void 0 ? true : _h, _j = props.buttonClass, buttonClass = _j === void 0 ? "" : _j, _k = props.buttonStyle, buttonStyle = _k === void 0 ? {} : _k;
     var _l = (0, import_react5.useState)(""), searchFilter = _l[0], setSearchFilter = _l[1], _m = (0, import_react5.useState)(props.options || []), options = _m[0], setOptions = _m[1], _o = (0, import_react5.useState)(props.value || []), selection = _o[0], setSelection = _o[1];
@@ -45534,6 +45604,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/minerva/ts/core/user.ts
   var AuthUserModel = Model({ proxy: { url: "/api/auth/user" } });
 
+  // ClientApp/minerva/ts/core/campaigns.ts
+  var CampaignInfoStore = Store({ proxy: { url: "/api/campaigns" } });
+  var CampaignGenerationModel = Model({
+    proxy: { url: "/api/campaigns/generate", method: "post" }
+  });
+
   // ClientApp/minerva/ts/core/products.ts
   var ProductInfoStore = Store({ proxy: { url: "/api/products" } });
   var ProductNavigatorModel = Model({
@@ -45545,19 +45621,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var UpdateProductInfoModel = Model({
     proxy: { url: "/api/products/{productId}", method: "patch" }
   });
+  var ProductDataTableStore = Store({ proxy: { url: "/api/products/{productId}/tables" } });
+  var ImportProductDataTableModel = Model({
+    proxy: { url: "/api/products/{productId}/tables/import", method: "patch" }
+  });
   var UpdateProductDataTableModel = Model({
     proxy: { url: "/api/products/{productId}/tables", method: "patch" }
   });
+  var ProductDataColumnStore = Store({ proxy: { url: "/api/products/{productId}/tables/{tableName}" } });
   var ConnectionDataSetStore = Store({
     proxy: { url: "/api/products/{productId}/connections/datasets", method: "post" }
   });
   var ConnectionDataSetModel = Model({
     proxy: { url: "/api/products/{productId}/connections/datasets/{dataSetName}", method: "post" }
-  });
-  var TrackedEventStore = Store({ proxy: { url: "/api/products/{productId}/tracked-events" } });
-  var CampaignInfoStore = Store({ proxy: { url: "/api/campaigns" } });
-  var CampaignGenerationModel = Model({
-    proxy: { url: "/api/campaigns/generate", method: "post" }
   });
 
   // ClientApp/minerva/ts/components/require-auth.component.tsx
@@ -45584,7 +45660,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         ] }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(Grid, { fitScreen: true, store: ProductInfoStore, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(GridColumn, { headerName: "Product ID", field: "productId", style: { flex: 1 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Link, { to: `/products/${value}/smart-view/overview`, children: value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(GridColumn, { headerName: "Product ID", field: "productId", style: { flex: 1 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Link, { to: `/products/${value}/dashboard/smart-view/overview`, children: value }) }) }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(GridColumn, { headerName: "Start Date", field: "startDate", style: { width: 200 }, renderer: (value) => Date.parseDate(value).format() }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(GridColumn, { headerName: "Action", field: "productId", style: { width: 200 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(import_jsx_runtime14.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Link, { to: `/products/${value}/settings`, children: "Settings" }) }) })
       ] }) })
@@ -45630,7 +45706,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         {
           to: navItem.navPath,
           style: { paddingLeft: 4 + 8 * level },
-          className: Rosie.classNames("nav-link rounded-0 py-1 pe-1", { active: location2.pathname === navItem.navPath }),
+          className: Rosie.classNames("nav-link rounded-0 py-1 pe-1", { active: location2.pathname.startsWith(navItem.navPath) }),
           children: [
             navItem.navIcon ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: `fa fa-${navItem.navIcon} nav-icon` }) : "",
             " ",
@@ -45692,7 +45768,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               Link,
               {
                 to: `/products/${item.productId}${props.navPath}`,
-                className: Rosie.classNames("dropdown-item cursor-pointer", { active: item.productId === selectedProduct?.productId }),
+                role: "button",
+                className: Rosie.classNames("dropdown-item", { active: item.productId === selectedProduct?.productId }),
                 children: value
               }
             );
@@ -45708,7 +45785,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_react13 = __toESM(require_react());
   var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   function ConnectorCreationDialog(props) {
-    const { productId } = props, [dataProducer, setDataProducer] = (0, import_react13.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react13.useState)("trino"), [endpoint, setEndpoint] = (0, import_react13.useState)("https://trino.gio.vng.vn:443"), [clientId, setClientId] = (0, import_react13.useState)("huynt3"), [clientSecret, setClientSecret] = (0, import_react13.useState)("E1kOe8y3yYZqat"), [dataSetName, setDataSetName] = (0, import_react13.useState)("iceberg.ballistar"), [selectedDataSets, setSelectedDataSets] = (0, import_react13.useState)([]);
+    const { productId } = props, [dataProducer, setDataProducer] = (0, import_react13.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react13.useState)(""), [endpoint, setEndpoint] = (0, import_react13.useState)(""), [clientId, setClientId] = (0, import_react13.useState)(""), [clientSecret, setClientSecret] = (0, import_react13.useState)(""), [dataSetName, setDataSetName] = (0, import_react13.useState)(""), [selectedDataSets, setSelectedDataSets] = (0, import_react13.useState)([]);
     (0, import_react13.useEffect)(() => {
       return () => {
         setDataSetName("");
@@ -45727,7 +45804,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         pathParams: { productId },
         body: { sqlDialect, endpoint, clientId, clientSecret }
       });
-      await UpdateProductDataTableModel.fetch({
+      await ImportProductDataTableModel.fetch({
         pathParams: { productId },
         body: { dataSets: selectedDataSets }
       });
@@ -45863,73 +45940,396 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_react15 = __toESM(require_react());
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   function EventListView() {
-    const [productId, setProductId] = (0, import_react15.useState)(""), eventCreationDialog = useDialog("#event-creation-dialog");
+    const params = useParams(), [productId, setProductId] = (0, import_react15.useState)(""), semanticEventUpdationDialog = useDialog('#semantic-event-updation-dialog"');
     (0, import_react15.useEffect)(() => {
-      const product$ = CurrentProductModel.subscribe((value) => {
-        const { productId: productId2 } = value;
-        setProductId(productId2);
-      });
-      return () => {
-        product$.unsubscribe();
-      };
-    }, []);
-    function onCreateEventSuccess() {
+      const { productId: productId2 } = params;
+      setProductId(productId2);
+      ProductDataTableStore.loadWithSplashScreen({ pathParams: { productId: productId2 } });
+    }, [params]);
+    function onUpdateSemanticEventSuccess(tables) {
+      ProductDataTableStore.loadData(tables);
+      Rosie.hideModal('#semantic-event-updation-dialog"');
     }
     return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(ProductSelector, { navPath: "/events", children: [
         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("li", { className: "breadcrumb-item active", children: "Events" }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("button", { className: "btn btn-sm btn-primary", onClick: () => eventCreationDialog.show(), children: [
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-plus me-1" }),
-          " Events"
-        ] }) })
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => semanticEventUpdationDialog.show(), children: "Update Semantic Events" }) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("main", { className: "fullscreen" }),
-      eventCreationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
-        EventCreationDialog,
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Grid, { fitScreen: true, store: ProductDataTableStore, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Event Name", field: "name", style: { flex: 1 }, renderer: (value, record) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Link, { to: `/products/${productId}/events/${value}${record.get("semanticName") ? `?semanticEvent=${record.get("semanticName")}` : ""}`, children: value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Display Name", field: "displayName", style: { flex: 1 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Semantic Event", field: "semanticName", style: { flex: 1 } })
+      ] }) }),
+      semanticEventUpdationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+        SemanticEventUpdationDialog,
         {
           productId,
-          onCreateSuccess: onCreateEventSuccess
+          onUpdateSuccess: onUpdateSemanticEventSuccess
         }
       )
     ] });
   }
-  function EventCreationDialog(props) {
-    const { productId } = props, [eventName, setEventName] = (0, import_react15.useState)(""), [eventSemanticName, setEventSemanticName] = (0, import_react15.useState)(""), [selectedEvents, setSelectedEvents] = (0, import_react15.useState)([]);
+  function SemanticEventUpdationDialog(props) {
+    const { productId } = props, [installEvent, setInstallEvent] = (0, import_react15.useState)(null), [openAppEvent, setOpenAppEvent] = (0, import_react15.useState)(null), [registerEvent, setRegisterEvent] = (0, import_react15.useState)(null), [sessionStartEvent, setSessionStartEvent] = (0, import_react15.useState)(null), [sessionEndEvent, setSessionEndEvent] = (0, import_react15.useState)(null), [purchaseEvent, setPurchaseEvent] = (0, import_react15.useState)(null), [dataTables, setDataTables] = (0, import_react15.useState)([]);
     (0, import_react15.useEffect)(() => {
-      TrackedEventStore.load({ pathParams: { productId } });
+      const tables$ = ProductDataTableStore.subscribe((value) => setDataTables(value.map((x) => x.value)));
       return () => {
-        TrackedEventStore.loadData([]);
+        tables$.unsubscribe();
       };
     }, []);
-    function onCheckChange() {
-    }
     async function onSubmit() {
+      const updatedTables = dataTables.map((table) => {
+        if (table.name === installEvent?.name) {
+          table.semanticName = "install";
+          return table;
+        } else if (table.name === openAppEvent?.name) {
+          table.semanticName = "openApp";
+          return table;
+        } else if (table.name === registerEvent?.name) {
+          table.semanticName = "register";
+          return table;
+        } else if (table.name === sessionStartEvent?.name) {
+          table.semanticName = "sessionStart";
+          return table;
+        } else if (table.name === sessionEndEvent?.name) {
+          table.semanticName = "sessionEnd";
+          return table;
+        } else if (table.name === purchaseEvent?.name) {
+          table.semanticName = "purchase";
+          return table;
+        } else return null;
+      }).filter((x) => x !== null);
+      const result = await UpdateProductDataTableModel.fetch({
+        pathParams: { productId },
+        body: { tables: updatedTables }
+      });
+      result && props.onUpdateSuccess(result);
     }
-    async function addEvent() {
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Dialog, { id: "event-creation-dialog", title: "Create Event", dialogClass: "modal-lg", fitScreen: true, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "modal-body fullscreen p-0", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Grid, { fitScreen: true, footer: true, store: TrackedEventStore, checkboxSelection: true, onCheckChange, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Event Name", field: "eventName", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Semantic Name", field: "eventSemanticName", style: { width: 150 } })
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Dialog, { id: "semantic-event-updation-dialog", title: "Update Semantic Model", dialogClass: "modal-lg", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "modal-body fullscreen d-flex flex-row pb-2", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "container-fluid", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Install" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: installEvent ? [installEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setInstallEvent(value[0])
+              }
+            ),
+            installEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setInstallEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Open App" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: openAppEvent ? [openAppEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setOpenAppEvent(value[0])
+              }
+            ),
+            openAppEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOpenAppEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Complete Registration" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: registerEvent ? [registerEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setRegisterEvent(value[0])
+              }
+            ),
+            registerEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setRegisterEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session Start" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: sessionStartEvent ? [sessionStartEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setSessionStartEvent(value[0])
+              }
+            ),
+            sessionStartEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionStartEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session End" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: sessionEndEvent ? [sessionEndEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setSessionEndEvent(value[0])
+              }
+            ),
+            sessionEndEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionEndEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Purchase" }),
+          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+              Dropdown2,
+              {
+                options: dataTables,
+                value: purchaseEvent ? [purchaseEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setPurchaseEvent(value[0])
+              }
+            ),
+            purchaseEvent && /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPurchaseEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "modal-footer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "me-auto", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "input-group", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { type: "text", className: "form-control", value: eventName, onChange: (e) => setEventName(e.target.value), placeholder: "Event name" }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { type: "text", className: "form-control", value: eventSemanticName, onChange: (e) => setEventSemanticName(e.target.value), placeholder: "Semantic name" }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-outline-secondary", disabled: eventName.trim() === "", onClick: () => addEvent(), children: "Add" })
-        ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
         /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Save" })
       ] })
     ] });
   }
 
-  // ClientApp/minerva/ts/views/products/dashboard.view.tsx
+  // ClientApp/minerva/ts/views/products/event-fields.view.tsx
   var import_react16 = __toESM(require_react());
   var import_jsx_runtime21 = __toESM(require_jsx_runtime());
-  function DashboardView() {
-    const [productId, setProductId] = (0, import_react16.useState)("");
+  function EventFieldListView() {
+    const params = useParams(), [searchParams] = useSearchParams(), [productId, setProductId] = (0, import_react16.useState)(""), [tableName, setTableName] = (0, import_react16.useState)(""), [eventName, setEventName] = (0, import_react16.useState)(""), semanticFieldUpdationDialog = useDialog("#semantic-field-updation-dialog");
     (0, import_react16.useEffect)(() => {
+      const { productId: productId2, tableName: tableName2 } = params;
+      setProductId(productId2);
+      setTableName(tableName2);
+      setEventName(searchParams.get("semanticEvent"));
+      ProductDataColumnStore.loadWithSplashScreen({ pathParams: { productId: productId2, tableName: tableName2 } });
+    }, [params]);
+    function onUpdateSemanticEventSuccess(tables) {
+      ProductDataColumnStore.loadData(tables);
+      Rosie.hideModal("#semantic-field-updation-dialog");
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductSelector, { navPath: "/events", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("li", { className: "breadcrumb-item", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Link, { to: `/products/${productId}/events`, role: "button", children: "Events" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("li", { className: "breadcrumb-item active", children: tableName }),
+        eventName && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => semanticFieldUpdationDialog.show(), children: "Update Semantic Fields" }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Grid, { fitScreen: true, store: ProductDataColumnStore, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(GridColumn, { headerName: "Field Name", field: "name", style: { flex: 1 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(import_jsx_runtime21.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Link, { to: `/products/${productId}/events/${value}`, children: value }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(GridColumn, { headerName: "Display Name", field: "displayName", style: { flex: 1 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(GridColumn, { headerName: "Semantic Model", field: "semanticName", style: { flex: 1 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(GridColumn, { headerName: "Type", field: "type", style: { flex: 1 } }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(GridColumn, { headerName: "Desc", field: "desc", style: { flex: 1 } })
+      ] }) }),
+      semanticFieldUpdationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+        SemanticFieldUpdationDialog,
+        {
+          productId,
+          eventName,
+          onUpdateSuccess: onUpdateSemanticEventSuccess
+        }
+      )
+    ] });
+  }
+  function SemanticFieldUpdationDialog(props) {
+    const { productId } = props, [eventTimeField, setEventTimeField] = (0, import_react16.useState)(null), [openAppEvent, setOpenAppEvent] = (0, import_react16.useState)(null), [registerEvent, setRegisterEvent] = (0, import_react16.useState)(null), [sessionStartEvent, setSessionStartEvent] = (0, import_react16.useState)(null), [sessionEndEvent, setSessionEndEvent] = (0, import_react16.useState)(null), [purchaseEvent, setPurchaseEvent] = (0, import_react16.useState)(null), [dataColumns, setDataColumns] = (0, import_react16.useState)([]);
+    (0, import_react16.useEffect)(() => {
+      const tables$ = ProductDataColumnStore.subscribe((value) => setDataColumns(value.map((x) => x.value)));
+      return () => {
+        tables$.unsubscribe();
+      };
+    }, []);
+    async function onSubmit() {
+      const body = {
+        install: eventTimeField?.name ?? null,
+        openApp: openAppEvent?.name ?? null,
+        register: registerEvent?.name ?? null,
+        sessionStart: sessionStartEvent?.name ?? null,
+        sessionEnd: sessionEndEvent?.name ?? null,
+        purchase: purchaseEvent?.name ?? null
+      };
+      const updatedTables = dataColumns.map((table) => {
+        if (table.name === eventTimeField?.name) {
+          table.semanticName = "install";
+          return table;
+        } else if (table.name === openAppEvent?.name) {
+          table.semanticName = "openApp";
+          return table;
+        } else if (table.name === registerEvent?.name) {
+          table.semanticName = "register";
+          return table;
+        } else if (table.name === sessionStartEvent?.name) {
+          table.semanticName = "sessionStart";
+          return table;
+        } else if (table.name === sessionEndEvent?.name) {
+          table.semanticName = "sessionEnd";
+          return table;
+        } else if (table.name === purchaseEvent?.name) {
+          table.semanticName = "purchase";
+          return table;
+        } else return null;
+      }).filter((x) => x !== null);
+      const result = await UpdateProductDataTableModel.fetch({
+        pathParams: { productId },
+        body: { tables: updatedTables }
+      });
+      result && props.onUpdateSuccess(result);
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Dialog, { id: "semantic-field-updation-dialog", title: "Update Semantic Model", dialogClass: "modal-lg", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "modal-body fullscreen d-flex flex-row pb-2", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "container-fluid", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Event Time" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: eventTimeField ? [eventTimeField] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setEventTimeField(value[0])
+              }
+            ),
+            eventTimeField && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setEventTimeField(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Open App" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: openAppEvent ? [openAppEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setOpenAppEvent(value[0])
+              }
+            ),
+            openAppEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOpenAppEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Complete Registration" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: registerEvent ? [registerEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setRegisterEvent(value[0])
+              }
+            ),
+            registerEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setRegisterEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session Start" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: sessionStartEvent ? [sessionStartEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setSessionStartEvent(value[0])
+              }
+            ),
+            sessionStartEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionStartEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session End" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: sessionEndEvent ? [sessionEndEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setSessionEndEvent(value[0])
+              }
+            ),
+            sessionEndEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionEndEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Purchase" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: purchaseEvent ? [purchaseEvent] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setPurchaseEvent(value[0])
+              }
+            ),
+            purchaseEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPurchaseEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "modal-footer", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Save" })
+      ] })
+    ] });
+  }
+
+  // ClientApp/minerva/ts/views/products/dashboard.view.tsx
+  var import_react17 = __toESM(require_react());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  function DashboardView() {
+    const [productId, setProductId] = (0, import_react17.useState)("");
+    (0, import_react17.useEffect)(() => {
       const product$ = CurrentProductModel.subscribe((value) => {
         setProductId(value.productId);
       });
@@ -45937,36 +46337,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         product$.unsubscribe();
       };
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("main", { className: "fullscreen" })
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("main", { className: "fullscreen" })
     ] });
   }
 
   // ClientApp/minerva/ts/views/admin.view.tsx
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   function AdminView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_jsx_runtime22.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, {});
   }
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react17.useEffect)(() => {
+    (0, import_react18.useEffect)(() => {
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "/products/:productId/dashboard/:spaceId/:viewId", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Navigate, { to: "/products" }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "/products/:productId/dashboard/:spaceId/:viewId", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }
 
   // ClientApp/minerva/ts/app.tsx
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
-  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime24.jsx)(AppView, {}));
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime25.jsx)(AppView, {}));
 })();
 /*! Bundled license information:
 
