@@ -35,6 +35,8 @@ class SourceOrTargetSettings:
   postprocess: Optional[str] = ''
   #transform:
   sql_model: Optional[str] = ''
+  #variables
+  vars: Optional[Dict[str, str]] = field(default_factory=dict)
 
 @dataclass
 class JsonModel:
@@ -115,6 +117,7 @@ def process_sql_model(model: str, spark: SparkSession, product_info: Dict[str, A
   save_data(target_data, targets[0], vars)
 
 def source(spark: SparkSession, source_settings: SourceOrTargetSettings, vars: Dict[str, Any]) -> str:
+  vars = {**source_settings.vars, **vars}
   data = load_data(spark, source_settings, vars)
   if data == None and source_settings.default_when_blank:
     logger.warning('`default_when_blank` is enabled, try to create empty DataFrame')
@@ -176,6 +179,8 @@ def load_data_with_jdbc(spark: SparkSession, path: str, source_settings: SourceO
     sql_file = jinja_env.from_string(source_settings.preprocess).render(**vars)
     sql_query = load_text(sql_file)
     dbtable = f'({jinja_env.from_string(sql_query).render(**vars)}) as {source_settings.name}'
+
+  logger.info(f'dbtable = {dbtable}')
 
   options = {
     'driver': cred['driver'],

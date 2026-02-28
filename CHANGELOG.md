@@ -2,6 +2,10 @@
 
 ## vNext
 
+**Processor**
+
+- Add `vars` to `source`
+
 ## 1.3.0
 > 2026-01-28
 
