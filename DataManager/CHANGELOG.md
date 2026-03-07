@@ -8,6 +8,7 @@
   - Add `ProductDashboardController`
     - Add GET `/api/products/{productId}/dashboard/{viewId}`
   - Implement `CartesianChart` component
+  - Implement `QueryBuilder`
 
 ## v0.0.3
 > 2026-03-07
