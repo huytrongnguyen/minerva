@@ -1,1 +1,60 @@
 @use 'variables' as *;
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/webfonts/inter-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/webfonts/inter-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/webfonts/inter-latin-600-normal.woff2') format('woff2');
+}
+
+aside {
+  width: 15rem;
+  background-color: #f9f8f7;
+//   .nav-link {
+//     &:hover {
+//       // background-color: $component-hover-bg;
+//     }
+//     &.active {
+//       // color: $component-active-color;
+//       // background-color: $component-active-bg;
+//     }
+//   }
+}
+
+.c3 {
+  // Axis text
+  text { font-size: .75rem; fill: #9b9b9b; font-family: $font-family-base; }
+
+  // Axis lines & ticks — match border color
+  .c3-axis path, .c3-axis line { stroke: $border-color; }
+
+  // Grid lines — very subtle (Notion-style)
+  .c3-ygrid line { stroke: $gray-200; stroke-dasharray: none; }
+  .c3-xgrid line { stroke: $gray-200; }
+
+  // Tooltip
+  .c3-tooltip-container { font-family: $font-family-base; }
+  .c3-tooltip {
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    td { font-size: .75rem; }
+    th { background-color: $gray-100; font-size: .75rem; }
+  }
+
+  // Legend
+  .c3-legend-item text { font-size: .75rem; fill: $body-color; }
+}
+
+#dotnet-compile-error { display: none !important; }

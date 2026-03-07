@@ -2,13 +2,19 @@
 
 ## vNext
 
+**Features**
+
+- Add `Dashboard > Complete View` screen
+  - Add `ProductDashboardController`
+    - Add GET `/api/products/{productId}/dashboard/{viewId}`
+  - Implement `CartesianChart` component
+
 ## v0.0.3
 > 2026-03-07
 
 **Features**
 
 - Re-design layout
-- Add `Dashboard > Smart View > Overview` screen
 - Add `Settings` screen
   - Add `ProductController`
     - Add POST `/api/products/{productId}/test-connection`

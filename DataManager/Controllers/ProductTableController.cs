@@ -8,8 +8,8 @@ namespace DataManager.Controllers;
 [Route("api/products/{productId}/tables")] [ApiController] [AuthFilter]
 public class ProductDataTableController(IProductDataTableStore productDataTableStore,
                                         IProductDataColumnStore productDataColumnStore,
-                                        IProductStore productStore,
                                         IProductDataSetStore productDataSetStore,
+                                        ProductAdapter productAdapter,
                                         ITrinoStore trinoStore) : ControllerBase {
   [HttpGet] public async Task<List<ProductDataTable>> ListProductDataTables(string productId) {
     var dataSets = productDataSetStore.List(productId);
@@ -18,7 +18,7 @@ public class ProductDataTableController(IProductDataTableStore productDataTableS
     var dataTables = productDataTableStore.List(productId)
         .ToDictionary(x => x.Name, x => x);
 
-    var connection = GetDataConnection(productId);
+    var connection = productAdapter.GetDataConnection(productId);
 
     var tables = new List<ProductDataTable>();
     foreach(var dataSet in dataSets) {
@@ -42,7 +42,7 @@ public class ProductDataTableController(IProductDataTableStore productDataTableS
   }
 
   [HttpGet("{tableName}")] public async Task<List<ProductDataColumn>> ListProductDataColumns(string productId, string tableName) {
-    var connection = GetDataConnection(productId);
+    var connection = productAdapter.GetDataConnection(productId);
 
     var trinoColumns = await trinoStore.ListDataColumns(tableName, connection);
     if (trinoColumns?.Count == 0) return [];
@@ -61,17 +61,5 @@ public class ProductDataTableController(IProductDataTableStore productDataTableS
 
   [HttpPatch("{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request) {
     return productDataColumnStore.BatchUpdate(productId, tableName, request.Columns);
-  }
-
-  private DataConnection GetDataConnection(string productId) {
-    var connection = productStore.GetDataConnection(productId);
-    if (string.IsNullOrWhiteSpace(connection.SqlDialect)
-        || string.IsNullOrWhiteSpace(connection.Endpoint)
-        || string.IsNullOrWhiteSpace(connection.ClientId)
-        || string.IsNullOrWhiteSpace(connection.ClientSecret)) {
-      throw new Exception($"Cannot access to {connection.Endpoint} with '{connection.ClientId}'");
-    }
-
-    return connection;
   }
 }

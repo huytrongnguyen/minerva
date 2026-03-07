@@ -1,4 +1,5 @@
 import { Model, NavItem, Store } from 'minerva/core';
+import { Dictionary } from 'rosie/core';
 
 //#region API: /api/products
 export type ProductInfo = {
@@ -34,6 +35,10 @@ export type ProductConnection = {
 
 export const ProductConnectionModel = Model<ProductConnection>({
   proxy: { url: '/api/products/{productId}/connection', method: 'get' }
+});
+
+export const ProductDashboardModel = Model<Dictionary<any[]>>({
+  proxy: { url: '/api/products/{productId}/dashboard/{viewId}', method: 'get' }
 });
 //#endregion
 

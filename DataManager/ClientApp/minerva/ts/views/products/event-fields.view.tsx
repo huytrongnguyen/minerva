@@ -40,9 +40,7 @@ export function EventFieldListView() {
     </ProductSelector>
     <main className="fullscreen">
       <Grid fitScreen store={ProductDataColumnStore}>
-        <GridColumn headerName="Field Name" field="name" style={{flex:1}} renderer={(value: string) => <>
-          <Link to={`/products/${productId}/events/${value}`}>{value}</Link>
-        </>} />
+        <GridColumn headerName="Field Name" field="name" style={{flex:1}} />
         <GridColumn headerName="Display Name" field="displayName" style={{flex:1}} />
         <GridColumn headerName="Semantic Model" field="semanticName" style={{flex:1}} />
         <GridColumn headerName="Type" field="type" style={{flex:1}} />

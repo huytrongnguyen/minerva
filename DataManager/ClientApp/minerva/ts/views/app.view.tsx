@@ -24,7 +24,7 @@ export function AppView() {
         <Route path="/products/:productId/settings" element={<RequireAuth component={ProductSettingsView} title="Product Settings" />} />
         <Route path="/products/:productId/events" element={<RequireAuth component={EventListView} title="Events" />} />
         <Route path="/products/:productId/events/:tableName" element={<RequireAuth component={EventFieldListView} title="Event Fields" />} />
-        <Route path="/products/:productId/dashboard/:spaceId/:viewId" element={<RequireAuth component={DashboardView} title="Dashboard" />} />
+        <Route path="/products/:productId/dashboard/:viewId" element={<RequireAuth component={DashboardView} title="Dashboard" />} />
         <Route path="*" element={<Navigate to="/products" />} />
       </Routes>
     </AppLayout>

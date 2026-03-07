@@ -30,6 +30,11 @@ export function onAjaxError(reason: AjaxError) {
 }
 
 export class AuthDataModel<T> extends DataModel<T> {
+  loadWithSplashScreen(params?: HttpParams) {
+    beforeProcessing();
+    return super.load(params, onAjaxError, afterProcessing);
+  }
+
   fetch(params: HttpParams = {}, onError?: (_reason: AjaxError) => T, onComplete?: () => void) {
     params = params ?? {};
     if (!params.headers) params.headers = {};

@@ -26,6 +26,13 @@ public class ProductController(IProductStore productStore) : ControllerBase {
         NavPath: null,
         Children: [
           new(
+            NavId: "complete-view",
+            NavName: "Complete View",
+            NavIcon: null,
+            NavPath: $"/products/{productId}/dashboard/complete-view",
+            Children: null
+          ),
+          new(
             NavId: "smart-view",
             NavName: "Smart View",
             NavIcon: null,
@@ -35,7 +42,7 @@ public class ProductController(IProductStore productStore) : ControllerBase {
                 NavId: "overview",
                 NavName: "Overview",
                 NavIcon: null,
-                NavPath: $"/products/{productId}/dashboard/smart-view/overview",
+                NavPath: $"/products/{productId}/dashboard/smart-view:overview",
                 Children: null
               )
             ]

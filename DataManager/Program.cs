@@ -1,9 +1,7 @@
 using DataManager.Auth;
-using DataManager.Campaign;
 using DataManager.Infrastructure;
 using DataManager.Product;
 using DataManager.Shared;
-using DataManager.Simulation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
@@ -31,13 +29,14 @@ services
     .AddDbContext<DataManagerDbContext>(options => {
       options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention();
     })
-    .AddScoped<ICampaignStore, CampaignStore>()
+    // .AddScoped<ICampaignStore, CampaignStore>()
     .AddScoped<IProductStore, ProductStore>()
     .AddScoped<IProductDataSetStore, ProductDataSetStore>()
     .AddScoped<IProductDataTableStore, ProductDataTableStore>()
     .AddScoped<IProductDataColumnStore, ProductDataColumnStore>()
     .AddScoped<ITrinoStore, TrinoStore>()
-    .AddScoped<CampaignService>()
+    .AddScoped<ProductAdapter>()
+    // .AddScoped<CampaignService>()
     .AddScoped<AuthService>()
     // .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
     .AddCors()

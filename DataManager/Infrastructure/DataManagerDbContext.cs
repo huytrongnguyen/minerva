@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace DataManager.Infrastructure;
 
 public class DataManagerDbContext(DbContextOptions<DataManagerDbContext> options) : DbContext(options) {
-  public DbSet<CAMPAIGN_INFO> CampaignInfo { get; set; }
+  // public DbSet<CAMPAIGN_INFO> CampaignInfo { get; set; }
   public DbSet<PRODUCT_INFO> ProductInfo { get; set; }
   public DbSet<PRODUCT_DATASET> ProductDataSet { get; set; }
   public DbSet<PRODUCT_DATATABLE> ProductDatatable { get; set; }
