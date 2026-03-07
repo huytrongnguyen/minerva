@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Rosie, useDialog } from 'rosie-ui';
+import { Rosie } from 'rosie/core';
+import { useDialog } from 'rosie/components';
 import { CurrentProductModel, ProductInfo } from 'minerva/core';
 
 import { ProductLayout } from './product-layout.component';

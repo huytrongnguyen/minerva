@@ -1,4 +1,4 @@
-import { Ajax, AjaxError, DataModel, DataStore, HttpParams, LocalCache, ProxyConfig } from 'rosie-ui';
+import { Ajax, AjaxError, DataModel, DataStore, HttpParams, LocalCache, ProxyConfig } from 'rosie/core';
 import { afterProcessing, alertError, beforeProcessing } from './shared';
 
 const loginUrl = `/login`,

@@ -15,6 +15,8 @@ public class ProductController(IProductStore productStore) : ControllerBase {
 
   [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request) => productStore.Update(productId, request);
 
+  [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId) => productStore.GetDataConnection(productId);
+
   [HttpGet("{productId}/navigator")] public List<NavItem> GetNavigator(string productId) {
     return [
       new(

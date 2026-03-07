@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { useLocation } from 'react-router';
-import { LoadingIndicator, Rosie } from 'rosie-ui';
+import { Rosie } from 'rosie/core';
+import { LoadingIndicator } from 'rosie/components';
 import { NavItem } from 'minerva/core';
 
 export const navigator: NavItem[] = [{

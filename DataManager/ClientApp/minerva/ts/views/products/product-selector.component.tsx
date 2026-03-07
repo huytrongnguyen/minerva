@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Rosie, InputDropdown } from 'rosie-ui';
-// import { InputDropdown } from 'minerva/components';
+import { Rosie } from 'rosie/core';
+import { InputDropdown } from 'rosie/components';
 import { CurrentProductModel, ProductInfo, ProductInfoStore } from 'minerva/core';
 
 interface ProductSelectorProps extends PropsWithChildren<any> { navPath: string }

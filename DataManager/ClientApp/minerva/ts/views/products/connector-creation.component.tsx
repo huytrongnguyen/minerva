@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { DataModel, Dialog, Grid, GridColumn } from 'rosie-ui';
-import { ProductInfo, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, ImportProductDataTableModel } from 'minerva/core';
+import { DataModel } from 'rosie/core';
+import { Dialog, Grid, GridColumn } from 'rosie/components';
+import { ProductInfo, ProductConnectionModel, ProductDataSetModel, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, UpdateProductDataSetModel } from 'minerva/core';
 
 export function ConnectorCreationDialog(props: { productId: string, onCreateSuccess: (productInfo: ProductInfo) => void }) {
   const { productId } = props,
@@ -13,6 +14,18 @@ export function ConnectorCreationDialog(props: { productId: string, onCreateSucc
         [selectedDataSets, setSelectedDataSets] = useState<ProductDataSet[]>([]);
 
   useEffect(() => {
+    ProductConnectionModel.fetch({ pathParams: { productId } }).then(connection => {
+      if (!connection) return;
+      setSqlDialect(connection.sqlDialect ?? '');
+      setEndpoint(connection.endpoint ?? '');
+      setClientId(connection.clientId ?? '');
+      setClientSecret(connection.clientSecret ?? '');
+    });
+
+    ProductDataSetModel.fetch({ pathParams: { productId } }).then(dataSets => {
+      if (dataSets?.length) setSelectedDataSets(dataSets);
+    });
+
     return () => {
       setDataSetName('');
       setSelectedDataSets([]);
@@ -33,9 +46,9 @@ export function ConnectorCreationDialog(props: { productId: string, onCreateSucc
       body: { sqlDialect, endpoint, clientId, clientSecret }
     });
 
-    await ImportProductDataTableModel.fetch({
+    await UpdateProductDataSetModel.fetch({
       pathParams: { productId },
-      body: { dataSets: selectedDataSets }
+      body: { dataSets: selectedDataSets.map(x => x.name) }
     });
 
     product && props.onCreateSuccess(product)

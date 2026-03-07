@@ -465,7 +465,7 @@
           componentName = this.props.ref;
           return void 0 !== componentName ? componentName : null;
         }
-        function ReactElement(type, key, props, owner, debugStack, debugTask) {
+        function ReactElement2(type, key, props, owner, debugStack, debugTask) {
           var refProp = props.ref;
           type = {
             $$typeof: REACT_ELEMENT_TYPE,
@@ -507,7 +507,7 @@
           return type;
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          newKey = ReactElement(
+          newKey = ReactElement2(
             oldElement.type,
             newKey,
             oldElement.props,
@@ -1030,7 +1030,7 @@
               JSCompiler_inline_result[i] = arguments[i + 2];
             props.children = JSCompiler_inline_result;
           }
-          props = ReactElement(
+          props = ReactElement2(
             element.type,
             key,
             props,
@@ -1086,7 +1086,7 @@
             "function" === typeof type ? type.displayName || type.name || "Unknown" : type
           );
           var propName = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
-          return ReactElement(
+          return ReactElement2(
             type,
             key,
             i,
@@ -21457,9 +21457,9 @@
     }
   });
 
-  // node_modules/bootstrap/dist/js/bootstrap.bundle.min.js
+  // ClientApp/rosie/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js
   var require_bootstrap_bundle_min = __commonJS({
-    "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"(exports, module) {
+    "ClientApp/rosie/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"(exports, module) {
       !(function(t, e) {
         "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).bootstrap = e();
       })(exports, function() {
@@ -23574,7 +23574,7 @@
           componentName = this.props.ref;
           return void 0 !== componentName ? componentName : null;
         }
-        function ReactElement(type, key, props, owner, debugStack, debugTask) {
+        function ReactElement2(type, key, props, owner, debugStack, debugTask) {
           var refProp = props.ref;
           type = {
             $$typeof: REACT_ELEMENT_TYPE,
@@ -23654,7 +23654,7 @@
             maybeKey,
             "function" === typeof type ? type.displayName || type.name || "Unknown" : type
           );
-          return ReactElement(
+          return ReactElement2(
             type,
             children,
             maybeKey,
@@ -32656,10 +32656,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return matchPath(path.pathname, nextPath) != null || matchPath(path.pathname, currentPath) != null;
   }
 
-  // node_modules/rosie-ui/dist/js/core/index.js
+  // ClientApp/rosie/ts/core/index.ts
   var import_bootstrap_bundle = __toESM(require_bootstrap_bundle_min());
 
-  // node_modules/rosie-ui/dist/js/core/lang/string.js
+  // ClientApp/rosie/ts/core/lang/string.ts
   String.prototype.parseInt = function() {
     return parseInt(this, 10);
   };
@@ -32667,30 +32667,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return parseFloat(this);
   };
   String.prototype.parseDate = function() {
-    var value = new Date(this);
+    const value = new Date(this);
     return new Date(value.getFullYear(), value.getMonth(), value.getDate());
   };
   String.prototype.parseDateTime = function() {
     return new Date(this);
   };
   String.prototype.decodeQS = function() {
-    return this.replace("?", "").split("&").reduce(function(queryParams, paramStr) {
-      var param = paramStr.split("=");
+    return this.replace("?", "").split("&").reduce((queryParams, paramStr) => {
+      const param = paramStr.split("=");
       queryParams[param[0]] = param[1];
       return queryParams;
     }, {});
   };
 
-  // node_modules/rosie-ui/dist/js/core/lang/number.js
-  Number.range = function(end2, start2, step) {
-    if (start2 === void 0) {
-      start2 = 0;
-    }
-    if (step === void 0) {
-      step = 1;
-    }
-    var result = [];
-    for (var index = start2; index < end2; index += step) {
+  // ClientApp/rosie/ts/core/lang/number.ts
+  Number.range = function(end2, start2 = 0, step = 1) {
+    const result = [];
+    for (let index = start2; index < end2; index += step) {
       result.push(index);
     }
     return result;
@@ -32708,18 +32702,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return fractionDigits ? Math.round(this * 10 * fractionDigits + Number.EPSILON) / (10 * fractionDigits) : Math.round(this);
   };
 
-  // node_modules/rosie-ui/dist/js/core/lang/date.js
+  // ClientApp/rosie/ts/core/lang/date.ts
   Date.currentDate = function() {
-    var value = /* @__PURE__ */ new Date();
+    const value = /* @__PURE__ */ new Date();
     return new Date(value.getFullYear(), value.getMonth(), value.getDate());
   };
   Date.parseDate = function(str) {
-    var _a;
-    var value = (_a = new Date(str)) !== null && _a !== void 0 ? _a : /* @__PURE__ */ new Date();
+    const value = new Date(str) ?? /* @__PURE__ */ new Date();
     return new Date(value.getFullYear(), value.getMonth(), value.getDate());
   };
   Date.prototype.format = function(pattern) {
-    return (pattern !== null && pattern !== void 0 ? pattern : "yyyy-MM-dd").replace("yyyy", "".concat(this.getFullYear())).replace("MM", "".concat(this.getMonth() + 1).padStart(2, "0")).replace("dd", "".concat(this.getDate()).padStart(2, "0")).replace("HH", "".concat(this.getHours()).padStart(2, "0")).replace("mm", "".concat(this.getMinutes()).padStart(2, "0")).replace("ss", "".concat(this.getSeconds()).padStart(2, "0"));
+    return (pattern ?? "yyyy-MM-dd").replace("yyyy", `${this.getFullYear()}`).replace("MM", `${this.getMonth() + 1}`.padStart(2, "0")).replace("dd", `${this.getDate()}`.padStart(2, "0")).replace("HH", `${this.getHours()}`.padStart(2, "0")).replace("mm", `${this.getMinutes()}`.padStart(2, "0")).replace("ss", `${this.getSeconds()}`.padStart(2, "0"));
   };
   Date.prototype.startOfMonth = function() {
     return new Date(this.getFullYear(), this.getMonth(), 1);
@@ -32730,16 +32723,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   Date.prototype.lengthOfMonth = function() {
     return this.endOfMonth().getDate();
   };
-  Date.prototype.minus = function(amountToSubtract, unit) {
-    if (unit === void 0) {
-      unit = "day";
-    }
+  Date.prototype.minus = function(amountToSubtract, unit = "day") {
     return this.plus(-amountToSubtract, unit);
   };
-  Date.prototype.plus = function(amountToAdd, unit) {
-    if (unit === void 0) {
-      unit = "day";
-    }
+  Date.prototype.plus = function(amountToAdd, unit = "day") {
     switch (unit) {
       case "year":
         return new Date(this.getFullYear() + amountToAdd, this.getMonth(), this.getDate(), 0, 0, 0, 0);
@@ -32760,16 +32747,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   };
 
-  // node_modules/rosie-ui/dist/js/core/lang/array.js
+  // ClientApp/rosie/ts/core/lang/array.ts
   Array.prototype.toDictionary = function(keySelector, elementSelector) {
-    return this.reduce(function(result, item, index, array) {
-      var key = typeof keySelector === "string" || typeof keySelector === "number" ? item[keySelector] : keySelector(item, index, array);
+    return this.reduce((result, item, index, array) => {
+      const key = typeof keySelector === "string" || typeof keySelector === "number" ? item[keySelector] : keySelector(item, index, array);
       !result[key] && (result[key] = elementSelector(item, index, array));
       return result;
     }, {});
   };
 
-  // node_modules/rosie-ui/dist/js/core/mixins/index.js
+  // ClientApp/rosie/ts/core/mixins/index.ts
   var mixins_exports = {};
   __export(mixins_exports, {
     SCROLLBAR_WIDTH: () => SCROLLBAR_WIDTH,
@@ -32787,22 +32774,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     showModal: () => showModal
   });
 
-  // node_modules/rosie-ui/dist/js/core/mixins/constants.js
+  // ClientApp/rosie/ts/core/mixins/constants.ts
   var SCROLLBAR_WIDTH = getScrollWidth();
   function getScrollWidth() {
-    var _a;
-    var outer = document.createElement("div");
+    const outer = document.createElement("div");
     outer.style.visibility = "hidden";
     outer.style.overflow = "scroll";
     document.body.appendChild(outer);
-    var inner = document.createElement("div");
+    const inner = document.createElement("div");
     outer.appendChild(inner);
-    var scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
-    (_a = outer.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(outer);
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+    outer.parentNode?.removeChild(outer);
     return scrollbarWidth;
   }
 
-  // node_modules/@popperjs/core/lib/index.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/index.js
   var lib_exports = {};
   __export(lib_exports, {
     afterMain: () => afterMain,
@@ -32845,7 +32831,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     write: () => write
   });
 
-  // node_modules/@popperjs/core/lib/enums.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/enums.js
   var top = "top";
   var bottom = "bottom";
   var right = "right";
@@ -32875,12 +32861,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var afterWrite = "afterWrite";
   var modifierPhases = [beforeRead, read, afterRead, beforeMain, main, afterMain, beforeWrite, write, afterWrite];
 
-  // node_modules/@popperjs/core/lib/dom-utils/getNodeName.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getNodeName.js
   function getNodeName(element) {
     return element ? (element.nodeName || "").toLowerCase() : null;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getWindow.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getWindow.js
   function getWindow(node) {
     if (node == null) {
       return window;
@@ -32892,7 +32878,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return node;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
   function isElement(node) {
     var OwnElement = getWindow(node).Element;
     return node instanceof OwnElement || node instanceof Element;
@@ -32909,7 +32895,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return node instanceof OwnElement || node instanceof ShadowRoot;
   }
 
-  // node_modules/@popperjs/core/lib/modifiers/applyStyles.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/applyStyles.js
   function applyStyles(_ref) {
     var state = _ref.state;
     Object.keys(state.elements).forEach(function(name) {
@@ -32977,17 +32963,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     requires: ["computeStyles"]
   };
 
-  // node_modules/@popperjs/core/lib/utils/getBasePlacement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getBasePlacement.js
   function getBasePlacement(placement) {
     return placement.split("-")[0];
   }
 
-  // node_modules/@popperjs/core/lib/utils/math.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/math.js
   var max = Math.max;
   var min = Math.min;
   var round = Math.round;
 
-  // node_modules/@popperjs/core/lib/utils/userAgent.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/userAgent.js
   function getUAString() {
     var uaData = navigator.userAgentData;
     if (uaData != null && uaData.brands && Array.isArray(uaData.brands)) {
@@ -32998,12 +32984,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return navigator.userAgent;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/isLayoutViewport.js
   function isLayoutViewport() {
     return !/^((?!chrome|android).)*safari/i.test(getUAString());
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
   function getBoundingClientRect(element, includeScale, isFixedStrategy) {
     if (includeScale === void 0) {
       includeScale = false;
@@ -33036,7 +33022,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getLayoutRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getLayoutRect.js
   function getLayoutRect(element) {
     var clientRect = getBoundingClientRect(element);
     var width = element.offsetWidth;
@@ -33055,7 +33041,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/contains.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/contains.js
   function contains(parent, child) {
     var rootNode = child.getRootNode && child.getRootNode();
     if (parent.contains(child)) {
@@ -33072,17 +33058,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return false;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getComputedStyle.js
   function getComputedStyle2(element) {
     return getWindow(element).getComputedStyle(element);
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/isTableElement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/isTableElement.js
   function isTableElement(element) {
     return ["table", "td", "th"].indexOf(getNodeName(element)) >= 0;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getDocumentElement.js
   function getDocumentElement(element) {
     return ((isElement(element) ? element.ownerDocument : (
       // $FlowFixMe[prop-missing]
@@ -33090,7 +33076,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     )) || window.document).documentElement;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getParentNode.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getParentNode.js
   function getParentNode(element) {
     if (getNodeName(element) === "html") {
       return element;
@@ -33107,7 +33093,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getOffsetParent.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getOffsetParent.js
   function getTrueOffsetParent(element) {
     if (!isHTMLElement(element) || // https://github.com/popperjs/popper-core/issues/837
     getComputedStyle2(element).position === "fixed") {
@@ -33150,12 +33136,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return offsetParent || getContainingBlock(element) || window2;
   }
 
-  // node_modules/@popperjs/core/lib/utils/getMainAxisFromPlacement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getMainAxisFromPlacement.js
   function getMainAxisFromPlacement(placement) {
     return ["top", "bottom"].indexOf(placement) >= 0 ? "x" : "y";
   }
 
-  // node_modules/@popperjs/core/lib/utils/within.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/within.js
   function within(min2, value, max2) {
     return max(min2, min(value, max2));
   }
@@ -33164,7 +33150,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return v > max2 ? max2 : v;
   }
 
-  // node_modules/@popperjs/core/lib/utils/getFreshSideObject.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getFreshSideObject.js
   function getFreshSideObject() {
     return {
       top: 0,
@@ -33174,12 +33160,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/utils/mergePaddingObject.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/mergePaddingObject.js
   function mergePaddingObject(paddingObject) {
     return Object.assign({}, getFreshSideObject(), paddingObject);
   }
 
-  // node_modules/@popperjs/core/lib/utils/expandToHashMap.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/expandToHashMap.js
   function expandToHashMap(value, keys) {
     return keys.reduce(function(hashMap, key) {
       hashMap[key] = value;
@@ -33187,7 +33173,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, {});
   }
 
-  // node_modules/@popperjs/core/lib/modifiers/arrow.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/arrow.js
   var toPaddingObject = function toPaddingObject2(padding, state) {
     padding = typeof padding === "function" ? padding(Object.assign({}, state.rects, {
       placement: state.placement
@@ -33249,12 +33235,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     requiresIfExists: ["preventOverflow"]
   };
 
-  // node_modules/@popperjs/core/lib/utils/getVariation.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getVariation.js
   function getVariation(placement) {
     return placement.split("-")[1];
   }
 
-  // node_modules/@popperjs/core/lib/modifiers/computeStyles.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/computeStyles.js
   var unsetSides = {
     top: "auto",
     right: "auto",
@@ -33375,7 +33361,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     data: {}
   };
 
-  // node_modules/@popperjs/core/lib/modifiers/eventListeners.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/eventListeners.js
   var passive = {
     passive: true
   };
@@ -33413,7 +33399,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     data: {}
   };
 
-  // node_modules/@popperjs/core/lib/utils/getOppositePlacement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getOppositePlacement.js
   var hash = {
     left: "right",
     right: "left",
@@ -33426,7 +33412,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/@popperjs/core/lib/utils/getOppositeVariationPlacement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getOppositeVariationPlacement.js
   var hash2 = {
     start: "end",
     end: "start"
@@ -33437,7 +33423,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
   function getWindowScroll(node) {
     var win = getWindow(node);
     var scrollLeft = win.pageXOffset;
@@ -33448,12 +33434,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getWindowScrollBarX.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getWindowScrollBarX.js
   function getWindowScrollBarX(element) {
     return getBoundingClientRect(getDocumentElement(element)).left + getWindowScroll(element).scrollLeft;
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getViewportRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getViewportRect.js
   function getViewportRect(element, strategy) {
     var win = getWindow(element);
     var html = getDocumentElement(element);
@@ -33479,7 +33465,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getDocumentRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getDocumentRect.js
   function getDocumentRect(element) {
     var _element$ownerDocumen;
     var html = getDocumentElement(element);
@@ -33500,13 +33486,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/isScrollParent.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/isScrollParent.js
   function isScrollParent(element) {
     var _getComputedStyle = getComputedStyle2(element), overflow = _getComputedStyle.overflow, overflowX = _getComputedStyle.overflowX, overflowY = _getComputedStyle.overflowY;
     return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getScrollParent.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getScrollParent.js
   function getScrollParent(node) {
     if (["html", "body", "#document"].indexOf(getNodeName(node)) >= 0) {
       return node.ownerDocument.body;
@@ -33517,7 +33503,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return getScrollParent(getParentNode(node));
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/listScrollParents.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/listScrollParents.js
   function listScrollParents(element, list) {
     var _element$ownerDocumen;
     if (list === void 0) {
@@ -33534,7 +33520,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
   }
 
-  // node_modules/@popperjs/core/lib/utils/rectToClientRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/rectToClientRect.js
   function rectToClientRect(rect) {
     return Object.assign({}, rect, {
       left: rect.x,
@@ -33544,7 +33530,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getClippingRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getClippingRect.js
   function getInnerBoundingClientRect(element, strategy) {
     var rect = getBoundingClientRect(element, false, strategy === "fixed");
     rect.top = rect.top + element.clientTop;
@@ -33590,7 +33576,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return clippingRect;
   }
 
-  // node_modules/@popperjs/core/lib/utils/computeOffsets.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/computeOffsets.js
   function computeOffsets(_ref) {
     var reference2 = _ref.reference, element = _ref.element, placement = _ref.placement;
     var basePlacement = placement ? getBasePlacement(placement) : null;
@@ -33645,7 +33631,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return offsets;
   }
 
-  // node_modules/@popperjs/core/lib/utils/detectOverflow.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/detectOverflow.js
   function detectOverflow(state, options) {
     if (options === void 0) {
       options = {};
@@ -33683,7 +33669,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return overflowOffsets;
   }
 
-  // node_modules/@popperjs/core/lib/utils/computeAutoPlacement.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/computeAutoPlacement.js
   function computeAutoPlacement(state, options) {
     if (options === void 0) {
       options = {};
@@ -33713,7 +33699,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/@popperjs/core/lib/modifiers/flip.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/flip.js
   function getExpandedFallbackPlacements(placement) {
     if (getBasePlacement(placement) === auto) {
       return [];
@@ -33818,7 +33804,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   };
 
-  // node_modules/@popperjs/core/lib/modifiers/hide.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/hide.js
   function getSideOffsets(overflow, rect, preventedOffsets) {
     if (preventedOffsets === void 0) {
       preventedOffsets = {
@@ -33872,7 +33858,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     fn: hide
   };
 
-  // node_modules/@popperjs/core/lib/modifiers/offset.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/offset.js
   function distanceAndSkiddingToXY(placement, rects, offset2) {
     var basePlacement = getBasePlacement(placement);
     var invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
@@ -33911,7 +33897,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     fn: offset
   };
 
-  // node_modules/@popperjs/core/lib/modifiers/popperOffsets.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/popperOffsets.js
   function popperOffsets(_ref) {
     var state = _ref.state, name = _ref.name;
     state.modifiersData[name] = computeOffsets({
@@ -33929,12 +33915,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     data: {}
   };
 
-  // node_modules/@popperjs/core/lib/utils/getAltAxis.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/getAltAxis.js
   function getAltAxis(axis) {
     return axis === "x" ? "y" : "x";
   }
 
-  // node_modules/@popperjs/core/lib/modifiers/preventOverflow.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/modifiers/preventOverflow.js
   function preventOverflow(_ref) {
     var state = _ref.state, options = _ref.options, name = _ref.name;
     var _options$mainAxis = options.mainAxis, checkMainAxis = _options$mainAxis === void 0 ? true : _options$mainAxis, _options$altAxis = options.altAxis, checkAltAxis = _options$altAxis === void 0 ? false : _options$altAxis, boundary = options.boundary, rootBoundary = options.rootBoundary, altBoundary = options.altBoundary, padding = options.padding, _options$tether = options.tether, tether = _options$tether === void 0 ? true : _options$tether, _options$tetherOffset = options.tetherOffset, tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
@@ -34027,7 +34013,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     requiresIfExists: ["offset"]
   };
 
-  // node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
   function getHTMLElementScroll(element) {
     return {
       scrollLeft: element.scrollLeft,
@@ -34035,7 +34021,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getNodeScroll.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getNodeScroll.js
   function getNodeScroll(node) {
     if (node === getWindow(node) || !isHTMLElement(node)) {
       return getWindowScroll(node);
@@ -34044,7 +34030,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   }
 
-  // node_modules/@popperjs/core/lib/dom-utils/getCompositeRect.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/dom-utils/getCompositeRect.js
   function isElementScaled(element) {
     var rect = element.getBoundingClientRect();
     var scaleX = round(rect.width) / element.offsetWidth || 1;
@@ -34088,7 +34074,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/utils/orderModifiers.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/orderModifiers.js
   function order(modifiers) {
     var map = /* @__PURE__ */ new Map();
     var visited = /* @__PURE__ */ new Set();
@@ -34125,7 +34111,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, []);
   }
 
-  // node_modules/@popperjs/core/lib/utils/debounce.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/debounce.js
   function debounce(fn2) {
     var pending;
     return function() {
@@ -34141,7 +34127,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
 
-  // node_modules/@popperjs/core/lib/utils/mergeByName.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/utils/mergeByName.js
   function mergeByName(modifiers) {
     var merged = modifiers.reduce(function(merged2, current) {
       var existing = merged2[current.name];
@@ -34156,7 +34142,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/@popperjs/core/lib/createPopper.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/createPopper.js
   var DEFAULT_OPTIONS = {
     placement: "bottom",
     modifiers: [],
@@ -34297,19 +34283,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var createPopper = /* @__PURE__ */ popperGenerator();
 
-  // node_modules/@popperjs/core/lib/popper-lite.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/popper-lite.js
   var defaultModifiers = [eventListeners_default, popperOffsets_default, computeStyles_default, applyStyles_default];
   var createPopper2 = /* @__PURE__ */ popperGenerator({
     defaultModifiers
   });
 
-  // node_modules/@popperjs/core/lib/popper.js
+  // ClientApp/rosie/node_modules/@popperjs/core/lib/popper.js
   var defaultModifiers2 = [eventListeners_default, popperOffsets_default, computeStyles_default, applyStyles_default, offset_default, flip_default, preventOverflow_default, arrow_default, hide_default];
   var createPopper3 = /* @__PURE__ */ popperGenerator({
     defaultModifiers: defaultModifiers2
   });
 
-  // node_modules/bootstrap/dist/js/bootstrap.esm.js
+  // ClientApp/rosie/node_modules/bootstrap/dist/js/bootstrap.esm.js
   var elementMap = /* @__PURE__ */ new Map();
   var Data = {
     set(element, key, instance) {
@@ -37961,87 +37947,49 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   enableDismissTrigger(Toast);
   defineJQueryPlugin(Toast);
 
-  // node_modules/rosie-ui/dist/js/core/mixins/dom.js
+  // ClientApp/rosie/ts/core/mixins/dom.ts
   function showModal(selector, onShow, onHide) {
-    var dialogEl = document.querySelector(selector);
+    const dialogEl = document.querySelector(selector);
     new Modal(dialogEl).show();
     onShow && dialogEl.addEventListener("shown.bs.modal", onShow);
     onHide && dialogEl.addEventListener("hide.bs.modal", onHide);
   }
   function hideModal(selector, onHide) {
-    var dialogEl = document.querySelector(selector);
-    new Modal(dialogEl).hide();
+    const dialogEl = document.querySelector(selector);
+    Modal.getInstance(dialogEl)?.hide();
     onHide && dialogEl.addEventListener("hide.bs.modal", onHide);
   }
 
-  // node_modules/rosie-ui/dist/js/core/mixins/utilities.js
-  var isString = function(value) {
-    return typeof value === "string";
-  };
-  var isNumber = function(value) {
-    return typeof value === "number";
-  };
-  var isBoolean = function(value) {
-    return typeof value === "boolean";
-  };
-  var isObject = function(value) {
-    return toString.call(value) === "[object Object]";
-  };
-  var isArray = function(value) {
-    return toString.call(value) === "[object Array]";
-  };
-  var isDate = function(value) {
-    return toString.call(value) === "[object Date]" && !isNaN(value);
-  };
-  var isEmpty = function(value) {
-    return value === void 0 || value == null || value === "" || isString(value) && value.trim() === "" || isArray(value) && value.length === 0 || isObject(value) && Object.keys(value).length === 0;
-  };
-  var isNotEmpty = function(value) {
-    return !isEmpty(value);
-  };
-  var guid = function(prefix, suffix) {
-    if (prefix === void 0) {
-      prefix = "";
-    }
-    if (suffix === void 0) {
-      suffix = "";
-    }
-    return "".concat(prefix).concat((Math.random() * (1 << 30)).toString(16).replace(".", "")).concat(suffix);
-  };
-  function classNames() {
-    var expressions = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      expressions[_i] = arguments[_i];
-    }
-    return expressions.filter(function(exp) {
-      return isNotEmpty(exp);
-    }).map(function(exp) {
+  // ClientApp/rosie/ts/core/mixins/utilities.ts
+  var isString = (value) => typeof value === "string";
+  var isNumber = (value) => typeof value === "number";
+  var isBoolean = (value) => typeof value === "boolean";
+  var isObject = (value) => toString.call(value) === "[object Object]";
+  var isArray = (value) => toString.call(value) === "[object Array]";
+  var isDate = (value) => toString.call(value) === "[object Date]" && !isNaN(value);
+  var isEmpty = (value) => value === void 0 || value == null || value === "" || isString(value) && value.trim() === "" || isArray(value) && value.length === 0 || isObject(value) && Object.keys(value).length === 0;
+  var isNotEmpty = (value) => !isEmpty(value);
+  var guid = (prefix = "", suffix = "") => `${prefix}${(Math.random() * (1 << 30)).toString(16).replace(".", "")}${suffix}`;
+  function classNames(...expressions) {
+    return expressions.filter((exp) => isNotEmpty(exp)).map((exp) => {
       if (isString(exp)) {
         return exp;
       } else if (isObject(exp)) {
-        return Object.entries(exp).filter(function(_a) {
-          var _key = _a[0], value = _a[1];
-          return value === true;
-        }).map(function(_a) {
-          var key = _a[0], _value = _a[1];
-          return key;
-        }).join(" ");
+        return Object.entries(exp).filter(([_key, value]) => value === true).map(([key, _value]) => key).join(" ");
       } else {
         return "";
       }
-    }).filter(function(className) {
-      return isNotEmpty(className);
-    }).join(" ");
+    }).filter((className) => isNotEmpty(className)).join(" ");
   }
 
-  // node_modules/axios/lib/helpers/bind.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/bind.js
   function bind(fn2, thisArg) {
     return function wrap() {
       return fn2.apply(thisArg, arguments);
     };
   }
 
-  // node_modules/axios/lib/utils.js
+  // ClientApp/rosie/node_modules/axios/lib/utils.js
   var { toString: toString2 } = Object.prototype;
   var { getPrototypeOf } = Object;
   var { iterator, toStringTag } = Symbol;
@@ -38454,7 +38402,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     isIterable
   };
 
-  // node_modules/axios/lib/core/AxiosError.js
+  // ClientApp/rosie/node_modules/axios/lib/core/AxiosError.js
   var AxiosError = class _AxiosError extends Error {
     static from(error, code, config, request, response, customProps) {
       const axiosError = new _AxiosError(error.message, code || error.code, config, request, response);
@@ -38520,10 +38468,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   AxiosError.ERR_INVALID_URL = "ERR_INVALID_URL";
   var AxiosError_default = AxiosError;
 
-  // node_modules/axios/lib/helpers/null.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/null.js
   var null_default = null;
 
-  // node_modules/axios/lib/helpers/toFormData.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/toFormData.js
   function isVisitable(thing) {
     return utils_default.isPlainObject(thing) || utils_default.isArray(thing);
   }
@@ -38638,7 +38586,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var toFormData_default = toFormData;
 
-  // node_modules/axios/lib/helpers/AxiosURLSearchParams.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/AxiosURLSearchParams.js
   function encode(str) {
     const charMap = {
       "!": "%21",
@@ -38671,7 +38619,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var AxiosURLSearchParams_default = AxiosURLSearchParams;
 
-  // node_modules/axios/lib/helpers/buildURL.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/buildURL.js
   function encode2(val) {
     return encodeURIComponent(val).replace(/%3A/gi, ":").replace(/%24/g, "$").replace(/%2C/gi, ",").replace(/%20/g, "+");
   }
@@ -38700,7 +38648,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return url;
   }
 
-  // node_modules/axios/lib/core/InterceptorManager.js
+  // ClientApp/rosie/node_modules/axios/lib/core/InterceptorManager.js
   var InterceptorManager = class {
     constructor() {
       this.handlers = [];
@@ -38765,7 +38713,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var InterceptorManager_default = InterceptorManager;
 
-  // node_modules/axios/lib/defaults/transitional.js
+  // ClientApp/rosie/node_modules/axios/lib/defaults/transitional.js
   var transitional_default = {
     silentJSONParsing: true,
     forcedJSONParsing: true,
@@ -38773,16 +38721,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     legacyInterceptorReqResOrdering: true
   };
 
-  // node_modules/axios/lib/platform/browser/classes/URLSearchParams.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/browser/classes/URLSearchParams.js
   var URLSearchParams_default = typeof URLSearchParams !== "undefined" ? URLSearchParams : AxiosURLSearchParams_default;
 
-  // node_modules/axios/lib/platform/browser/classes/FormData.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/browser/classes/FormData.js
   var FormData_default = typeof FormData !== "undefined" ? FormData : null;
 
-  // node_modules/axios/lib/platform/browser/classes/Blob.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/browser/classes/Blob.js
   var Blob_default = typeof Blob !== "undefined" ? Blob : null;
 
-  // node_modules/axios/lib/platform/browser/index.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/browser/index.js
   var browser_default = {
     isBrowser: true,
     classes: {
@@ -38793,7 +38741,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     protocols: ["http", "https", "file", "blob", "url", "data"]
   };
 
-  // node_modules/axios/lib/platform/common/utils.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/common/utils.js
   var utils_exports = {};
   __export(utils_exports, {
     hasBrowserEnv: () => hasBrowserEnv,
@@ -38811,13 +38759,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   })();
   var origin = hasBrowserEnv && window.location.href || "http://localhost";
 
-  // node_modules/axios/lib/platform/index.js
+  // ClientApp/rosie/node_modules/axios/lib/platform/index.js
   var platform_default = {
     ...utils_exports,
     ...browser_default
   };
 
-  // node_modules/axios/lib/helpers/toURLEncodedForm.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/toURLEncodedForm.js
   function toURLEncodedForm(data2, options) {
     return toFormData_default(data2, new platform_default.classes.URLSearchParams(), {
       visitor: function(value, key, path, helpers) {
@@ -38831,7 +38779,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/axios/lib/helpers/formDataToJSON.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/formDataToJSON.js
   function parsePropPath(name) {
     return utils_default.matchAll(/\w+|\[(\w*)]/g, name).map((match) => {
       return match[0] === "[]" ? "" : match[1] || match[0];
@@ -38884,7 +38832,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var formDataToJSON_default = formDataToJSON;
 
-  // node_modules/axios/lib/defaults/index.js
+  // ClientApp/rosie/node_modules/axios/lib/defaults/index.js
   function stringifySafely(rawValue, parser, encoder) {
     if (utils_default.isString(rawValue)) {
       try {
@@ -38993,7 +38941,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
   var defaults_default = defaults;
 
-  // node_modules/axios/lib/helpers/parseHeaders.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/parseHeaders.js
   var ignoreDuplicateOf = utils_default.toObjectSet([
     "age",
     "authorization",
@@ -39038,7 +38986,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return parsed;
   };
 
-  // node_modules/axios/lib/core/AxiosHeaders.js
+  // ClientApp/rosie/node_modules/axios/lib/core/AxiosHeaders.js
   var $internals = /* @__PURE__ */ Symbol("internals");
   function normalizeHeader(header) {
     return header && String(header).trim().toLowerCase();
@@ -39267,7 +39215,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   utils_default.freezeMethods(AxiosHeaders);
   var AxiosHeaders_default = AxiosHeaders;
 
-  // node_modules/axios/lib/core/transformData.js
+  // ClientApp/rosie/node_modules/axios/lib/core/transformData.js
   function transformData(fns, response) {
     const config = this || defaults_default;
     const context = response || config;
@@ -39280,12 +39228,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return data2;
   }
 
-  // node_modules/axios/lib/cancel/isCancel.js
+  // ClientApp/rosie/node_modules/axios/lib/cancel/isCancel.js
   function isCancel(value) {
     return !!(value && value.__CANCEL__);
   }
 
-  // node_modules/axios/lib/cancel/CanceledError.js
+  // ClientApp/rosie/node_modules/axios/lib/cancel/CanceledError.js
   var CanceledError = class extends AxiosError_default {
     /**
      * A `CanceledError` is an object that is thrown when an operation is canceled.
@@ -39304,7 +39252,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var CanceledError_default = CanceledError;
 
-  // node_modules/axios/lib/core/settle.js
+  // ClientApp/rosie/node_modules/axios/lib/core/settle.js
   function settle(resolve, reject, response) {
     const validateStatus2 = response.config.validateStatus;
     if (!response.status || !validateStatus2 || validateStatus2(response.status)) {
@@ -39320,13 +39268,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   }
 
-  // node_modules/axios/lib/helpers/parseProtocol.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/parseProtocol.js
   function parseProtocol(url) {
     const match = /^([-+\w]{1,25})(:?\/\/|:)/.exec(url);
     return match && match[1] || "";
   }
 
-  // node_modules/axios/lib/helpers/speedometer.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/speedometer.js
   function speedometer(samplesCount, min2) {
     samplesCount = samplesCount || 10;
     const bytes = new Array(samplesCount);
@@ -39362,7 +39310,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var speedometer_default = speedometer;
 
-  // node_modules/axios/lib/helpers/throttle.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/throttle.js
   function throttle(fn2, freq) {
     let timestamp = 0;
     let threshold = 1e3 / freq;
@@ -39397,7 +39345,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var throttle_default = throttle;
 
-  // node_modules/axios/lib/helpers/progressEventReducer.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/progressEventReducer.js
   var progressEventReducer = (listener, isDownloadStream, freq = 3) => {
     let bytesNotified = 0;
     const _speedometer = speedometer_default(50, 250);
@@ -39432,7 +39380,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var asyncDecorator = (fn2) => (...args) => utils_default.asap(() => fn2(...args));
 
-  // node_modules/axios/lib/helpers/isURLSameOrigin.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/isURLSameOrigin.js
   var isURLSameOrigin_default = platform_default.hasStandardBrowserEnv ? /* @__PURE__ */ ((origin2, isMSIE) => (url) => {
     url = new URL(url, platform_default.origin);
     return origin2.protocol === url.protocol && origin2.host === url.host && (isMSIE || origin2.port === url.port);
@@ -39441,7 +39389,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     platform_default.navigator && /(msie|trident)/i.test(platform_default.navigator.userAgent)
   ) : () => true;
 
-  // node_modules/axios/lib/helpers/cookies.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/cookies.js
   var cookies_default = platform_default.hasStandardBrowserEnv ? (
     // Standard browser envs support document.cookie
     {
@@ -39487,7 +39435,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   );
 
-  // node_modules/axios/lib/helpers/isAbsoluteURL.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/isAbsoluteURL.js
   function isAbsoluteURL(url) {
     if (typeof url !== "string") {
       return false;
@@ -39495,12 +39443,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
   }
 
-  // node_modules/axios/lib/helpers/combineURLs.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/combineURLs.js
   function combineURLs(baseURL, relativeURL) {
     return relativeURL ? baseURL.replace(/\/?\/$/, "") + "/" + relativeURL.replace(/^\/+/, "") : baseURL;
   }
 
-  // node_modules/axios/lib/core/buildFullPath.js
+  // ClientApp/rosie/node_modules/axios/lib/core/buildFullPath.js
   function buildFullPath(baseURL, requestedURL, allowAbsoluteUrls) {
     let isRelativeUrl = !isAbsoluteURL(requestedURL);
     if (baseURL && (isRelativeUrl || allowAbsoluteUrls == false)) {
@@ -39509,7 +39457,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return requestedURL;
   }
 
-  // node_modules/axios/lib/core/mergeConfig.js
+  // ClientApp/rosie/node_modules/axios/lib/core/mergeConfig.js
   var headersToObject = (thing) => thing instanceof AxiosHeaders_default ? { ...thing } : thing;
   function mergeConfig(config1, config2) {
     config2 = config2 || {};
@@ -39594,7 +39542,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return config;
   }
 
-  // node_modules/axios/lib/helpers/resolveConfig.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/resolveConfig.js
   var resolveConfig_default = (config) => {
     const newConfig = mergeConfig({}, config);
     let { data: data2, withXSRFToken, xsrfHeaderName, xsrfCookieName, headers, auth } = newConfig;
@@ -39631,7 +39579,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return newConfig;
   };
 
-  // node_modules/axios/lib/adapters/xhr.js
+  // ClientApp/rosie/node_modules/axios/lib/adapters/xhr.js
   var isXHRAdapterSupported = typeof XMLHttpRequest !== "undefined";
   var xhr_default = isXHRAdapterSupported && function(config) {
     return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -39761,7 +39709,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   };
 
-  // node_modules/axios/lib/helpers/composeSignals.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/composeSignals.js
   var composeSignals = (signals, timeout) => {
     const { length } = signals = signals ? signals.filter(Boolean) : [];
     if (timeout || length) {
@@ -39797,7 +39745,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var composeSignals_default = composeSignals;
 
-  // node_modules/axios/lib/helpers/trackStream.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/trackStream.js
   var streamChunk = function* (chunk, chunkSize) {
     let len = chunk.byteLength;
     if (!chunkSize || len < chunkSize) {
@@ -39874,7 +39822,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   };
 
-  // node_modules/axios/lib/adapters/fetch.js
+  // ClientApp/rosie/node_modules/axios/lib/adapters/fetch.js
   var DEFAULT_CHUNK_SIZE = 64 * 1024;
   var { isFunction: isFunction2 } = utils_default;
   var globalFetchAPI = (({ Request: Request2, Response: Response2 }) => ({
@@ -40083,7 +40031,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var adapter = getFetch();
 
-  // node_modules/axios/lib/adapters/adapters.js
+  // ClientApp/rosie/node_modules/axios/lib/adapters/adapters.js
   var knownAdapters = {
     http: null_default,
     xhr: xhr_default,
@@ -40148,7 +40096,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     adapters: knownAdapters
   };
 
-  // node_modules/axios/lib/core/dispatchRequest.js
+  // ClientApp/rosie/node_modules/axios/lib/core/dispatchRequest.js
   function throwIfCancellationRequested(config) {
     if (config.cancelToken) {
       config.cancelToken.throwIfRequested();
@@ -40193,10 +40141,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
   }
 
-  // node_modules/axios/lib/env/data.js
+  // ClientApp/rosie/node_modules/axios/lib/env/data.js
   var VERSION2 = "1.13.5";
 
-  // node_modules/axios/lib/helpers/validator.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/validator.js
   var validators = {};
   ["object", "boolean", "number", "function", "string", "symbol"].forEach((type, i) => {
     validators[type] = function validator(thing) {
@@ -40260,7 +40208,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     validators
   };
 
-  // node_modules/axios/lib/core/Axios.js
+  // ClientApp/rosie/node_modules/axios/lib/core/Axios.js
   var validators2 = validator_default.validators;
   var Axios = class {
     constructor(instanceConfig) {
@@ -40439,7 +40387,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
   var Axios_default = Axios;
 
-  // node_modules/axios/lib/cancel/CancelToken.js
+  // ClientApp/rosie/node_modules/axios/lib/cancel/CancelToken.js
   var CancelToken = class _CancelToken {
     constructor(executor) {
       if (typeof executor !== "function") {
@@ -40537,19 +40485,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var CancelToken_default = CancelToken;
 
-  // node_modules/axios/lib/helpers/spread.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/spread.js
   function spread(callback) {
     return function wrap(arr) {
       return callback.apply(null, arr);
     };
   }
 
-  // node_modules/axios/lib/helpers/isAxiosError.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/isAxiosError.js
   function isAxiosError(payload) {
     return utils_default.isObject(payload) && payload.isAxiosError === true;
   }
 
-  // node_modules/axios/lib/helpers/HttpStatusCode.js
+  // ClientApp/rosie/node_modules/axios/lib/helpers/HttpStatusCode.js
   var HttpStatusCode = {
     Continue: 100,
     SwitchingProtocols: 101,
@@ -40626,7 +40574,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
   var HttpStatusCode_default = HttpStatusCode;
 
-  // node_modules/axios/lib/axios.js
+  // ClientApp/rosie/node_modules/axios/lib/axios.js
   function createInstance(defaultConfig) {
     const context = new Axios_default(defaultConfig);
     const instance = bind(Axios_default.prototype.request, context);
@@ -40659,7 +40607,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   axios.default = axios;
   var axios_default = axios;
 
-  // node_modules/axios/index.js
+  // ClientApp/rosie/node_modules/axios/index.js
   var {
     Axios: Axios2,
     AxiosError: AxiosError2,
@@ -40679,166 +40627,54 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     mergeConfig: mergeConfig2
   } = axios_default;
 
-  // node_modules/rosie-ui/dist/js/core/ajax.js
-  var __awaiter = function(thisArg, _arguments, P, generator) {
-    function adopt(value) {
-      return value instanceof P ? value : new P(function(resolve) {
-        resolve(value);
-      });
-    }
-    return new (P || (P = Promise))(function(resolve, reject) {
-      function fulfilled(value) {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function rejected(value) {
-        try {
-          step(generator["throw"](value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-      }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-  };
-  var __generator = function(thisArg, body) {
-    var _ = { label: 0, sent: function() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-      return this;
-    }), g;
-    function verb(n) {
-      return function(v) {
-        return step([n, v]);
-      };
-    }
-    function step(op) {
-      if (f) throw new TypeError("Generator is already executing.");
-      while (g && (g = 0, op[0] && (_ = 0)), _) try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-          case 4:
-            _.label++;
-            return { value: op[1], done: false };
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-          case 7:
-            op = _.ops.pop();
-            _.trys.pop();
-            continue;
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-              _.ops.push(op);
-              break;
-            }
-            if (t[2]) _.ops.pop();
-            _.trys.pop();
-            continue;
-        }
-        op = body.call(thisArg, _);
-      } catch (e) {
-        op = [6, e];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
-      if (op[0] & 5) throw op[1];
-      return { value: op[0] ? op[1] : void 0, done: true };
-    }
-  };
+  // ClientApp/rosie/ts/core/ajax.ts
   var Ajax = {
-    request: function(settings) {
-      return __awaiter(void 0, void 0, void 0, function() {
-        var _a, method, _b, params, url, config;
-        return __generator(this, function(_c) {
-          switch (_c.label) {
-            case 0:
-              _a = settings.method, method = _a === void 0 ? "get" : _a, _b = settings.params, params = _b === void 0 ? {} : _b;
-              url = settings.url;
-              if (params.pathParams) {
-                Object.entries(params.pathParams).forEach(function(_a2) {
-                  var key = _a2[0], value = _a2[1];
-                  return url = url.replace("{".concat(key, "}"), value);
-                });
-              }
-              if (params.queryParams) {
-                url = "".concat(url, "?").concat(Object.entries(params.queryParams).map(function(_a2) {
-                  var key = _a2[0], value = _a2[1];
-                  return "".concat(key, "=").concat(value);
-                }).join("&"));
-              }
-              config = {
-                url,
-                method,
-                headers: params.headers || {},
-                timeout: 0
-              };
-              params.body && (config.data = params.body);
-              return [4, axios_default(config)];
-            case 1:
-              return [2, _c.sent().data];
-          }
-        });
-      });
+    request: async (settings) => {
+      const { method = "get", params = {} } = settings;
+      let { url } = settings;
+      if (params.pathParams) {
+        Object.entries(params.pathParams).forEach(([key, value]) => url = url.replace(`{${key}}`, value));
+      }
+      if (params.queryParams) {
+        url = `${url}?${Object.entries(params.queryParams).map(([key, value]) => `${key}=${value}`).join("&")}`;
+      }
+      const config = {
+        url,
+        method,
+        headers: params.headers || {},
+        timeout: 0
+      };
+      params.body && (config.data = params.body);
+      return (await axios_default(config)).data;
     }
   };
 
-  // node_modules/rosie-ui/dist/js/core/data/proxy/client.js
+  // ClientApp/rosie/ts/core/data/proxy/client.ts
   var CacheType = {
     Local: "localStorage",
     Session: "sessionStorage",
     Memory: "memory"
   };
-  var Cache = (function() {
-    function Cache2(type) {
+  var Cache = class {
+    constructor(type) {
       this.type = type;
       this.cacheData = {};
     }
-    Cache2.prototype.hasLocalStorage = function() {
+    hasLocalStorage() {
       try {
         return "localStorage" in window && window.localStorage !== null;
       } catch (e) {
         return false;
       }
-    };
-    Cache2.prototype.hasSessionStorage = function() {
+    }
+    hasSessionStorage() {
       try {
         return "sessionStorage" in window && window.sessionStorage !== null;
       } catch (e) {
         return false;
       }
-    };
-    Cache2.prototype.get = function(key) {
+    }
+    get(key) {
       if (this.type === CacheType.Local && this.hasLocalStorage()) {
         return localStorage.getItem(key) || void 0;
       } else if (this.type === CacheType.Session && this.hasSessionStorage()) {
@@ -40846,8 +40682,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } else {
         return this.cacheData[key] || void 0;
       }
-    };
-    Cache2.prototype.set = function(key, value) {
+    }
+    set(key, value) {
       if (this.type === CacheType.Local && this.hasLocalStorage()) {
         localStorage.setItem(key, value);
       } else if (this.type === CacheType.Session && this.hasSessionStorage()) {
@@ -40855,8 +40691,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } else {
         this.cacheData[key] = value;
       }
-    };
-    Cache2.prototype.remove = function(key) {
+    }
+    remove(key) {
       if (this.type === CacheType.Local && this.hasLocalStorage()) {
         localStorage.removeItem(key);
       } else if (this.type === CacheType.Session && this.hasSessionStorage()) {
@@ -40864,594 +40700,376 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } else {
         delete this.cacheData[key];
       }
-    };
-    return Cache2;
-  })();
+    }
+  };
   var LocalCache = new Cache(CacheType.Local);
   var SessionCache = new Cache(CacheType.Session);
   var MemoryCache = new Cache(CacheType.Memory);
 
-  // node_modules/rosie-ui/dist/js/core/data/proxy/server.js
-  var __awaiter2 = function(thisArg, _arguments, P, generator) {
-    function adopt(value) {
-      return value instanceof P ? value : new P(function(resolve) {
-        resolve(value);
-      });
-    }
-    return new (P || (P = Promise))(function(resolve, reject) {
-      function fulfilled(value) {
-        try {
-          step(generator.next(value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function rejected(value) {
-        try {
-          step(generator["throw"](value));
-        } catch (e) {
-          reject(e);
-        }
-      }
-      function step(result) {
-        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-      }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-  };
-  var __generator2 = function(thisArg, body) {
-    var _ = { label: 0, sent: function() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() {
-      return this;
-    }), g;
-    function verb(n) {
-      return function(v) {
-        return step([n, v]);
-      };
-    }
-    function step(op) {
-      if (f) throw new TypeError("Generator is already executing.");
-      while (g && (g = 0, op[0] && (_ = 0)), _) try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-          case 4:
-            _.label++;
-            return { value: op[1], done: false };
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-          case 7:
-            op = _.ops.pop();
-            _.trys.pop();
-            continue;
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-              _.ops.push(op);
-              break;
-            }
-            if (t[2]) _.ops.pop();
-            _.trys.pop();
-            continue;
-        }
-        op = body.call(thisArg, _);
-      } catch (e) {
-        op = [6, e];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
-      if (op[0] & 5) throw op[1];
-      return { value: op[0] ? op[1] : void 0, done: true };
-    }
-  };
-  function ajaxRequest(config, params) {
-    return __awaiter2(this, void 0, void 0, function() {
-      var proxy, url, method, response;
-      return __generator2(this, function(_a) {
-        switch (_a.label) {
-          case 0:
-            proxy = (config !== null && config !== void 0 ? config : {}).proxy, url = proxy.url, method = proxy.method;
-            return [4, Ajax.request({ url, method, params })];
-          case 1:
-            response = _a.sent();
-            return [2, response];
-        }
-      });
-    });
+  // ClientApp/rosie/ts/core/data/proxy/server.ts
+  async function ajaxRequest(config, params) {
+    const { proxy } = config ?? {}, { url, method } = proxy;
+    let response = await Ajax.request({ url, method, params });
+    return response;
   }
 
-  // node_modules/rosie-ui/dist/js/core/observable.js
-  var Subject = (function() {
-    function Subject2() {
+  // ClientApp/rosie/ts/core/observable.ts
+  var Subject = class {
+    constructor() {
       this.observers = [];
       this.events = {};
     }
-    Subject2.prototype.refresh = function() {
+    refresh() {
       this.next(this.value);
-    };
-    Subject2.prototype.on = function(eventName, fn2) {
+    }
+    on(eventName, fn2) {
       this.events[eventName] = fn2;
-    };
-    Subject2.prototype.triggerEvent = function(eventName) {
+    }
+    triggerEvent(eventName) {
       this.events[eventName] && this.events[eventName]();
-    };
-    Subject2.prototype.subscribe = function(next, error, complete) {
-      var subscriber = { next, error, complete };
+    }
+    subscribe(next, error, complete) {
+      const subscriber = { next, error, complete };
       this.observers.push(subscriber);
       if (this.value) {
         subscriber.next(this.value);
       }
       return new Subscription(this, subscriber);
-    };
-    Subject2.prototype.next = function(value) {
+    }
+    next(value) {
       this.value = value;
-      this.observers.forEach(function(observer) {
-        return observer.next && observer.next(value);
-      });
-    };
-    return Subject2;
-  })();
-  var Subscription = (function() {
-    function Subscription2(subject, subscriber) {
+      this.observers.forEach((observer) => observer.next && observer.next(value));
+    }
+  };
+  var Subscription = class {
+    constructor(subject, subscriber) {
       this.subject = subject;
       this.subscriber = subscriber;
     }
-    Subscription2.prototype.unsubscribe = function() {
-      var observers = this.subject.observers;
-      if (!observers || !observers.length)
-        return;
-      var subscriberIndex = observers.indexOf(this.subscriber);
+    unsubscribe() {
+      const { observers } = this.subject;
+      if (!observers || !observers.length) return;
+      const subscriberIndex = observers.indexOf(this.subscriber);
       if (subscriberIndex > -1) {
         observers.splice(subscriberIndex, 1);
       }
-    };
-    return Subscription2;
-  })();
-
-  // node_modules/rosie-ui/dist/js/core/data/model.js
-  var __extends = /* @__PURE__ */ (function() {
-    var extendStatics = function(d, b) {
-      extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
-        d2.__proto__ = b2;
-      } || function(d2, b2) {
-        for (var p in b2) if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
-      };
-      return extendStatics(d, b);
-    };
-    return function(d, b) {
-      if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-      extendStatics(d, b);
-      function __() {
-        this.constructor = d;
-      }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-  })();
-  var DataModel = (function(_super) {
-    __extends(DataModel3, _super);
-    function DataModel3(config) {
-      var _this = _super.call(this) || this;
-      _this.config = config;
-      _this.selected = false;
-      return _this;
     }
-    DataModel3.prototype.get = function(fieldName) {
-      var _a;
-      return (_a = this.value) === null || _a === void 0 ? void 0 : _a[fieldName];
-    };
-    DataModel3.prototype.loadData = function(data2) {
-      data2 && _super.prototype.next.call(this, data2);
+  };
+
+  // ClientApp/rosie/ts/core/data/model.ts
+  var DataModel = class _DataModel extends Subject {
+    constructor(config) {
+      super();
+      this.config = config;
+      this.selected = false;
+    }
+    get(fieldName) {
+      return this.value?.[fieldName];
+    }
+    loadData(data2) {
+      data2 && super.next(data2);
       return this;
-    };
-    DataModel3.prototype.select = function() {
+    }
+    select() {
       this.selected = true;
       this.refresh();
-    };
-    DataModel3.prototype.unselect = function() {
+    }
+    unselect() {
       this.selected = false;
       this.refresh();
-    };
-    DataModel3.prototype.toggle = function() {
+    }
+    toggle() {
       this.selected = !this.selected;
       this.refresh();
-    };
-    DataModel3.prototype.load = function(params, onError, onComplete) {
-      var _this = this;
-      this.fetch(params, onError, onComplete).then(function(value) {
-        return value && _this.loadData(value);
-      });
-    };
-    DataModel3.prototype.fetch = function(params, onError, onComplete) {
+    }
+    load(params, onError, onComplete) {
+      this.fetch(params, onError, onComplete).then((value) => value && this.loadData(value));
+    }
+    fetch(params, onError, onComplete) {
       return ajaxRequest(this.config, params).catch(onError).finally(onComplete);
-    };
-    DataModel3.create = function(data2) {
-      var record = new DataModel3();
+    }
+    static create(data2) {
+      const record = new _DataModel();
       record.loadData(data2);
       return record;
-    };
-    return DataModel3;
-  })(Subject);
-
-  // node_modules/rosie-ui/dist/js/core/data/store.js
-  var __extends2 = /* @__PURE__ */ (function() {
-    var extendStatics = function(d, b) {
-      extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
-        d2.__proto__ = b2;
-      } || function(d2, b2) {
-        for (var p in b2) if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
-      };
-      return extendStatics(d, b);
-    };
-    return function(d, b) {
-      if (typeof b !== "function" && b !== null)
-        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-      extendStatics(d, b);
-      function __() {
-        this.constructor = d;
-      }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-  })();
-  var __spreadArray = function(to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-      if (ar || !(i in from)) {
-        if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-        ar[i] = from[i];
-      }
     }
-    return to.concat(ar || Array.prototype.slice.call(from));
   };
-  var DataStore = (function(_super) {
-    __extends2(DataStore2, _super);
-    function DataStore2(config) {
-      var _this = _super.call(this) || this;
-      _this.config = config;
-      return _this;
+
+  // ClientApp/rosie/ts/core/data/store.ts
+  var DataStore = class extends Subject {
+    constructor(config) {
+      super();
+      this.config = config;
     }
-    DataStore2.prototype.loadData = function(data2) {
-      data2 && _super.prototype.next.call(this, data2.map(DataModel.create));
-    };
-    DataStore2.prototype.add = function(item) {
+    loadData(data2) {
+      data2 && super.next(data2.map(DataModel.create));
+    }
+    add(item) {
       this.addRecord(DataModel.create(item));
-    };
-    DataStore2.prototype.addRecord = function(record) {
-      var _a;
-      this.next(__spreadArray(__spreadArray([], (_a = this.value) !== null && _a !== void 0 ? _a : [], true), [record], false));
-    };
-    DataStore2.prototype.insertRecord = function(record) {
-      var _a;
-      this.next(__spreadArray([record], (_a = this.value) !== null && _a !== void 0 ? _a : [], true));
-    };
-    DataStore2.prototype.load = function(params, onError, onComplete) {
-      var _this = this;
-      this.fetch(params, onError, onComplete).then(function(value) {
-        return value && _this.loadData(value);
-      });
-    };
-    DataStore2.prototype.fetch = function(params, onError, onComplete) {
+    }
+    addRecord(record) {
+      this.next([...this.value ?? [], record]);
+    }
+    insertRecord(record) {
+      this.next([record, ...this.value ?? []]);
+    }
+    load(params, onError, onComplete) {
+      this.fetch(params, onError, onComplete).then((value) => value && this.loadData(value));
+    }
+    fetch(params, onError, onComplete) {
       return ajaxRequest(this.config, params).catch(onError).finally(onComplete);
-    };
-    return DataStore2;
-  })(Subject);
-
-  // node_modules/rosie-ui/dist/js/core/index.js
-  var __assign = function() {
-    __assign = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
-      }
-      return t;
-    };
-    return __assign.apply(this, arguments);
+    }
   };
-  var Rosie = __assign({}, mixins_exports);
 
-  // node_modules/rosie-ui/dist/js/components/loading-indicator.component.js
+  // ClientApp/rosie/ts/core/index.ts
+  var Rosie = { ...mixins_exports };
+
+  // ClientApp/rosie/ts/components/loading-indicator.component.tsx
   var import_jsx_runtime = __toESM(require_jsx_runtime());
   function LoadingIndicator() {
-    return (0, import_jsx_runtime.jsx)("div", { className: "loading-indicator", children: (0, import_jsx_runtime.jsx)("div", { className: "loading-indicator-msg", children: (0, import_jsx_runtime.jsxs)("div", { className: "loading-indicator-msg-text", children: [(0, import_jsx_runtime.jsx)("span", { className: "fa fa-circle-notch fa-spin me-1" }), "Loading..."] }) }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "loading-indicator", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "loading-indicator-msg", children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "loading-indicator-msg-text", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "fa fa-circle-notch fa-spin me-1" }),
+      "Loading..."
+    ] }) }) });
   }
 
-  // node_modules/rosie-ui/dist/js/components/dialog.component.js
-  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/dialog.component.tsx
   var import_react = __toESM(require_react());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   function Dialog(props) {
-    var _a;
-    var _b = props.id, id = _b === void 0 ? "dialog" : _b, _c = props.title, title = _c === void 0 ? "Dialog" : _c, _d = props.className, className = _d === void 0 ? "" : _d, _e = props.dialogClass, dialogClass = _e === void 0 ? "" : _e, disableCloseButton = props.disableCloseButton, fitScreen = props.fitScreen, children = props.children;
-    return (0, import_jsx_runtime2.jsx)("section", { className: "modal fade ".concat(className), id, "data-bs-backdrop": "static", tabIndex: -1, role: "dialog", children: (0, import_jsx_runtime2.jsx)("div", { className: "modal-dialog modal-dialog-centered modal-dialog-scrollable ".concat(dialogClass), role: "document", children: (0, import_jsx_runtime2.jsxs)("div", { className: Rosie.classNames("modal-content", { fullscreen: fitScreen }), style: { maxHeight: (_a = props.height) !== null && _a !== void 0 ? _a : "100%" }, children: [(0, import_jsx_runtime2.jsxs)("div", { className: "modal-header", children: [(0, import_jsx_runtime2.jsx)("h5", { className: "modal-title", children: title }), !disableCloseButton && (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal" })] }), children] }) }) });
+    const { id = "dialog", title = "Dialog", className = "", dialogClass = "", disableCloseButton, fitScreen, children } = props;
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("section", { className: `modal fade ${className}`, id, "data-bs-backdrop": "static", tabIndex: -1, role: "dialog", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: `modal-dialog modal-dialog-centered modal-dialog-scrollable ${dialogClass}`, role: "document", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: Rosie.classNames("modal-content", { fullscreen: fitScreen }), style: { maxHeight: props.height ?? "100%" }, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "modal-header", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h5", { className: "modal-title", children: title }),
+        !disableCloseButton && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal" })
+      ] }),
+      children
+    ] }) }) });
   }
   function useDialog(id) {
-    var _a = (0, import_react.useState)(false), isShown = _a[0], setState = _a[1];
-    (0, import_react.useEffect)(function() {
+    const [isShown, setState] = (0, import_react.useState)(false);
+    (0, import_react.useEffect)(() => {
       if (isShown) {
-        Rosie.showModal(id, void 0, function() {
+        Rosie.showModal(id, void 0, () => {
           setState(false);
         });
       }
     }, [isShown]);
     return {
       isShown,
-      show: function() {
-        return setState(true);
-      },
-      hide: function() {
-        return setState(false);
-      }
+      show: () => setState(true),
+      hide: () => Rosie.hideModal(id)
     };
   }
 
-  // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
-  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/grid/grid.component.tsx
   var import_react4 = __toESM(require_react());
 
-  // node_modules/rosie-ui/dist/js/components/paging-toolbar.component.js
+  // ClientApp/rosie/ts/components/paging-toolbar.component.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   function PagingToolbar(props) {
-    var _a = props.page, page = _a === void 0 ? 1 : _a, _b = props.size, size = _b === void 0 ? 100 : _b, _c = props.count, count = _c === void 0 ? 0 : _c, _d = props.total, total = _d === void 0 ? 0 : _d, totalPage = (total / size).floor() + (total % size > 0 ? 1 : 0);
-    return (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [(0, import_jsx_runtime3.jsxs)("div", { className: "mt-1 me-auto", children: ["Display records ", !count ? 0 : (page - 1) * size + 1, " - ", Math.min(page * size, (page - 1) * size + count), " of ", total] }), (0, import_jsx_runtime3.jsxs)("ul", { className: "pagination pagination-sm mb-0", children: [(0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page <= 1 }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-backward" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page - 1 < 1 }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play fa-rotate-180" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: "page-item active", children: (0, import_jsx_runtime3.jsxs)("span", { className: "page-link", children: [!totalPage ? 0 : page, " / ", totalPage] }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page + 1 > totalPage }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play" }) }) }), (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page >= totalPage }), children: (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-forward" }) }) })] })] });
+    const { page = 1, size = 100, count = 0, total = 0 } = props, totalPage = (total / size).floor() + (total % size > 0 ? 1 : 0);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "mt-1 me-auto", children: [
+        "Display records ",
+        !count ? 0 : (page - 1) * size + 1,
+        " - ",
+        Math.min(page * size, (page - 1) * size + count),
+        " of ",
+        total
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("ul", { className: "pagination pagination-sm mb-0", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page <= 1 }), children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-backward" }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page - 1 < 1 }), children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play fa-rotate-180" }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { className: "page-item active", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("span", { className: "page-link", children: [
+          !totalPage ? 0 : page,
+          " / ",
+          totalPage
+        ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page + 1 > totalPage }), children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-play" }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page >= totalPage }), children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "fa fa-step-forward" }) }) })
+      ] })
+    ] });
   }
 
-  // node_modules/rosie-ui/dist/js/components/grid/grid-row.component.js
-  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/grid/grid-row.component.tsx
   var import_react3 = __toESM(require_react());
 
-  // node_modules/rosie-ui/dist/js/components/grid/grid-cell.component.js
-  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/grid/grid-cell.component.tsx
   var import_react2 = __toESM(require_react());
-  var __assign2 = function() {
-    __assign2 = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
-      }
-      return t;
-    };
-    return __assign2.apply(this, arguments);
-  };
-  var __rest = function(s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-      t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-      for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-        if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-          t[p[i]] = s[p[i]];
-      }
-    return t;
-  };
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   function GridCell(props) {
-    var _a;
-    var field = props.field, headerName = props.headerName, className = props.className, renderer = props.renderer, rowIndex = props.rowIndex, colIndex = props.colIndex, header = props.header, others = __rest(props, ["field", "headerName", "className", "renderer", "rowIndex", "colIndex", "header"]), cellCls = Rosie.classNames("rosie-grid-cell p-1", className);
+    const { field, headerName, className, renderer, rowIndex, colIndex, header, ...others } = props, cellCls = Rosie.classNames("rosie-grid-cell p-1", className);
     if (header) {
-      return (0, import_jsx_runtime4.jsx)("div", __assign2({ className: cellCls }, others, { children: headerName !== null && headerName !== void 0 ? headerName : field }));
+      return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: cellCls, ...others, children: headerName ?? field });
     }
-    var _b = (0, import_react2.useState)((_a = props.record) === null || _a === void 0 ? void 0 : _a.get(field)), fieldValue = _b[0], setFieldValue = _b[1];
-    (0, import_react2.useEffect)(function() {
-      var _a2;
-      setFieldValue((_a2 = props.record) === null || _a2 === void 0 ? void 0 : _a2.get(field));
+    const [fieldValue, setFieldValue] = (0, import_react2.useState)(props.record?.get(field));
+    (0, import_react2.useEffect)(() => {
+      setFieldValue(props.record?.get(field));
     }, [props.record]);
     function getDisplayValue() {
-      if (renderer)
-        return renderer(fieldValue, props.record, rowIndex, colIndex);
+      if (renderer) return renderer(fieldValue, props.record, rowIndex, colIndex);
       return fieldValue;
     }
-    return (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: (0, import_jsx_runtime4.jsx)("div", __assign2({ className: Rosie.classNames(cellCls) }, others, { children: getDisplayValue() })) });
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_jsx_runtime4.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: Rosie.classNames(cellCls), ...others, children: getDisplayValue() }) });
   }
 
-  // node_modules/rosie-ui/dist/js/components/grid/grid-row.component.js
-  var __assign3 = function() {
-    __assign3 = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
-      }
-      return t;
-    };
-    return __assign3.apply(this, arguments);
-  };
+  // ClientApp/rosie/ts/components/grid/grid-row.component.tsx
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   function GridRow(props) {
-    var record = props.record, rowIndex = props.rowIndex, columns = props.columns, checkboxSelection = props.checkboxSelection, _a = (0, import_react3.useState)(false), selected = _a[0], setSelected = _a[1];
-    (0, import_react3.useEffect)(function() {
+    const { record, rowIndex, columns, checkboxSelection } = props, [selected, setSelected] = (0, import_react3.useState)(false);
+    (0, import_react3.useEffect)(() => {
       if (record) {
-        record.on("toggle", function() {
-          var _a2;
-          setSelected((_a2 = record === null || record === void 0 ? void 0 : record.selected) !== null && _a2 !== void 0 ? _a2 : false);
+        record.on("toggle", () => {
+          setSelected(record?.selected ?? false);
         });
         record.triggerEvent("toggle");
       }
     }, [record]);
-    return (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: (0, import_jsx_runtime5.jsxs)("div", { className: Rosie.classNames("rosie-grid-row d-flex flex-row", { selected }), children: [checkboxSelection && (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: (0, import_jsx_runtime5.jsx)("div", { className: "rosie-grid-cell p-1", children: (0, import_jsx_runtime5.jsx)("div", { className: "form-check mb-0", children: (0, import_jsx_runtime5.jsx)("input", { className: "form-check-input", type: "checkbox", checked: selected, onChange: function() {
-      record.toggle();
-      record.triggerEvent("toggle");
-      props.onCheckChange && props.onCheckChange(record.value, record.selected);
-    } }) }) }) }), columns.map(function(col, colIndex) {
-      return (0, import_jsx_runtime5.jsx)(GridCell, __assign3({ record, rowIndex, colIndex }, col), colIndex);
-    })] }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { className: Rosie.classNames("rosie-grid-row d-flex flex-row", { selected }), children: [
+      checkboxSelection && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "rosie-grid-cell p-1", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: "form-check mb-0", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { className: "form-check-input", type: "checkbox", checked: selected, onChange: () => {
+        record.toggle();
+        record.triggerEvent("toggle");
+        props.onCheckChange && props.onCheckChange(record.value, record.selected);
+      } }) }) }) }),
+      columns.map((col, colIndex) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(GridCell, { record, rowIndex, colIndex, ...col }, colIndex))
+    ] }) });
   }
 
-  // node_modules/rosie-ui/dist/js/components/grid/grid.component.js
-  var __assign4 = function() {
-    __assign4 = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
-      }
-      return t;
-    };
-    return __assign4.apply(this, arguments);
-  };
+  // ClientApp/rosie/ts/components/grid/grid.component.tsx
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
   function GridColumn(_) {
     return null;
   }
   function Grid(props) {
-    var gridId = (0, import_react4.useState)(Rosie.guid("rosie-grid-"))[0], _a = (0, import_react4.useState)([]), records = _a[0], setRecords = _a[1], _b = (0, import_react4.useState)([]), columns = _b[0], setColumns = _b[1];
-    (0, import_react4.useEffect)(function() {
-      var _a2;
-      var store$ = (_a2 = props.store) === null || _a2 === void 0 ? void 0 : _a2.subscribe(function(value) {
-        return setRecords(value || []);
+    const [gridId] = (0, import_react4.useState)(Rosie.guid("rosie-grid-")), [records, setRecords] = (0, import_react4.useState)([]), [columns, setColumns] = (0, import_react4.useState)([]);
+    (0, import_react4.useEffect)(() => {
+      const store$ = props.store?.subscribe((value) => setRecords(value || []));
+      const body = document.querySelector(`#${gridId} .rosie-grid-body`);
+      body.addEventListener("scroll", () => {
+        document.querySelector(`#${gridId} .rosie-grid-header`).scrollLeft = body.scrollLeft;
       });
-      var body = document.querySelector("#".concat(gridId, " .rosie-grid-body"));
-      body.addEventListener("scroll", function() {
-        document.querySelector("#".concat(gridId, " .rosie-grid-header")).scrollLeft = body.scrollLeft;
-      });
-      return function() {
-        store$ === null || store$ === void 0 ? void 0 : store$.unsubscribe();
+      return () => {
+        store$?.unsubscribe();
       };
     }, []);
-    (0, import_react4.useEffect)(function() {
-      var columns2 = import_react4.Children.toArray(props.children).map(function(child) {
-        return child.props;
-      });
+    (0, import_react4.useEffect)(() => {
+      const columns2 = import_react4.Children.toArray(props.children).map((child) => child.props);
       setColumns(columns2);
     }, [props.children]);
-    return (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", { fullscreen: props.fitScreen || props.fitHeight }, props.className), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [(0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-header fw-bold bg-light overflow-hidden d-flex", { "flex-column": props.fitScreen || props.fitWidth }), children: (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [columns.map(function(col, index) {
-      return (0, import_jsx_runtime6.jsx)(GridCell, __assign4({ header: true }, col), index);
-    }), (0, import_jsx_runtime6.jsx)("div", { style: { width: Rosie.SCROLLBAR_WIDTH } })] }) }), (0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-body fullscreen overflow-x-auto d-flex", { "flex-column": !props.fitHeight, "overflow-y-scroll": !props.fitWidth }), children: (0, import_jsx_runtime6.jsxs)("div", { children: [!(records === null || records === void 0 ? void 0 : records.length) && (0, import_jsx_runtime6.jsx)("div", { className: "border-top p-2", children: "No record found." }), (records === null || records === void 0 ? void 0 : records.length) > 0 && records.map(function(record, rowIndex) {
-      return (0, import_jsx_runtime6.jsx)(GridRow, { record, rowIndex, columns, checkboxSelection: props.checkboxSelection, onCheckChange: props.onCheckChange }, rowIndex);
-    })] }) }), !props.pagingToolbar && (records === null || records === void 0 ? void 0 : records.length) && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: (0, import_jsx_runtime6.jsxs)("div", { className: "text-body-tertiary", children: [records.length, " record", records.length > 1 ? "s" : ""] }) }) }), props.pagingToolbar && (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: props.pagingToolbar && (0, import_jsx_runtime6.jsx)(PagingToolbar, {}) }) })] }) }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", { fullscreen: props.fitScreen || props.fitHeight }, props.className), children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-header fw-bold bg-light overflow-hidden d-flex", { "flex-column": props.fitScreen || props.fitWidth }), children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [
+        columns.map((col, index) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(GridCell, { header: true, ...col }, index)),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { width: Rosie.SCROLLBAR_WIDTH } })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: Rosie.classNames("rosie-grid-body fullscreen overflow-x-auto d-flex", { "flex-column": !props.fitHeight, "overflow-y-scroll": !props.fitWidth }), children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { children: [
+        !records?.length && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "border-top p-2", children: "No record found." }),
+        records?.length > 0 && records.map((record, rowIndex) => {
+          return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(GridRow, { record, rowIndex, columns, checkboxSelection: props.checkboxSelection, onCheckChange: props.onCheckChange }, rowIndex);
+        })
+      ] }) }),
+      !props.pagingToolbar && records?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: "text-body-tertiary", children: [
+        records.length,
+        " record",
+        records.length > 1 ? "s" : ""
+      ] }) }) }),
+      props.pagingToolbar && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-footer bg-light border-top d-flex flex-row p-2", children: props.pagingToolbar && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PagingToolbar, {}) }) })
+    ] }) }) });
   }
 
-  // node_modules/rosie-ui/dist/js/components/dropdown.component.js
-  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/dropdown.component.tsx
   var import_react5 = __toESM(require_react());
-  var __assign5 = function() {
-    __assign5 = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-          t[p] = s[p];
-      }
-      return t;
-    };
-    return __assign5.apply(this, arguments);
-  };
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   function Dropdown2(props) {
-    var _a = props.className, className = _a === void 0 ? "" : _a, _b = props.buttonClass, buttonClass = _b === void 0 ? "" : _b;
-    return (0, import_jsx_runtime7.jsx)("div", { className: Rosie.classNames("dropdown", className), children: (0, import_jsx_runtime7.jsx)(InputDropdown, __assign5({}, props, { buttonClass })) });
+    const { className = "", buttonClass = "" } = props;
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: Rosie.classNames("dropdown", className), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(InputDropdown, { ...props, buttonClass }) });
   }
   function InputDropdown(props) {
-    var _a = props.displayField, displayField = _a === void 0 ? "name" : _a, _b = props.valueField, valueField = _b === void 0 ? "value" : _b, _c = props.multiple, multiple = _c === void 0 ? false : _c, _d = props.defaultText, defaultText = _d === void 0 ? "Select" : _d, _e = props.separator, separator = _e === void 0 ? ": " : _e, _f = props.smartButtonText, smartButtonText = _f === void 0 ? true : _f, _g = props.rightAligned, rightAligned = _g === void 0 ? false : _g, _h = props.searchBox, searchBox = _h === void 0 ? true : _h, _j = props.buttonClass, buttonClass = _j === void 0 ? "" : _j, _k = props.buttonStyle, buttonStyle = _k === void 0 ? {} : _k;
-    var _l = (0, import_react5.useState)(""), searchFilter = _l[0], setSearchFilter = _l[1], _m = (0, import_react5.useState)(props.options || []), options = _m[0], setOptions = _m[1], _o = (0, import_react5.useState)(props.value || []), selection = _o[0], setSelection = _o[1];
-    (0, import_react5.useEffect)(function() {
-      return setSelection((props === null || props === void 0 ? void 0 : props.value) || []);
-    }, [props.value]);
-    (0, import_react5.useEffect)(function() {
-      return setOptions((props === null || props === void 0 ? void 0 : props.options) || []);
-    }, [props.options]);
+    const {
+      displayField = "name",
+      valueField = "value",
+      multiple = false,
+      defaultText = "Select",
+      separator = ": ",
+      smartButtonText = true,
+      rightAligned = false,
+      searchBox = true,
+      buttonClass = "",
+      buttonStyle = {}
+    } = props;
+    const [searchFilter, setSearchFilter] = (0, import_react5.useState)(""), [options, setOptions] = (0, import_react5.useState)(props.options || []), [selection, setSelection] = (0, import_react5.useState)(props.value || []);
+    (0, import_react5.useEffect)(() => setSelection(props?.value || []), [props.value]);
+    (0, import_react5.useEffect)(() => setOptions(props?.options || []), [props.options]);
     function displayText() {
       if (!smartButtonText || !selection || !selection.length) {
         return defaultText;
       }
-      var names = selection.map(function(item) {
-        var _a2;
-        return (_a2 = item === null || item === void 0 ? void 0 : item[displayField]) !== null && _a2 !== void 0 ? _a2 : "";
-      }).join(",");
-      return "".concat(defaultText).concat(separator).concat(names);
+      const names = selection.map((item) => item?.[displayField] ?? "").join(",");
+      return `${defaultText}${separator}${names}`;
     }
     function isSelected(opt) {
-      return selection.findIndex(function(item) {
-        return item[valueField] === opt[valueField];
-      }) > -1;
+      return selection.findIndex((item) => item[valueField] === opt[valueField]) > -1;
     }
     function select(opt) {
-      var opts = [];
+      let opts = [];
       if (!multiple) {
         opts = [opt];
       } else if (isSelected(opt)) {
-        opts = selection.filter(function(item) {
-          return item[valueField] !== opt[valueField];
-        });
+        opts = selection.filter((item) => item[valueField] !== opt[valueField]);
       } else {
-        opts = options.filter(function(item) {
-          return isSelected(item) || item[valueField] === opt[valueField];
-        });
+        opts = options.filter((item) => isSelected(item) || item[valueField] === opt[valueField]);
       }
       setSelection(opts);
       props.onChange && props.onChange(opts);
     }
-    return (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [(0, import_jsx_runtime7.jsx)("button", { type: "button", className: Rosie.classNames("btn dropdown-toggle", buttonClass), style: buttonStyle, "data-bs-toggle": "dropdown", children: displayText() }), (0, import_jsx_runtime7.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", { "dropdown-menu-right": rightAligned }), children: [searchBox && (0, import_jsx_runtime7.jsx)("div", { className: "p-1 border-bottom", children: (0, import_jsx_runtime7.jsx)("input", { type: "text", className: "form-control form-control-sm", name: "searchFilter", placeholder: "Search...", value: searchFilter, onChange: function(event) {
-      return setSearchFilter(event.target.value);
-    } }) }), (0, import_jsx_runtime7.jsx)("div", { className: "dropdown-item-list", children: options.map(function(opt, index) {
-      if (searchFilter && !opt[displayField].toLowerCase().startsWith(searchFilter.toLowerCase()))
-        return null;
-      return (0, import_jsx_runtime7.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", { active: isSelected(opt) }), onClick: function() {
-        return select(opt);
-      }, children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
-    }) })] })] });
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_jsx_runtime7.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { type: "button", className: Rosie.classNames("btn dropdown-toggle", buttonClass), style: buttonStyle, "data-bs-toggle": "dropdown", children: displayText() }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", { "dropdown-menu-right": rightAligned }), children: [
+        searchBox && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "p-1 border-bottom", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+          "input",
+          {
+            type: "text",
+            className: "form-control form-control-sm",
+            name: "searchFilter",
+            placeholder: "Search...",
+            value: searchFilter,
+            onChange: (event) => setSearchFilter(event.target.value)
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "dropdown-item-list", children: options.map((opt, index) => {
+          if (searchFilter && !opt[displayField].toLowerCase().startsWith(searchFilter.toLowerCase())) return null;
+          return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", { active: isSelected(opt) }), onClick: () => select(opt), children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
+        }) })
+      ] })
+    ] });
   }
 
-  // node_modules/rosie-ui/dist/js/components/datepicker/date-picker.component.js
-  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/datepicker/date-picker.component.tsx
   var import_react6 = __toESM(require_react());
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
 
-  // node_modules/rosie-ui/dist/js/components/datepicker/date-range-picker.component.js
-  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/datepicker/date-range-picker.component.tsx
   var import_react7 = __toESM(require_react());
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
 
-  // node_modules/rosie-ui/dist/js/components/query-builder/type.js
-  var andOperator = function() {
-    return { name: "AND", value: "and" };
-  };
-  var orOperator = function() {
-    return { name: "OR", value: "or" };
-  };
-  var excludeOperator = function() {
-    return { name: "EXCLUDE", value: "not" };
-  };
+  // ClientApp/rosie/ts/components/query-builder/type.ts
+  var andOperator = () => ({ name: "AND", value: "and" });
+  var orOperator = () => ({ name: "OR", value: "or" });
+  var excludeOperator = () => ({ name: "EXCLUDE", value: "not" });
   var combineOperators = [andOperator(), orOperator(), excludeOperator()];
-  var isOperator = function() {
-    return { name: "is", value: "eq" };
-  };
-  var beforeOperator = function() {
-    return { name: "before", value: "lt" };
-  };
-  var afterOperator = function() {
-    return { name: "after", value: "gt" };
-  };
-  var fromOperator = function() {
-    return { name: "from", value: "gte" };
-  };
-  var toOperator = function() {
-    return { name: "to", value: "lte" };
-  };
+  var isOperator = () => ({ name: "is", value: "eq" });
+  var beforeOperator = () => ({ name: "before", value: "lt" });
+  var afterOperator = () => ({ name: "after", value: "gt" });
+  var fromOperator = () => ({ name: "from", value: "gte" });
+  var toOperator = () => ({ name: "to", value: "lte" });
   var compareOperators = [isOperator(), beforeOperator(), afterOperator(), fromOperator(), toOperator()];
 
-  // node_modules/rosie-ui/dist/js/components/query-builder/query-operation.component.js
-  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
-
-  // node_modules/rosie-ui/dist/js/components/query-builder/criteria-field.component.js
-  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+  // ClientApp/rosie/ts/components/query-builder/criteria-field.component.tsx
   var import_react8 = __toESM(require_react());
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
+
+  // ClientApp/rosie/ts/components/query-builder/query-operation.component.tsx
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/components/app-layout.component.tsx
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
@@ -45621,14 +45239,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var UpdateProductInfoModel = Model({
     proxy: { url: "/api/products/{productId}", method: "patch" }
   });
+  var ProductConnectionModel = Model({
+    proxy: { url: "/api/products/{productId}/connection", method: "get" }
+  });
   var ProductDataTableStore = Store({ proxy: { url: "/api/products/{productId}/tables" } });
-  var ImportProductDataTableModel = Model({
-    proxy: { url: "/api/products/{productId}/tables/import", method: "patch" }
+  var UpdateProductDataSetModel = Model({
+    proxy: { url: "/api/products/{productId}/datasets", method: "patch" }
   });
   var UpdateProductDataTableModel = Model({
     proxy: { url: "/api/products/{productId}/tables", method: "patch" }
   });
   var ProductDataColumnStore = Store({ proxy: { url: "/api/products/{productId}/tables/{tableName}" } });
+  var UpdateProductDataColumnModel = Model({
+    proxy: { url: "/api/products/{productId}/tables/{tableName}/columns", method: "patch" }
+  });
+  var ProductDataSetModel = Model({
+    proxy: { url: "/api/products/{productId}/datasets", method: "get" }
+  });
   var ConnectionDataSetStore = Store({
     proxy: { url: "/api/products/{productId}/connections/datasets", method: "post" }
   });
@@ -45787,6 +45414,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function ConnectorCreationDialog(props) {
     const { productId } = props, [dataProducer, setDataProducer] = (0, import_react13.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react13.useState)(""), [endpoint, setEndpoint] = (0, import_react13.useState)(""), [clientId, setClientId] = (0, import_react13.useState)(""), [clientSecret, setClientSecret] = (0, import_react13.useState)(""), [dataSetName, setDataSetName] = (0, import_react13.useState)(""), [selectedDataSets, setSelectedDataSets] = (0, import_react13.useState)([]);
     (0, import_react13.useEffect)(() => {
+      ProductConnectionModel.fetch({ pathParams: { productId } }).then((connection) => {
+        if (!connection) return;
+        setSqlDialect(connection.sqlDialect ?? "");
+        setEndpoint(connection.endpoint ?? "");
+        setClientId(connection.clientId ?? "");
+        setClientSecret(connection.clientSecret ?? "");
+      });
+      ProductDataSetModel.fetch({ pathParams: { productId } }).then((dataSets) => {
+        if (dataSets?.length) setSelectedDataSets(dataSets);
+      });
       return () => {
         setDataSetName("");
         setSelectedDataSets([]);
@@ -45804,9 +45441,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         pathParams: { productId },
         body: { sqlDialect, endpoint, clientId, clientSecret }
       });
-      await ImportProductDataTableModel.fetch({
+      await UpdateProductDataSetModel.fetch({
         pathParams: { productId },
-        body: { dataSets: selectedDataSets }
+        body: { dataSets: selectedDataSets.map((x) => x.name) }
       });
       product && props.onCreateSuccess(product);
     }
@@ -45940,7 +45577,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var import_react15 = __toESM(require_react());
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   function EventListView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react15.useState)(""), semanticEventUpdationDialog = useDialog('#semantic-event-updation-dialog"');
+    const params = useParams(), [productId, setProductId] = (0, import_react15.useState)(""), semanticEventUpdationDialog = useDialog("#semantic-event-updation-dialog");
     (0, import_react15.useEffect)(() => {
       const { productId: productId2 } = params;
       setProductId(productId2);
@@ -45948,7 +45585,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, [params]);
     function onUpdateSemanticEventSuccess(tables) {
       ProductDataTableStore.loadData(tables);
-      Rosie.hideModal('#semantic-event-updation-dialog"');
+      semanticEventUpdationDialog.hide();
     }
     return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(ProductSelector, { navPath: "/events", children: [
@@ -45972,7 +45609,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function SemanticEventUpdationDialog(props) {
     const { productId } = props, [installEvent, setInstallEvent] = (0, import_react15.useState)(null), [openAppEvent, setOpenAppEvent] = (0, import_react15.useState)(null), [registerEvent, setRegisterEvent] = (0, import_react15.useState)(null), [sessionStartEvent, setSessionStartEvent] = (0, import_react15.useState)(null), [sessionEndEvent, setSessionEndEvent] = (0, import_react15.useState)(null), [purchaseEvent, setPurchaseEvent] = (0, import_react15.useState)(null), [dataTables, setDataTables] = (0, import_react15.useState)([]);
     (0, import_react15.useEffect)(() => {
-      const tables$ = ProductDataTableStore.subscribe((value) => setDataTables(value.map((x) => x.value)));
+      const tables$ = ProductDataTableStore.subscribe((value) => {
+        const tables = value.map((x) => x.value);
+        setDataTables(tables);
+        setInstallEvent(tables.find((x) => x.semanticName === "install") ?? null);
+        setOpenAppEvent(tables.find((x) => x.semanticName === "open_app") ?? null);
+        setRegisterEvent(tables.find((x) => x.semanticName === "register") ?? null);
+        setSessionStartEvent(tables.find((x) => x.semanticName === "session_start") ?? null);
+        setSessionEndEvent(tables.find((x) => x.semanticName === "session_end") ?? null);
+        setPurchaseEvent(tables.find((x) => x.semanticName === "purchase") ?? null);
+      });
       return () => {
         tables$.unsubscribe();
       };
@@ -45983,16 +45629,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           table.semanticName = "install";
           return table;
         } else if (table.name === openAppEvent?.name) {
-          table.semanticName = "openApp";
+          table.semanticName = "open_app";
           return table;
         } else if (table.name === registerEvent?.name) {
           table.semanticName = "register";
           return table;
         } else if (table.name === sessionStartEvent?.name) {
-          table.semanticName = "sessionStart";
+          table.semanticName = "session_start";
           return table;
         } else if (table.name === sessionEndEvent?.name) {
-          table.semanticName = "sessionEnd";
+          table.semanticName = "session_end";
           return table;
         } else if (table.name === purchaseEvent?.name) {
           table.semanticName = "purchase";
@@ -46137,7 +45783,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }, [params]);
     function onUpdateSemanticEventSuccess(tables) {
       ProductDataColumnStore.loadData(tables);
-      Rosie.hideModal("#semantic-field-updation-dialog");
+      semanticFieldUpdationDialog.hide();
     }
     return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductSelector, { navPath: "/events", children: [
@@ -46156,6 +45802,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         SemanticFieldUpdationDialog,
         {
           productId,
+          tableName,
           eventName,
           onUpdateSuccess: onUpdateSemanticEventSuccess
         }
@@ -46163,51 +45810,66 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] });
   }
   function SemanticFieldUpdationDialog(props) {
-    const { productId } = props, [eventTimeField, setEventTimeField] = (0, import_react16.useState)(null), [openAppEvent, setOpenAppEvent] = (0, import_react16.useState)(null), [registerEvent, setRegisterEvent] = (0, import_react16.useState)(null), [sessionStartEvent, setSessionStartEvent] = (0, import_react16.useState)(null), [sessionEndEvent, setSessionEndEvent] = (0, import_react16.useState)(null), [purchaseEvent, setPurchaseEvent] = (0, import_react16.useState)(null), [dataColumns, setDataColumns] = (0, import_react16.useState)([]);
+    const { productId, tableName } = props, [eventTimeField, setEventTimeField] = (0, import_react16.useState)(null), [userIdField, setUserIdField] = (0, import_react16.useState)(null), [osField, setOSField] = (0, import_react16.useState)(null), [countryField, setCountryField] = (0, import_react16.useState)(null), [partDateField, setPartDateField] = (0, import_react16.useState)(null), [dataColumns, setDataColumns] = (0, import_react16.useState)([]);
     (0, import_react16.useEffect)(() => {
-      const tables$ = ProductDataColumnStore.subscribe((value) => setDataColumns(value.map((x) => x.value)));
+      const tables$ = ProductDataColumnStore.subscribe((value) => {
+        const columns = value.map((x) => x.value);
+        setDataColumns(columns);
+        setPartDateField(columns.find((x) => x.semanticName === "part_date") ?? null);
+        setEventTimeField(columns.find((x) => x.semanticName === "event_time") ?? null);
+        setUserIdField(columns.find((x) => x.semanticName === "user_id") ?? null);
+        setOSField(columns.find((x) => x.semanticName === "os") ?? null);
+        setCountryField(columns.find((x) => x.semanticName === "country") ?? null);
+      });
       return () => {
         tables$.unsubscribe();
       };
     }, []);
     async function onSubmit() {
-      const body = {
-        install: eventTimeField?.name ?? null,
-        openApp: openAppEvent?.name ?? null,
-        register: registerEvent?.name ?? null,
-        sessionStart: sessionStartEvent?.name ?? null,
-        sessionEnd: sessionEndEvent?.name ?? null,
-        purchase: purchaseEvent?.name ?? null
-      };
-      const updatedTables = dataColumns.map((table) => {
-        if (table.name === eventTimeField?.name) {
-          table.semanticName = "install";
-          return table;
-        } else if (table.name === openAppEvent?.name) {
-          table.semanticName = "openApp";
-          return table;
-        } else if (table.name === registerEvent?.name) {
-          table.semanticName = "register";
-          return table;
-        } else if (table.name === sessionStartEvent?.name) {
-          table.semanticName = "sessionStart";
-          return table;
-        } else if (table.name === sessionEndEvent?.name) {
-          table.semanticName = "sessionEnd";
-          return table;
-        } else if (table.name === purchaseEvent?.name) {
-          table.semanticName = "purchase";
-          return table;
+      const updatedColumns = dataColumns.map((column) => {
+        if (column.name === partDateField?.name) {
+          column.semanticName = "part_date";
+          return column;
+        } else if (column.name === eventTimeField?.name) {
+          column.semanticName = "event_time";
+          return column;
+        } else if (column.name === userIdField?.name) {
+          column.semanticName = "user_id";
+          return column;
+        } else if (column.name === osField?.name) {
+          column.semanticName = "os";
+          return column;
+        } else if (column.name === countryField?.name) {
+          column.semanticName = "country";
+          return column;
         } else return null;
       }).filter((x) => x !== null);
-      const result = await UpdateProductDataTableModel.fetch({
-        pathParams: { productId },
-        body: { tables: updatedTables }
+      const result = await UpdateProductDataColumnModel.fetch({
+        pathParams: { productId, tableName },
+        body: { columns: updatedColumns }
       });
       result && props.onUpdateSuccess(result);
     }
     return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Dialog, { id: "semantic-field-updation-dialog", title: "Update Semantic Model", dialogClass: "modal-lg", children: [
       /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "modal-body fullscreen d-flex flex-row pb-2", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "container-fluid", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Part Date" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+              Dropdown2,
+              {
+                options: dataColumns,
+                value: partDateField ? [partDateField] : [],
+                valueField: "name",
+                displayField: "name",
+                searchBox: true,
+                buttonClass: "btn-outline-secondary",
+                onChange: (value) => setPartDateField(value[0])
+              }
+            ),
+            partDateField && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPartDateField(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+          ] })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
           /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Event Time" }),
           /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
@@ -46227,93 +45889,57 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Open App" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "User ID" }),
           /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
             /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
               Dropdown2,
               {
                 options: dataColumns,
-                value: openAppEvent ? [openAppEvent] : [],
+                value: userIdField ? [userIdField] : [],
                 valueField: "name",
                 displayField: "name",
                 searchBox: true,
                 buttonClass: "btn-outline-secondary",
-                onChange: (value) => setOpenAppEvent(value[0])
+                onChange: (value) => setUserIdField(value[0])
               }
             ),
-            openAppEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOpenAppEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+            userIdField && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setUserIdField(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Complete Registration" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "OS" }),
           /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
             /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
               Dropdown2,
               {
                 options: dataColumns,
-                value: registerEvent ? [registerEvent] : [],
+                value: osField ? [osField] : [],
                 valueField: "name",
                 displayField: "name",
                 searchBox: true,
                 buttonClass: "btn-outline-secondary",
-                onChange: (value) => setRegisterEvent(value[0])
+                onChange: (value) => setOSField(value[0])
               }
             ),
-            registerEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setRegisterEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+            osField && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOSField(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session Start" }),
+          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Country" }),
           /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
             /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
               Dropdown2,
               {
                 options: dataColumns,
-                value: sessionStartEvent ? [sessionStartEvent] : [],
+                value: countryField ? [countryField] : [],
                 valueField: "name",
                 displayField: "name",
                 searchBox: true,
                 buttonClass: "btn-outline-secondary",
-                onChange: (value) => setSessionStartEvent(value[0])
+                onChange: (value) => setCountryField(value[0])
               }
             ),
-            sessionStartEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionStartEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session End" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: sessionEndEvent ? [sessionEndEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setSessionEndEvent(value[0])
-              }
-            ),
-            sessionEndEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionEndEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Purchase" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: purchaseEvent ? [purchaseEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setPurchaseEvent(value[0])
-              }
-            ),
-            purchaseEvent && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPurchaseEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
+            countryField && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setCountryField(null), children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("span", { className: "fa fa-xmark" }) })
           ] })
         ] })
       ] }) }),

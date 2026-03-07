@@ -7,63 +7,71 @@ namespace DataManager.Controllers;
 
 [Route("api/products/{productId}/tables")] [ApiController] [AuthFilter]
 public class ProductDataTableController(IProductDataTableStore productDataTableStore,
+                                        IProductDataColumnStore productDataColumnStore,
                                         IProductStore productStore,
+                                        IProductDataSetStore productDataSetStore,
                                         ITrinoStore trinoStore) : ControllerBase {
-  [HttpGet] public List<ProductDataTable> ListProductDataTables(string productId) => productDataTableStore.List(productId);
+  [HttpGet] public async Task<List<ProductDataTable>> ListProductDataTables(string productId) {
+    var dataSets = productDataSetStore.List(productId);
+    if (dataSets?.Count == 0) return [];
 
-  [HttpPatch] public List<ProductDataTable> UpdateProductDataTables(string productId, ProductDataTablePatchRequest request) => productDataTableStore.BatchUpdate(productId, request.Tables);
+    var dataTables = productDataTableStore.List(productId)
+        .ToDictionary(x => x.Name, x => x);
 
-  [HttpPatch("import")] public async Task<List<ProductDataTable>> ImportProductDataTables(string productId, ProductDataSetPatchRequest request) {
-    var connection = productStore.GetDataConnection(productId);
-    if (string.IsNullOrWhiteSpace(connection.SqlDialect)
-        || string.IsNullOrWhiteSpace(connection.Endpoint)
-        || string.IsNullOrWhiteSpace(connection.ClientId)
-        || string.IsNullOrWhiteSpace(connection.ClientSecret)) {
-      return null;
-    }
+    var connection = GetDataConnection(productId);
 
     var tables = new List<ProductDataTable>();
-    foreach(var dataSet in request.DataSets) {
-      foreach(var tableName in dataSet.Tables) {
-        var columns = await trinoStore.ListDataColumns(tableName, connection);
-        if (columns.Count == 0) continue;
-
+    foreach(var dataSet in dataSets) {
+      var trackedDataSet = await trinoStore.GetDataSet(dataSet.Name, connection);
+      foreach(var tableName in trackedDataSet.Tables) {
         var table = new ProductDataTable(
-          DataSetName: dataSet.Name,
           Name: tableName,
-          DisplayName: null,
-          SemanticName: null,
-          Desc: null
+          DisplayName: dataTables.GetValueOrDefault(tableName)?.DisplayName,
+          SemanticName: dataTables.GetValueOrDefault(tableName)?.SemanticName,
+          Desc: dataTables.GetValueOrDefault(tableName)?.Desc
         );
         tables.Add(table);
       }
     }
 
-    return productDataTableStore.BatchUpdate(productId, tables);
+    return tables;
+  }
+
+  [HttpPatch] public List<ProductDataTable> UpdateProductDataTables(string productId, ProductDataTablePatchRequest request) {
+    return productDataTableStore.BatchUpdate(productId, request.Tables);
   }
 
   [HttpGet("{tableName}")] public async Task<List<ProductDataColumn>> ListProductDataColumns(string productId, string tableName) {
+    var connection = GetDataConnection(productId);
+
+    var trinoColumns = await trinoStore.ListDataColumns(tableName, connection);
+    if (trinoColumns?.Count == 0) return [];
+
+    var savedColumns = productDataColumnStore.List(productId, tableName)
+        .ToDictionary(x => x.Name, x => x);
+
+    return [..trinoColumns.Select(c => new ProductDataColumn(
+      Name: c.Name,
+      DisplayName: savedColumns.GetValueOrDefault(c.Name)?.DisplayName,
+      SemanticName: savedColumns.GetValueOrDefault(c.Name)?.SemanticName,
+      Type: c.Type,
+      Desc: c.Desc
+    ))];
+  }
+
+  [HttpPatch("{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request) {
+    return productDataColumnStore.BatchUpdate(productId, tableName, request.Columns);
+  }
+
+  private DataConnection GetDataConnection(string productId) {
     var connection = productStore.GetDataConnection(productId);
     if (string.IsNullOrWhiteSpace(connection.SqlDialect)
         || string.IsNullOrWhiteSpace(connection.Endpoint)
         || string.IsNullOrWhiteSpace(connection.ClientId)
         || string.IsNullOrWhiteSpace(connection.ClientSecret)) {
-      return null;
+      throw new Exception($"Cannot access to {connection.Endpoint} with '{connection.ClientId}'");
     }
 
-    var columns = await trinoStore.ListDataColumns(tableName, connection);
-    if (columns?.Count == 0) return null;
-
-    return [..columns.Select(ToProductDataColumn)];
-  }
-
-  private static ProductDataColumn ToProductDataColumn(TrackedDataColumn column) {
-    return new ProductDataColumn(
-      Name: column.Name,
-      DisplayName: null,
-      SemanticName: null,
-      Type: column.Type,
-      Desc: column.Desc
-    );
+    return connection;
   }
 }

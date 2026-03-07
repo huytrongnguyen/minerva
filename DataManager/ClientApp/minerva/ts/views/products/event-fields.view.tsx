@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { Dialog, Dropdown, Grid, GridColumn, Rosie, useDialog } from 'rosie-ui';
-import { ProductDataColumn, ProductDataColumnStore, ProductDataTable, ProductDataTableStore, UpdateProductDataTableModel } from 'minerva/core';
+import { Dialog, Dropdown, Grid, GridColumn, useDialog } from 'rosie/components';
+import { ProductDataColumn, ProductDataColumnStore, UpdateProductDataColumnModel } from 'minerva/core';
 import { ProductLayout } from './product-layout.component';
 import { ProductSelector } from './product-selector.component';
 
@@ -23,7 +23,7 @@ export function EventFieldListView() {
 
   function onUpdateSemanticEventSuccess(tables: ProductDataColumn[]) {
     ProductDataColumnStore.loadData(tables);
-    Rosie.hideModal('#semantic-field-updation-dialog');
+    semanticFieldUpdationDialog.hide();
   }
 
   return <ProductLayout>
@@ -49,49 +49,46 @@ export function EventFieldListView() {
         <GridColumn headerName="Desc" field="desc" style={{flex:1}} />
       </Grid>
     </main>
-    {semanticFieldUpdationDialog.isShown && <SemanticFieldUpdationDialog productId={productId} eventName={eventName}
+    {semanticFieldUpdationDialog.isShown && <SemanticFieldUpdationDialog productId={productId} tableName={tableName} eventName={eventName}
         onUpdateSuccess={onUpdateSemanticEventSuccess} />}
   </ProductLayout>
 }
 
-function SemanticFieldUpdationDialog(props: { productId: string, eventName: string, onUpdateSuccess: (tables: ProductDataColumn[]) => void }) {
-  const { productId } = props,
+function SemanticFieldUpdationDialog(props: { productId: string, tableName: string, eventName: string, onUpdateSuccess: (tables: ProductDataColumn[]) => void }) {
+  const { productId, tableName } = props,
         [eventTimeField, setEventTimeField] = useState(null as ProductDataColumn),
-        [openAppEvent, setOpenAppEvent] = useState(null as ProductDataTable),
-        [registerEvent, setRegisterEvent] = useState(null as ProductDataTable),
-        [sessionStartEvent, setSessionStartEvent] = useState(null as ProductDataTable),
-        [sessionEndEvent, setSessionEndEvent] = useState(null as ProductDataTable),
-        [purchaseEvent, setPurchaseEvent] = useState(null as ProductDataTable),
+        [userIdField, setUserIdField] = useState(null as ProductDataColumn),
+        [osField, setOSField] = useState(null as ProductDataColumn),
+        [countryField, setCountryField] = useState(null as ProductDataColumn),
+        [partDateField, setPartDateField] = useState(null as ProductDataColumn),
         [dataColumns, setDataColumns] = useState<ProductDataColumn[]>([]);
 
   useEffect(() => {
-    const tables$ = ProductDataColumnStore.subscribe(value => setDataColumns(value.map(x => x.value)));
+    const tables$ = ProductDataColumnStore.subscribe(value => {
+      const columns = value.map(x => x.value);
+      setDataColumns(columns);
+      setPartDateField(columns.find(x => x.semanticName === 'part_date') ?? null);
+      setEventTimeField(columns.find(x => x.semanticName === 'event_time') ?? null);
+      setUserIdField(columns.find(x => x.semanticName === 'user_id') ?? null);
+      setOSField(columns.find(x => x.semanticName === 'os') ?? null);
+      setCountryField(columns.find(x => x.semanticName === 'country') ?? null);
+    });
     return () => { tables$.unsubscribe(); }
   }, [])
 
   async function onSubmit() {
-    const body = {
-      install: eventTimeField?.name ?? null,
-      openApp: openAppEvent?.name ?? null,
-      register: registerEvent?.name ?? null,
-      sessionStart: sessionStartEvent?.name ?? null,
-      sessionEnd: sessionEndEvent?.name ?? null,
-      purchase: purchaseEvent?.name ?? null,
-    }
-
-    const updatedTables = dataColumns.map(table => {
-      if (table.name === eventTimeField?.name) { table.semanticName = 'install'; return table; }
-      else if (table.name === openAppEvent?.name) { table.semanticName = 'openApp'; return table; }
-      else if (table.name === registerEvent?.name) { table.semanticName = 'register'; return table; }
-      else if (table.name === sessionStartEvent?.name) { table.semanticName = 'sessionStart'; return table; }
-      else if (table.name === sessionEndEvent?.name) { table.semanticName = 'sessionEnd'; return table; }
-      else if (table.name === purchaseEvent?.name) { table.semanticName = 'purchase'; return table; }
+    const updatedColumns = dataColumns.map(column => {
+      if (column.name === partDateField?.name) { column.semanticName = 'part_date'; return column; }
+      else if (column.name === eventTimeField?.name) { column.semanticName = 'event_time'; return column; }
+      else if (column.name === userIdField?.name) { column.semanticName = 'user_id'; return column; }
+      else if (column.name === osField?.name) { column.semanticName = 'os'; return column; }
+      else if (column.name === countryField?.name) { column.semanticName = 'country'; return column; }
       else return null;
     }).filter(x => x !== null);
 
-    const result = await UpdateProductDataTableModel.fetch({
-      pathParams: { productId },
-      body: { tables: updatedTables }
+    const result = await UpdateProductDataColumnModel.fetch({
+      pathParams: { productId, tableName },
+      body: { columns: updatedColumns }
     });
 
     result && props.onUpdateSuccess(result)
@@ -100,6 +97,17 @@ function SemanticFieldUpdationDialog(props: { productId: string, eventName: stri
   return <Dialog id="semantic-field-updation-dialog" title="Update Semantic Model" dialogClass="modal-lg">
     <div className="modal-body fullscreen d-flex flex-row pb-2">
       <div className="container-fluid">
+        <div className="row mt-2">
+          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Part Date</label>
+          <div className="col-9 d-flex flex-row">
+            <Dropdown options={dataColumns} value={partDateField ? [partDateField] : []}
+                  valueField="name" displayField="name" searchBox
+                  buttonClass="btn-outline-secondary" onChange={value => setPartDateField(value[0])} />
+            {partDateField && <button type="button" className="btn btn-danger ms-1" onClick={() => setPartDateField(null)}>
+              <span className="fa fa-xmark" />
+            </button>}
+          </div>
+        </div>
         <div className="row mt-2">
           <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Event Time</label>
           <div className="col-9 d-flex flex-row">
@@ -112,56 +120,34 @@ function SemanticFieldUpdationDialog(props: { productId: string, eventName: stri
           </div>
         </div>
         <div className="row mt-2">
-          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Open App</label>
+          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">User ID</label>
           <div className="col-9 d-flex flex-row">
-            <Dropdown options={dataColumns} value={openAppEvent ? [openAppEvent] : []}
+            <Dropdown options={dataColumns} value={userIdField ? [userIdField] : []}
                   valueField="name" displayField="name" searchBox
-                  buttonClass="btn-outline-secondary" onChange={value => setOpenAppEvent(value[0])} />
-            {openAppEvent && <button type="button" className="btn btn-danger ms-1" onClick={() => setOpenAppEvent(null)}>
+                  buttonClass="btn-outline-secondary" onChange={value => setUserIdField(value[0])} />
+            {userIdField && <button type="button" className="btn btn-danger ms-1" onClick={() => setUserIdField(null)}>
               <span className="fa fa-xmark" />
             </button>}
           </div>
         </div>
         <div className="row mt-2">
-          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Complete Registration</label>
+          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">OS</label>
           <div className="col-9 d-flex flex-row">
-            <Dropdown options={dataColumns} value={registerEvent ? [registerEvent] : []}
+            <Dropdown options={dataColumns} value={osField ? [osField] : []}
                   valueField="name" displayField="name" searchBox
-                  buttonClass="btn-outline-secondary" onChange={value => setRegisterEvent(value[0])} />
-            {registerEvent && <button type="button" className="btn btn-danger ms-1" onClick={() => setRegisterEvent(null)}>
+                  buttonClass="btn-outline-secondary" onChange={value => setOSField(value[0])} />
+            {osField && <button type="button" className="btn btn-danger ms-1" onClick={() => setOSField(null)}>
               <span className="fa fa-xmark" />
             </button>}
           </div>
         </div>
         <div className="row mt-2">
-          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Session Start</label>
+          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Country</label>
           <div className="col-9 d-flex flex-row">
-            <Dropdown options={dataColumns} value={sessionStartEvent ? [sessionStartEvent] : []}
+            <Dropdown options={dataColumns} value={countryField ? [countryField] : []}
                   valueField="name" displayField="name" searchBox
-                  buttonClass="btn-outline-secondary" onChange={value => setSessionStartEvent(value[0])} />
-            {sessionStartEvent && <button type="button" className="btn btn-danger ms-1" onClick={() => setSessionStartEvent(null)}>
-              <span className="fa fa-xmark" />
-            </button>}
-          </div>
-        </div>
-        <div className="row mt-2">
-          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Session End</label>
-          <div className="col-9 d-flex flex-row">
-            <Dropdown options={dataColumns} value={sessionEndEvent ? [sessionEndEvent] : []}
-                  valueField="name" displayField="name" searchBox
-                  buttonClass="btn-outline-secondary" onChange={value => setSessionEndEvent(value[0])} />
-            {sessionEndEvent && <button type="button" className="btn btn-danger ms-1" onClick={() => setSessionEndEvent(null)}>
-              <span className="fa fa-xmark" />
-            </button>}
-          </div>
-        </div>
-        <div className="row mt-2">
-          <label htmlFor="sheet_name" className="col-3 col-form-label text-end">Purchase</label>
-          <div className="col-9 d-flex flex-row">
-            <Dropdown options={dataColumns} value={purchaseEvent ? [purchaseEvent] : []}
-                  valueField="name" displayField="name" searchBox
-                  buttonClass="btn-outline-secondary" onChange={value => setPurchaseEvent(value[0])} />
-            {purchaseEvent && <button type="button" className="btn btn-danger ms-1" onClick={() => setPurchaseEvent(null)}>
+                  buttonClass="btn-outline-secondary" onChange={value => setCountryField(value[0])} />
+            {countryField && <button type="button" className="btn btn-danger ms-1" onClick={() => setCountryField(null)}>
               <span className="fa fa-xmark" />
             </button>}
           </div>

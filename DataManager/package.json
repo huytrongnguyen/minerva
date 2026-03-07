@@ -9,8 +9,8 @@
   },
   "bugs": "https://github.com/huytrongnguyen/minerva/issues",
   "scripts": {
-    "js-watch": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --watch",
-    "js-build": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --minify",
+    "js-watch": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --alias:react=./node_modules/react --alias:react-dom=./node_modules/react-dom --watch",
+    "js-build": "esbuild ClientApp/minerva/ts/app.tsx --bundle --outfile=wwwroot/minerva.js --loader:.tsx=tsx --format=iife --alias:react=./node_modules/react --alias:react-dom=./node_modules/react-dom --minify",
     "css-watch": "sass --watch ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "css-build": "sass ClientApp/minerva/scss/app.scss wwwroot/minerva.css --style=compressed --no-source-map",
     "rosie-js-build": "cd ClientApp/rosie && npm run js && cd ../../ && rm -rf node_modules/rosie-ui/dist/js && cp -r ClientApp/rosie/dist/js node_modules/rosie-ui/dist/ && cp -r ClientApp/rosie/package.json node_modules/rosie-ui/package.json",
@@ -25,8 +25,7 @@
     "c3": "0.7.20",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-router-dom": "7.13.0",
-    "rosie-ui": "0.3.0"
+    "react-router-dom": "7.13.0"
   },
   "devDependencies": {
     "@types/react": "19.2.14",

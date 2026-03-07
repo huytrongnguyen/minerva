@@ -1,4 +1,4 @@
-import { LocalCache } from 'rosie-ui';
+import { LocalCache } from 'rosie/core';
 import { AUTH_TOKEN, redirectToLogin } from 'minerva/core';
 
 export function RequireAuth({ component: Component, title = '' }) {

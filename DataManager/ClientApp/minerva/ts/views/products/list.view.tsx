@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router';
-import { Grid, GridColumn } from 'rosie-ui';
+import { Grid, GridColumn } from 'rosie/components';
 import { ProductInfoStore } from 'minerva/core';
 
 export function ProductListView() {

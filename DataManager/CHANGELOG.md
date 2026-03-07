@@ -2,25 +2,34 @@
 
 ## vNext
 
+## v0.0.3
+> 2026-03-07
+
 **Features**
 
 - Re-design layout
 - Add `Dashboard > Smart View > Overview` screen
 - Add `Settings` screen
-  - Add POST `/api/products/{productId}/test-connection`
-  - Add PATCH `/api/products/{productId}`
-  - Add PATCH `/api/products/{productId}/tables`
+  - Add `ProductController`
+    - Add POST `/api/products/{productId}/test-connection`
+    - Add PATCH `/api/products/{productId}`
+    - Add GET `/api/products/{productId}/connection`
+  - Add `ProductDataSetController`
+    - Add GET `/api/products/{productId}/datasets`
+    - Add PATCH `/api/products/{productId}/datasets`
   - Add POST `/api/products/{productId}/connections/datasets`
   - Add POST `/api/products/{productId}/connections/datasets/{dataSetName}`
 - Add `Events` screen
-  - Add GET `/api/products/{productId}/events`
+  - Add GET `/api/products/{productId}/tables`
+  - Add PATCH `/api/products/{productId}/tables`
 - Add `Event Fields` screen
-  - Add GET `/api/products/{productId}/events/{eventName}`
+  - Add GET `/api/products/{productId}/tables/{tableName}`
+  - Add PATCH `/api/products/{productId}/tables/{tableName}`
 - Implement `TrinoStore`
 - Implement `ProductStore`
+- Implement `ProductDataSetStore`
 - Implement `ProductDataTableStore`
 - Implement `ProductDataColumnStore`
-- Implement `ProductService`
 - Implement `ProductController`
 
 ## v0.0.2

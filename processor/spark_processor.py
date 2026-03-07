@@ -113,6 +113,7 @@ def process_sql_model(model: str, spark: SparkSession, product_info: Dict[str, A
   jinja_env.globals['date_range'] = lambda before, after = 0: f"{{{','.join(date_range(job_settings.event_date, before, after))}}}"
 
   sql_query = jinja_env.from_string(model).render(**vars)
+  logger.info(f'sql_query = {sql_query}')
   target_data = spark.sql(sql_query)
   save_data(target_data, targets[0], vars)
 

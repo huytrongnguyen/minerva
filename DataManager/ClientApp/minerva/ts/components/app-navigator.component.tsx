@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Rosie } from 'rosie-ui';
+import { Rosie } from 'rosie/core';
 
 import { NavItem } from 'minerva/core';
 

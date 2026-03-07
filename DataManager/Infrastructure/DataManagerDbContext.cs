@@ -1,14 +1,13 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Query;
-using Npgsql.Replication;
 
 namespace DataManager.Infrastructure;
 
 public class DataManagerDbContext(DbContextOptions<DataManagerDbContext> options) : DbContext(options) {
   public DbSet<CAMPAIGN_INFO> CampaignInfo { get; set; }
   public DbSet<PRODUCT_INFO> ProductInfo { get; set; }
+  public DbSet<PRODUCT_DATASET> ProductDataSet { get; set; }
   public DbSet<PRODUCT_DATATABLE> ProductDatatable { get; set; }
   public DbSet<PRODUCT_DATACOLUMN> ProductDatacolumn { get; set; }
 }

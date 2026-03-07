@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { DataModel, Dialog, Dropdown, Grid, GridColumn, Rosie, useDialog } from 'rosie-ui';
+import { DataModel } from 'rosie/core';
+import { Dialog, Dropdown, Grid, GridColumn, useDialog } from 'rosie/components';
 import { ProductDataTable, ProductDataTableStore, UpdateProductDataTableModel } from 'minerva/core';
 import { ProductLayout } from './product-layout.component';
 import { ProductSelector } from './product-selector.component';
@@ -8,7 +9,7 @@ import { ProductSelector } from './product-selector.component';
 export function EventListView() {
   const params = useParams(),
         [productId, setProductId] = useState(''),
-        semanticEventUpdationDialog = useDialog('#semantic-event-updation-dialog"');
+        semanticEventUpdationDialog = useDialog('#semantic-event-updation-dialog');
 
   useEffect(() => {
     const { productId } = params;
@@ -18,7 +19,7 @@ export function EventListView() {
 
   function onUpdateSemanticEventSuccess(tables: ProductDataTable[]) {
     ProductDataTableStore.loadData(tables);
-    Rosie.hideModal('#semantic-event-updation-dialog"');
+    semanticEventUpdationDialog.hide();
   }
 
   return <ProductLayout>
@@ -55,17 +56,26 @@ function SemanticEventUpdationDialog(props: { productId: string, onUpdateSuccess
         [dataTables, setDataTables] = useState<ProductDataTable[]>([]);
 
   useEffect(() => {
-    const tables$ = ProductDataTableStore.subscribe(value => setDataTables(value.map(x => x.value)));
+    const tables$ = ProductDataTableStore.subscribe(value => {
+      const tables = value.map(x => x.value);
+      setDataTables(tables);
+      setInstallEvent(tables.find(x => x.semanticName === 'install') ?? null);
+      setOpenAppEvent(tables.find(x => x.semanticName === 'open_app') ?? null);
+      setRegisterEvent(tables.find(x => x.semanticName === 'register') ?? null);
+      setSessionStartEvent(tables.find(x => x.semanticName === 'session_start') ?? null);
+      setSessionEndEvent(tables.find(x => x.semanticName === 'session_end') ?? null);
+      setPurchaseEvent(tables.find(x => x.semanticName === 'purchase') ?? null);
+    });
     return () => { tables$.unsubscribe(); }
   }, [])
 
   async function onSubmit() {
     const updatedTables = dataTables.map(table => {
       if (table.name === installEvent?.name) { table.semanticName = 'install'; return table; }
-      else if (table.name === openAppEvent?.name) { table.semanticName = 'openApp'; return table; }
+      else if (table.name === openAppEvent?.name) { table.semanticName = 'open_app'; return table; }
       else if (table.name === registerEvent?.name) { table.semanticName = 'register'; return table; }
-      else if (table.name === sessionStartEvent?.name) { table.semanticName = 'sessionStart'; return table; }
-      else if (table.name === sessionEndEvent?.name) { table.semanticName = 'sessionEnd'; return table; }
+      else if (table.name === sessionStartEvent?.name) { table.semanticName = 'session_start'; return table; }
+      else if (table.name === sessionEndEvent?.name) { table.semanticName = 'session_end'; return table; }
       else if (table.name === purchaseEvent?.name) { table.semanticName = 'purchase'; return table; }
       else return null;
     }).filter(x => x !== null);

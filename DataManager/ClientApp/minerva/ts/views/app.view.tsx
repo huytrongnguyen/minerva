@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router';
-// import { LocalCache } from 'rosie-ui';
 
-// import { AUTH_TOKEN, AuthUserModel } from 'venus/core';
+// import { AUTH_TOKEN, AuthUserModel } from 'rosie/core';
 import { AppLayout, RequireAuth } from 'minerva/components';
 
 // import { navigator } from '../core';

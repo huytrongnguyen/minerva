@@ -24,6 +24,19 @@ export const UpdateProductInfoModel = Model<ProductInfo>({
 });
 //#endregion
 
+//#region API: /api/products/{productId}/connection
+export type ProductConnection = {
+  sqlDialect: string,
+  endpoint: string,
+  clientId: string,
+  clientSecret: string,
+}
+
+export const ProductConnectionModel = Model<ProductConnection>({
+  proxy: { url: '/api/products/{productId}/connection', method: 'get' }
+});
+//#endregion
+
 //#region API: /api/products/{productId}/tables
 export type ProductDataTable = {
   dataSetName: string,
@@ -35,8 +48,8 @@ export type ProductDataTable = {
 
 export const ProductDataTableStore = Store<ProductDataTable>({ proxy: { url: '/api/products/{productId}/tables' } });
 
-export const ImportProductDataTableModel = Model<any>({
-  proxy: { url: '/api/products/{productId}/tables/import', method: 'patch' }
+export const UpdateProductDataSetModel = Model<ProductDataSet[]>({
+  proxy: { url: '/api/products/{productId}/datasets', method: 'patch' }
 });
 
 export const UpdateProductDataTableModel = Model<any>({
@@ -55,6 +68,10 @@ export type ProductDataColumn = {
 
 export const ProductDataColumnStore = Store<ProductDataColumn>({ proxy: { url: '/api/products/{productId}/tables/{tableName}' } });
 
+export const UpdateProductDataColumnModel = Model<ProductDataColumn[]>({
+  proxy: { url: '/api/products/{productId}/tables/{tableName}/columns', method: 'patch' }
+});
+
 //#endregion
 
 //#region API: /api/products/{productId}/connections/datasets
@@ -62,6 +79,10 @@ export type ProductDataSet = {
   name: string,
   tables: string[],
 }
+
+export const ProductDataSetModel = Model<ProductDataSet[]>({
+  proxy: { url: '/api/products/{productId}/datasets', method: 'get' }
+});
 
 export const ConnectionDataSetStore = Store<ProductDataSet>({
   proxy: { url: '/api/products/{productId}/connections/datasets', method: 'post' }
