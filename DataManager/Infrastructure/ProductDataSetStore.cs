@@ -16,9 +16,11 @@ public class ProductDataSetStore(DataManagerDbContext dbContext) : DataStore<PRO
   public List<ProductDataSet> List(string productId) => [..dbSet.Where(x => x.ProductId == productId).Select(ToValue)];
 
   public List<ProductDataSet> BatchUpdate(string productId, List<string> dataSetNames) {
+    using var tx = dbContext.Database.BeginTransaction();
     dbSet.Where(x => x.ProductId == productId).ExecuteDelete();
     dbSet.AddRange(dataSetNames.Select(name => new PRODUCT_DATASET { ProductId = productId, DatasetName = name }));
     dbContext.SaveChanges();
+    tx.Commit();
     return List(productId);
   }
 

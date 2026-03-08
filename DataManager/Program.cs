@@ -29,20 +29,16 @@ services
     .AddDbContext<DataManagerDbContext>(options => {
       options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention();
     })
-    // .AddScoped<ICampaignStore, CampaignStore>()
     .AddScoped<IProductStore, ProductStore>()
     .AddScoped<IProductDataSetStore, ProductDataSetStore>()
     .AddScoped<IProductDataTableStore, ProductDataTableStore>()
     .AddScoped<IProductDataColumnStore, ProductDataColumnStore>()
-    .AddScoped<ITrinoStore, TrinoStore>()
-    .AddScoped<ProductAdapter>()
-    // .AddScoped<CampaignService>()
+    .AddScoped<ProductService>()
     .AddScoped<AuthService>()
-    // .AddHostedService<SimulationService>() // Background simulator worker (runs forever)
     .AddCors()
     .AddControllers();
 
-// services.AddSignalR();
+services.AddHttpClient<ITrinoStore, TrinoStore>();
 services.AddDataProtection();
 services.AddHealthChecks();
 services.AddRazorPages();
@@ -76,8 +72,6 @@ app.UseExceptionHandler(configure => configure.Run(async context => {
   var error = context.Features.Get<IExceptionHandlerPathFeature>().Error;
   await context.Response.WriteAsJsonAsync(new { message = $"{error.Message.TrimEnd(".")}. {error.InnerException}" });
 }));
-
-// app.MapHub<EventHub>("/hub/event");
 
 app.UseHealthChecks("/health");
 

@@ -18,6 +18,7 @@ public class ProductDataTableStore(DataManagerDbContext dbContext) : DataStore<P
   public List<ProductDataTable> List(string productId) => [..dbSet.Where(x => x.ProductId == productId).Select(ToValue)];
 
   public List<ProductDataTable> BatchUpdate(string productId, List<ProductDataTable> tables) {
+    using var tx = dbContext.Database.BeginTransaction();
     dbSet.Where(x => x.ProductId == productId).ExecuteDelete();
     dbSet.AddRange(tables.Select(t => new PRODUCT_DATATABLE {
       ProductId = productId,
@@ -27,6 +28,7 @@ public class ProductDataTableStore(DataManagerDbContext dbContext) : DataStore<P
       TableDesc = t.Desc
     }));
     dbContext.SaveChanges();
+    tx.Commit();
     return List(productId);
   }
 

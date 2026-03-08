@@ -1,9 +1,5 @@
 namespace DataManager.Shared;
 
-public abstract class IDataService<T>(IDataStore<T> dataStore) {
-  public List<T> List() => dataStore.List();
-}
-
 public interface IDataStore<T> {
   List<T> List();
 }

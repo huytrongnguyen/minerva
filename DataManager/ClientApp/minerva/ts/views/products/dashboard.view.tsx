@@ -9,7 +9,7 @@ import { Dictionary } from 'rosie/core';
 
 export function DashboardView() {
   const params = useParams(),
-        [viewId, setViewId] = useState(''),
+        [dashboardId, setDashboardId] = useState(''),
         [data, setData] = useState({} as Dictionary<any[]>);
 
   useEffect(() => {
@@ -18,9 +18,9 @@ export function DashboardView() {
   }, []);
 
   useEffect(() => {
-    const { productId, viewId } = params;
-    setViewId(viewId);
-    ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, viewId } });
+    const { productId, dashboardId } = params;
+    setDashboardId(dashboardId);
+    ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
   }, [params]);
 
   return <ProductLayout>
@@ -28,7 +28,7 @@ export function DashboardView() {
       <li className="breadcrumb-item active">Dashboard</li>
     </ProductSelector>
     <main className="fullscreen">
-      {viewId === 'complete-view' && <CompleteViewComponent data={data} />}
+      {dashboardId === 'complete-view' && <CompleteViewComponent data={data} />}
     </main>
   </ProductLayout>
 }

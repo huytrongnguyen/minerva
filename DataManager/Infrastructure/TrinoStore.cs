@@ -4,7 +4,7 @@ using DataManager.Shared;
 
 namespace DataManager.Infrastructure;
 
-public class TrinoStore(ILogger<TrinoStore> logger) : ITrinoStore {
+public class TrinoStore(HttpClient httpClient, ILogger<TrinoStore> logger) : ITrinoStore {
   public async Task<List<TrackedDataSet>> ListDataSets(DataConnection connection) {
     var result = new List<TrackedDataSet>();
 
@@ -44,16 +44,14 @@ public class TrinoStore(ILogger<TrinoStore> logger) : ITrinoStore {
   }
 
   public async Task<List<Dictionary<string, object>>> ExecuteQueryAsync(DataConnection connection, string sql) {
-    var httpClient = new HttpClient();
-
     // Auth: Basic (most common for Trino LDAP/Password)
     var byteArray = System.Text.Encoding.ASCII.GetBytes($"{connection.ClientId}:{connection.ClientSecret}");
-    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-        "Basic", Convert.ToBase64String(byteArray));
 
     // Step 1: Submit query (POST /v1/statement)
-    var requestContent = new StringContent(sql, System.Text.Encoding.UTF8, "text/plain");
-    var responseMessage = await httpClient.PostAsync($"{connection.Endpoint.TrimEnd('/')}/v1/statement", requestContent);
+    var request = new HttpRequestMessage(HttpMethod.Post, $"{connection.Endpoint.TrimEnd('/')}/v1/statement");
+    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+    request.Content = new StringContent(sql, System.Text.Encoding.UTF8, "text/plain");
+    var responseMessage = await httpClient.SendAsync(request);
     var responseText = await responseMessage.Content.ReadAsStringAsync();
     var response = ObjectUtils.Decode<TrinoQueryResponse>(responseText);
 

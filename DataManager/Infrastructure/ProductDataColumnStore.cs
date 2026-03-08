@@ -21,6 +21,7 @@ public class ProductDataColumnStore(DataManagerDbContext dbContext) : DataStore<
     [..dbSet.Where(x => x.ProductId == productId && x.TableName == tableName).Select(ToValue)];
 
   public List<ProductDataColumn> BatchUpdate(string productId, string tableName, List<ProductDataColumn> columns) {
+    using var tx = dbContext.Database.BeginTransaction();
     dbSet.Where(x => x.ProductId == productId && x.TableName == tableName).ExecuteDelete();
     dbSet.AddRange(columns.Select(c => new PRODUCT_DATACOLUMN {
       ProductId = productId,
@@ -32,6 +33,7 @@ public class ProductDataColumnStore(DataManagerDbContext dbContext) : DataStore<
       ColumnDesc = c.Desc
     }));
     dbContext.SaveChanges();
+    tx.Commit();
     return List(productId, tableName);
   }
 

@@ -6,71 +6,50 @@ using Microsoft.AspNetCore.Mvc;
 namespace DataManager.Controllers;
 
 [Route("api/products")] [ApiController] [AuthFilter]
-public class ProductController(IProductStore productStore) : ControllerBase {
-  [HttpGet] public List<ProductInfo> List() => productStore.List();
+public class ProductController(ProductService productService) : ControllerBase {
+  [HttpGet] public List<ProductInfo> List()
+      => productService.List();
 
-  [HttpPost] public ProductInfo Create(string productId) => productStore.Get(productId);
+  [HttpPost] public ProductInfo Create(string productId)
+      => productService.Get(productId);
 
-  [HttpGet("{productId}")] public ProductInfo Get(string productId) => productStore.Get(productId);
+  [HttpGet("{productId}")] public ProductInfo Get(string productId)
+      => productService.Get(productId);
 
-  [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request) => productStore.Update(productId, request);
+  [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request)
+      => productService.Update(productId, request);
 
-  [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId) => productStore.GetDataConnection(productId);
+  [HttpGet("{productId}/datasets")] public List<ProductDataSet> ListProductDataSets(string productId)
+      => productService.ListProductDataSets(productId);
 
-  [HttpGet("{productId}/navigator")] public List<NavItem> GetNavigator(string productId) {
-    return [
-      new(
-        NavId: "dashboard",
-        NavName: "Dashboard",
-        NavIcon: null,
-        NavPath: null,
-        Children: [
-          new(
-            NavId: "complete-view",
-            NavName: "Complete View",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/dashboard/complete-view",
-            Children: null
-          ),
-          new(
-            NavId: "smart-view",
-            NavName: "Smart View",
-            NavIcon: null,
-            NavPath: null,
-            Children: [
-              new(
-                NavId: "overview",
-                NavName: "Overview",
-                NavIcon: null,
-                NavPath: $"/products/{productId}/dashboard/smart-view:overview",
-                Children: null
-              )
-            ]
-          )
-        ]
-      ),
-      new(
-        NavId: "management",
-        NavName: "Management",
-        NavIcon: null,
-        NavPath: null,
-        Children: [
-          new(
-            NavId: "events",
-            NavName: "Events",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/events",
-            Children: null
-          ),
-          new(
-            NavId: "settings",
-            NavName: "Settings",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/settings",
-            Children: null
-          )
-        ]
-      )
-    ];
-  }
+  [HttpPatch("{productId}/datasets")] public List<ProductDataSet> UpdateProductDataSets(string productId, ProductDataSetUpdateRequest request)
+      => productService.UpdateProductDataSets(productId, request);
+
+  [HttpGet("{productId}/tables")] public Task<List<ProductDataTable>> ListProductDataTables(string productId)
+      => productService.ListProductDataTables(productId);
+
+  [HttpPatch("{productId}/tables")] public List<ProductDataTable> UpdateProductDataTables(string productId, ProductDataTablePatchRequest request)
+      => productService.UpdateProductDataTables(productId, request);
+
+  [HttpGet("{productId}/tables/{tableName}")] public Task<List<ProductDataColumn>> ListProductDataColumns(string productId, string tableName)
+      => productService.ListProductDataColumns(productId, tableName);
+
+  [HttpPatch("{productId}/tables/{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request)
+      => productService.UpdateProductDataColumns(productId, tableName, request);
+
+  [HttpGet("{productId}/dashboard/{dashboardId}")] public Task<Dictionary<string, List<Dictionary<string, object>>>> GetDashboard(string productId, string dashboardId)
+      => productService.GetDashboard(productId, dashboardId);
+
+  [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId)
+      => productService.GetDataConnection(productId);
+
+  [HttpPost("{productId}/connection/datasets")] public Task<List<TrackedDataSet>> ListConnectionDataSets(string productId, DataConnection connection)
+      => productService.ListConnectionDataSets(connection);
+
+  [HttpPost("{productId}/connection/datasets/{dataSetName}")] public Task<TrackedDataSet> GetConnectionDataSet(string productId, string dataSetName, DataConnection connection)
+      => productService.GetConnectionDataSet(dataSetName, connection);
+
+
+  [HttpGet("{productId}/navigator")] public List<NavItem> GetNavigator(string productId)
+      => productService.GetNavigator(productId);
 }

@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace DataManager.Infrastructure;
 
 public class DataManagerDbContext(DbContextOptions<DataManagerDbContext> options) : DbContext(options) {
-  // public DbSet<CAMPAIGN_INFO> CampaignInfo { get; set; }
   public DbSet<PRODUCT_INFO> ProductInfo { get; set; }
   public DbSet<PRODUCT_DATASET> ProductDataSet { get; set; }
   public DbSet<PRODUCT_DATATABLE> ProductDatatable { get; set; }
@@ -13,7 +12,7 @@ public class DataManagerDbContext(DbContextOptions<DataManagerDbContext> options
 }
 
 public abstract class DataStore<TEntity, T>(DataManagerDbContext _dbContext) where TEntity : class {
-  public List<T> List() => [..dbSet.Where(x => true).AsNoTracking().Select(ToValue)];
+  public List<T> List() => [..dbSet.AsNoTracking().Select(ToValue)];
 
   public T Get(Expression<Func<TEntity, bool>> predicate) {
     var entity = dbSet.FirstOrDefault(predicate);

@@ -38,7 +38,7 @@ export const ProductConnectionModel = Model<ProductConnection>({
 });
 
 export const ProductDashboardModel = Model<Dictionary<any[]>>({
-  proxy: { url: '/api/products/{productId}/dashboard/{viewId}', method: 'get' }
+  proxy: { url: '/api/products/{productId}/dashboard/{dashboardId}', method: 'get' }
 });
 //#endregion
 

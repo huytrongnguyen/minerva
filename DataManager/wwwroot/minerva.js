@@ -68484,7 +68484,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     proxy: { url: "/api/products/{productId}/connection", method: "get" }
   });
   var ProductDashboardModel = Model({
-    proxy: { url: "/api/products/{productId}/dashboard/{viewId}", method: "get" }
+    proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}", method: "get" }
   });
   var ProductDataTableStore = Store({ proxy: { url: "/api/products/{productId}/tables" } });
   var UpdateProductDataSetModel = Model({
@@ -69307,7 +69307,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/minerva/ts/views/products/dashboard.view.tsx
   var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    const params = useParams(), [viewId, setViewId] = (0, import_react18.useState)(""), [data2, setData] = (0, import_react18.useState)({});
+    const params = useParams(), [dashboardId, setDashboardId] = (0, import_react18.useState)(""), [data2, setData] = (0, import_react18.useState)({});
     (0, import_react18.useEffect)(() => {
       const data$ = ProductDashboardModel.subscribe(setData);
       return () => {
@@ -69315,13 +69315,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, []);
     (0, import_react18.useEffect)(() => {
-      const { productId, viewId: viewId2 } = params;
-      setViewId(viewId2);
-      ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, viewId: viewId2 } });
+      const { productId, dashboardId: dashboardId2 } = params;
+      setDashboardId(dashboardId2);
+      ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, dashboardId: dashboardId2 } });
     }, [params]);
     return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("main", { className: "fullscreen", children: viewId === "complete-view" && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CompleteViewComponent, { data: data2 }) })
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("main", { className: "fullscreen", children: dashboardId === "complete-view" && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CompleteViewComponent, { data: data2 }) })
     ] });
   }
 
@@ -69342,7 +69342,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/dashboard/:viewId", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/dashboard/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }
