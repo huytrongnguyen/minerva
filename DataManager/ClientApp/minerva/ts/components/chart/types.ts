@@ -7,14 +7,14 @@ export type ChartProps = {
   name?: string,
   dataOriented?: DataOriented,
   data: any[],
-  series: Series,
+  series?: Series,
   axes: { x: XAxis, y?: YAxis, y2?: YAxis, rotated?: boolean },
 }
 
 type Series = {
   type?: c3.ChartType,
   xField: string,
-  yField: string | Dictionary<string>,
+  yField?: string | Dictionary<string>,
   stackedField?: string,
   label?: boolean | { format: c3.FormatFunction } | { format: { [key: string]: boolean | c3.FormatFunction } },
   tooltip?: { format?: string, renderer?: (value: c3.Primitive, ratio: number, id: string, index: number) => string }

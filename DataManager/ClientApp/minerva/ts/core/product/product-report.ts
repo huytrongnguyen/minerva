@@ -1,33 +1,61 @@
 import { Model } from '../http';
 
-export type DashboardLayout = {
+export type DashboardDefinition = {
   name: string,
-  reports: ReportStub[],
+  reports: ReportDefinition[],
 }
 
-export type ReportStub = {
-  id: string,
+export type ReportDefinition = {
   name: string,
+  rowIndex: number,
+  colIndex: number,
+  colWidth: number,
+  measures: MeasureDefinition[],
+  view: ViewDefinition,
 }
 
-export type ColumnInfo = {
-  field: string,
-  label: string,
+export type MeasureDefinition = {
+  name: string,
+//   eventName: string,
+//   fieldName: string,
+//   aggregation: string,
+  chartType: string,
+  stacked: boolean,
+  secondaryAxis: boolean,
+//   calculation: CalculationDefinition[],
 }
+
+// export type CalculationDefinition = {
+//   type: string,
+//   eventName: string,
+//   fieldName: string,
+//   aggregation: string,
+// }
+
+export type ViewDefinition = {
+  timeField: string,
+//   breakdown: { fieldName: string },
+//   startRollingDate: number,
+//   endRollingDate: number,
+//   startExactDate: string,
+//   endExactDate: string,
+}
+
+// export type ColumnInfo = {
+//   field: string,
+//   label: string,
+// }
 
 export type ReportResult = {
-  name: string,
-  columns: ColumnInfo[],
-  data: unknown[][], // columnar: [[field, v1, v2, ...], ...] — maps directly to C3 data.columns
+  // name: string,
+  data: any[],
+  groups?: string[], // breakdown column names — present when Breakdown is set, used for C3 stacking
 }
 
-// Layout endpoint — fast, no Trino.
-export const DashboardLayoutModel = Model<DashboardLayout>({
+export const DashboardDefinitionModel = Model<DashboardDefinition>({
   proxy: { url: '/api/products/{productId}/dashboard/{dashboardId}' }
 });
 
-// Factory — creates a fresh isolated model instance per report so parallel
-// loads don't overwrite each other.
-export const ReportModel = () => Model<ReportResult>({
-  proxy: { url: '/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}' }
+export const ReportResultModel = Model<ReportResult>({
+  proxy: { url: '/api/products/{productId}/reports/execute', method: 'post' }
 });

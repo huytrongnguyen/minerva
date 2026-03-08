@@ -37,11 +37,11 @@ public class ProductController(ProductService productService) : ControllerBase {
   [HttpPatch("{productId}/tables/{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request)
       => productService.UpdateProductDataColumns(productId, tableName, request);
 
-  [HttpGet("{productId}/dashboard/{dashboardId}")] public DashboardLayout GetDashboardLayout(string productId, string dashboardId)
-      => productService.GetDashboardLayout(dashboardId);
+  [HttpGet("{productId}/dashboard/{dashboardId}")] public DashboardDefinition GetDashboardLayout(string productId, string dashboardId)
+      => productService.GetDashboardDefinition(dashboardId);
 
-  [HttpGet("{productId}/dashboard/{dashboardId}/reports/{reportId}")] public Task<ReportResult> GetReport(string productId, string dashboardId, string reportId)
-      => productService.GetReport(productId, dashboardId, reportId);
+  [HttpPost("{productId}/reports/execute")] public Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request)
+      => productService.ExecuteReport(productId, request);
 
   [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId)
       => productService.GetDataConnection(productId);

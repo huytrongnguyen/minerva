@@ -15,7 +15,7 @@ public class ReportQueryBuilder {
     if (view.Breakdown != null)
       select.Add($"t.{view.Breakdown.FieldName}");
     foreach (var m in report.Measures)
-      select.Add($"{MeasureExpr(m, aliases)} AS {Slug(m.Name)}");
+      select.Add($"{MeasureExpr(m, aliases)} AS \"{m.Name}\"");
     sb.AppendLine($"SELECT {string.Join(", ", select)}");
 
     // FROM
@@ -128,9 +128,4 @@ public class ReportQueryBuilder {
   private static bool IsTimestamp(string? s) =>
     s != null && (s.Contains(' ') || s.Contains('T'));
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-
-  // Measure name → safe SQL alias: lowercase, spaces → underscores.
-  private static string Slug(string name) =>
-    name.ToLower().Replace(' ', '_');
 }

@@ -8,7 +8,7 @@
 
 **Features**
 
-- Add `Dashboard > Complete View` screen
+- Add `Dashboard` screen
   - Add `ProductDashboardController`
     - Add GET `/api/products/{productId}/dashboard/{dashboardId}`
     - Add GET `/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}`

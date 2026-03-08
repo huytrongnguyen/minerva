@@ -55918,7 +55918,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ]
   };
   var d3Pattern = (specifier = ",.2~f") => (0, import_d3.format)(specifier);
-  var d3Format = (value = 0, pattern = ",.2~f") => (0, import_d3.format)(pattern)(value ?? 0);
 
   // ClientApp/minerva/ts/components/chart/cartesian.component.tsx
   var import_react = __toESM(require_react());
@@ -56016,6 +56015,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
 
   // ClientApp/rosie/ts/core/lang/array.ts
+  Array.prototype.orderBy = function(keySelector, orders = "asc") {
+    return this.sort((a, b) => {
+      const left2 = a[keySelector], right2 = b[keySelector], compareResult = !right2 || left2 > right2 ? 1 : left2 < right2 ? -1 : 0;
+      return orders === "desc" ? -compareResult : compareResult;
+    });
+  };
+  Array.prototype.groupBy = function(keySelector, elementSelector) {
+    const groupByKey = this.reduce((result2, item, index, array) => {
+      const key = typeof keySelector === "string" || typeof keySelector === "number" ? item[keySelector] : keySelector(item, index, array);
+      !result2[key] && (result2[key] = []);
+      result2[key].push(item);
+      return result2;
+    }, {});
+    if (elementSelector) {
+      for (let key in groupByKey) {
+        groupByKey[key] = elementSelector(groupByKey[key], key);
+      }
+    }
+    const result = [];
+    for (let key in groupByKey) {
+      result.push({ key, elements: groupByKey[key] });
+    }
+    return result;
+  };
   Array.prototype.toDictionary = function(keySelector, elementSelector) {
     return this.reduce((result, item, index, array) => {
       const key = typeof keySelector === "string" || typeof keySelector === "number" ? item[keySelector] : keySelector(item, index, array);
@@ -64098,39 +64121,40 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [chartId] = (0, import_react.useState)(Rosie.guid(`rosie-chart-${props.name ?? ""}-`));
     (0, import_react.useEffect)(() => {
       if (!props.data?.length) return;
-      const { dataOriented, series, axes } = props, { xField, yField } = series, valueFields = typeof yField === "string" ? { [yField]: yField } : yField, seriesType = series.type ?? "bar", types = {};
+      const { dataOriented, series, axes } = props, { xField, yField } = series, seriesType = series.type ?? "bar", types = {};
       axes?.y?.fields?.forEach((field) => types[field] = axes?.y?.type ?? seriesType);
       axes?.y2?.fields?.forEach((field) => types[field] = axes?.y2?.type ?? seriesType);
-      const isColumns = (dataOriented ?? "json") === "columns";
       const config = {
         bindto: `#${chartId}`,
         data: {
-          [dataOriented ?? "json"]: props.data,
-          ...isColumns ? { x: xField } : { keys: { x: xField, value: Object.keys(valueFields) } },
-          names: valueFields,
+          [dataOriented ?? "columns"]: props.data,
+          x: xField,
+          // names: valueFields,
           type: seriesType,
           types,
           axes: Object.fromEntries(axes?.y2?.fields?.map((field) => [field, "y2"]) ?? []),
-          groups: axes?.y?.stacked ? [axes.y.fields] : void 0,
-          labels: false,
-          //series?.label ?? false,
-          order: null
+          groups: axes?.y?.stacked ? [axes.y.fields] : void 0
+          // labels: false,//series?.label ?? false,
+          // order: null,
         },
         size: { height: chartConfig.height },
         axis: {
           x: {
             type: axes.x.type,
-            label: axes?.x?.label,
-            show: axes?.x?.show ?? true,
+            // label: axes?.x?.label,
+            // show: axes?.x?.show ?? true,
             tick: { format: axes?.x?.format, rotate: axes?.x?.rotate, multiline: false }
           },
-          y: { label: axes?.y?.label, show: axes?.y?.show ?? true, tick: { format: d3Pattern(axes?.y?.format ?? ",.2~s"), rotate: axes?.y?.rotate } },
-          y2: { show: axes?.y2?.fields?.length > 0, tick: { format: d3Pattern(axes?.y2?.format ?? ",.2~s") } },
-          rotated: axes?.rotated
+          // y: { label: axes?.y?.label, show: axes?.y?.show ?? true, tick: { format: d3Pattern(axes?.y?.format ?? ',.2~s'), rotate: axes?.y?.rotate } },
+          y2: {
+            show: axes?.y2?.fields?.length > 0,
+            tick: { format: d3Pattern(axes?.y2?.format ?? ",.2~s") }
+          }
+          // rotated: axes?.rotated,
         },
         color: { pattern: chartConfig.colorPatterns },
-        grid: { y: { show: true } },
-        tooltip: { format: { value: series?.tooltip?.renderer ?? ((value) => d3Format(value, series?.tooltip?.format ?? ",.2~f")) } }
+        grid: { y: { show: true } }
+        // tooltip: { format: { value: series?.tooltip?.renderer ?? ((value: number) => d3Format(value, series?.tooltip?.format ?? ',.2~f')) } }
       };
       import_c3.default.generate(config);
     }, [props.data]);
@@ -68583,11 +68607,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
 
   // ClientApp/minerva/ts/core/product/product-report.ts
-  var DashboardLayoutModel = Model({
+  var DashboardDefinitionModel = Model({
     proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}" }
   });
-  var ReportModel = () => Model({
-    proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}" }
+  var ReportResultModel = Model({
+    proxy: { url: "/api/products/{productId}/reports/execute", method: "post" }
   });
 
   // ClientApp/minerva/ts/components/app-layout/require-auth.component.tsx
@@ -69278,120 +69302,97 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_react19 = __toESM(require_react());
-
-  // ClientApp/minerva/ts/views/reports/complete-view.component.tsx
   var import_react18 = __toESM(require_react());
   var import_jsx_runtime23 = __toESM(require_jsx_runtime());
-  function useReport(productId, dashboardId, reportId) {
-    const [result, setResult] = (0, import_react18.useState)(null);
-    (0, import_react18.useEffect)(() => {
-      const model = ReportModel();
-      const sub = model.subscribe(setResult);
-      model.load({ pathParams: { productId, dashboardId, reportId } });
-      return () => {
-        sub.unsubscribe();
-      };
-    }, [productId, dashboardId, reportId]);
-    return result;
-  }
-  function CompleteViewComponent({ layout, productId, dashboardId }) {
-    const [installsCpiStub, costByOsStub] = layout.reports;
-    const installsCpi = useReport(productId, dashboardId, installsCpiStub?.id);
-    const costByOs = useReport(productId, dashboardId, costByOsStub?.id);
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "container-fluid mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: installsCpiStub?.name }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: installsCpi ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-          CartesianChart,
-          {
-            name: "installs-cpi",
-            dataOriented: "columns",
-            data: installsCpi.data,
-            series: {
-              xField: "report_date",
-              yField: { installs: "Installs", cpi: "CPI" },
-              tooltip: {
-                renderer: (value, _, id) => {
-                  return d3Format(value, id === "cpi" ? "$,.2~f" : ",.2~f");
-                }
-              }
-            },
-            axes: {
-              x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
-              y: { fields: ["installs"] },
-              y2: { fields: ["cpi"], type: "line", format: "$,.2~f" }
-            }
-          }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { className: "text-muted small", children: "Loading..." }) })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: costByOsStub?.name }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: costByOs ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-          CartesianChart,
-          {
-            name: "cost-by-os",
-            dataOriented: "columns",
-            data: costByOs.data,
-            series: {
-              xField: "report_date",
-              yField: Object.fromEntries(
-                costByOs.columns.slice(1).map((c) => [c.field, c.label])
-              )
-            },
-            axes: {
-              x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
-              y: { fields: costByOs.columns.slice(1).map((c) => c.field), stacked: true }
-            }
-          }
-        ) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { className: "text-muted small", children: "Loading..." }) })
-      ] }) })
-    ] }) }) });
-  }
-
-  // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    const params = useParams(), [layout, setLayout] = (0, import_react19.useState)(null);
-    (0, import_react19.useEffect)(() => {
-      const layout$ = DashboardLayoutModel.subscribe(setLayout);
+    const params = useParams(), [productId, setProductId] = (0, import_react18.useState)(""), [dashboardName, setDashboardName] = (0, import_react18.useState)(""), [layout, setLayout] = (0, import_react18.useState)([]);
+    (0, import_react18.useEffect)(() => {
+      const layout$ = DashboardDefinitionModel.subscribe((value) => {
+        setDashboardName(value.name);
+        const layout2 = value.reports.groupBy("rowIndex").orderBy("key").map((row) => {
+          return row.elements.orderBy("colIndex");
+        });
+        setLayout(layout2 ?? []);
+      });
       return () => {
         layout$.unsubscribe();
       };
     }, []);
-    (0, import_react19.useEffect)(() => {
-      const { productId, dashboardId } = params;
-      DashboardLayoutModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
+    (0, import_react18.useEffect)(() => {
+      const { productId: productId2, dashboardId } = params;
+      setProductId(productId2);
+      DashboardDefinitionModel.loadWithSplashScreen({ pathParams: { productId: productId2, dashboardId } });
     }, [params]);
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("main", { className: "fullscreen", children: params.dashboardId === "complete-view" && layout && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CompleteViewComponent, { layout, productId: params.productId, dashboardId: params.dashboardId }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("li", { className: "breadcrumb-item active", children: dashboardName ?? "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("main", { className: "fullscreen", children: layout?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "container-fluid mb-2", children: layout.map((row, rowIndex) => {
+        return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "row mt-2", children: row.map((col, colIndex) => {
+          return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: `col-${col.colWidth}`, children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: col.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ReportComponent, { productId, definition: col }) })
+          ] }) }, colIndex);
+        }) }, rowIndex);
+      }) }) })
     ] });
+  }
+  function ReportComponent(props) {
+    const [data2, setData] = (0, import_react18.useState)([]);
+    const [groups, setGroups] = (0, import_react18.useState)(null);
+    (0, import_react18.useEffect)(() => {
+      if (props.definition) {
+        loadReport(props.productId, props.definition);
+      }
+    }, [props.definition]);
+    async function loadReport(productId, report) {
+      const result = await ReportResultModel.fetch({ pathParams: { productId }, body: { report } });
+      setData(result?.data ?? []);
+      setGroups(result?.groups ?? null);
+    }
+    const { measures, view } = props.definition;
+    const primaryFields = groups ?? measures.filter((x) => !x.secondaryAxis).map((x) => x.name);
+    const secondaryMeasures = measures.filter((x) => x.secondaryAxis);
+    const isStacked = groups != null || measures.some((x) => x.stacked);
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, { children: data2?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+      CartesianChart,
+      {
+        dataOriented: "columns",
+        data: data2,
+        series: { xField: view.timeField },
+        axes: {
+          x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
+          y: { fields: primaryFields, stacked: isStacked },
+          y2: {
+            fields: secondaryMeasures.map((x) => x.name),
+            type: secondaryMeasures[0]?.chartType ?? "bar"
+          }
+        }
+      }
+    ) });
   }
 
   // ClientApp/minerva/ts/views/admin.view.tsx
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function AdminView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_jsx_runtime25.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(import_jsx_runtime24.Fragment, {});
   }
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   function AppView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "/products/:productId/dashboard/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Navigate, { to: "/products" }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "/products/:productId/dashboard/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }
 
   // ClientApp/minerva/ts/app.tsx
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
-  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime27.jsx)(AppView, {}));
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime26.jsx)(AppView, {}));
 })();
 /*! Bundled license information:
 

@@ -7,6 +7,9 @@ public record DashboardDefinition(
 
 public record ReportDefinition(
   string Name,
+  int RowIndex,
+  int ColIndex,
+  int ColWidth, // Align with Bootstrap grid: XS -> 2, S -> 3, M -> 6, L -> 12
   List<MeasureDefinition> Measures,
   ViewDefinition View
 );
@@ -16,14 +19,17 @@ public record MeasureDefinition(
   string? EventName,
   string? FieldName,
   string? Aggregation,
-  List<CalculationDefinition> Calculation
+  string? ChartType,
+  bool? Stacked,
+  bool? SecondaryAxis,
+  List<CalculationDefinition>? Calculation
 );
 
 public record CalculationDefinition(
   string Type, // operand, operator
   string? EventName,
   string? FieldName,
-  string? Aggregation
+  string Aggregation
 );
 
 public record ViewDefinition(
@@ -36,3 +42,7 @@ public record ViewDefinition(
 );
 
 public record BreakdownDefinition(string FieldName);
+
+public record ProductReportExecutePostRequest(ReportDefinition Report);
+
+public record ReportResult(string Name, List<List<object>> Data, List<string>? Groups);
