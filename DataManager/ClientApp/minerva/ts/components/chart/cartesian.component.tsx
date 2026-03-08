@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import c3, { ChartConfiguration, FormatFunction } from 'c3';
-import { Dictionary, Rosie } from 'rosie/core';
-import { chartConfig, ChartProps } from './types';
-import { d3Format, d3Pattern } from 'minerva/core';
+import c3, { ChartConfiguration } from 'c3';
+import { Rosie } from 'rosie/core';
+import { chartConfig, ChartProps, d3Format, d3Pattern } from './types';
 
 export function CartesianChart(props: ChartProps) {
   const [chartId] = useState(Rosie.guid(`rosie-chart-${props.name ?? ''}-`));

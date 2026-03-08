@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { DataModel } from 'rosie/core';
 import { Dialog, Grid, GridColumn } from 'rosie/components';
-import { ProductInfo, ProductConnectionModel, ProductDataSetModel, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, UpdateProductDataSetModel } from 'minerva/core';
+import { ProductInfo, ProductConnectionModel, ProductDataSetsModel, ConnectionDataSetStore, UpdateProductInfoModel, ProductDataSet, ConnectionDataSetModel, alertError, UpdateProductDataSetModel } from 'minerva/core';
 
 export function ConnectorCreationDialog(props: { productId: string, onCreateSuccess: (productInfo: ProductInfo) => void }) {
   const { productId } = props,
@@ -22,7 +22,7 @@ export function ConnectorCreationDialog(props: { productId: string, onCreateSucc
       setClientSecret(connection.clientSecret ?? '');
     });
 
-    ProductDataSetModel.fetch({ pathParams: { productId } }).then(dataSets => {
+    ProductDataSetsModel.fetch({ pathParams: { productId } }).then(dataSets => {
       if (dataSets?.length) setSelectedDataSets(dataSets);
     });
 

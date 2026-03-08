@@ -2,10 +2,6 @@
 
 ## vNext
 
-**Breaking Changes**
-
-- Restructure codebase
-
 **Processor**
 
 - Add `vars` to `source`

@@ -1,6 +1,6 @@
-import { CartesianChart } from 'minerva/components';
-import { d3Format } from 'minerva/core';
 import { Dictionary } from 'rosie/core';
+import { CartesianChart, d3Format } from 'minerva/components';
+
 
 export function CompleteViewComponent(props: { data: Dictionary<any[]> }) {
   return <>

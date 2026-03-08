@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { Rosie } from 'rosie/core';
 import { useDialog } from 'rosie/components';
 import { CurrentProductModel, ProductInfo } from 'minerva/core';
+import { ProductLayout, ProductSelector } from 'minerva/components';
 
-import { ProductLayout } from './product-layout.component';
-import { ProductSelector } from './product-selector.component';
 import { ConnectorCreationDialog } from './connector-creation.component';
 
 export function ProductSettingsView() {

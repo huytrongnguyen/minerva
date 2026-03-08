@@ -2,6 +2,10 @@
 
 ## vNext
 
+**Breaking Changes**
+
+- Restructure codebase
+
 **Features**
 
 - Add `Dashboard > Complete View` screen

@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Dialog, Dropdown, Grid, GridColumn, useDialog } from 'rosie/components';
 import { ProductDataColumn, ProductDataColumnStore, UpdateProductDataColumnModel } from 'minerva/core';
-import { ProductLayout } from './product-layout.component';
-import { ProductSelector } from './product-selector.component';
+import { ProductLayout, ProductSelector } from 'minerva/components';
 
 export function EventFieldListView() {
   const params = useParams(),

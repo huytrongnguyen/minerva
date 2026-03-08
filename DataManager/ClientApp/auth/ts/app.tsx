@@ -13,9 +13,6 @@ function AuthView() {
 
   useEffect(() => {
     const code = searchParams.get('code');
-
-    console.log(code);
-
     if (code) getAuthUser(code);
   }, [])
 

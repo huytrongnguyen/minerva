@@ -3,8 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { DataModel } from 'rosie/core';
 import { Dialog, Dropdown, Grid, GridColumn, useDialog } from 'rosie/components';
 import { ProductDataTable, ProductDataTableStore, UpdateProductDataTableModel } from 'minerva/core';
-import { ProductLayout } from './product-layout.component';
-import { ProductSelector } from './product-selector.component';
+import { ProductLayout, ProductSelector } from 'minerva/components';
 
 export function EventListView() {
   const params = useParams(),
@@ -67,7 +66,7 @@ function SemanticEventUpdationDialog(props: { productId: string, onUpdateSuccess
       setPurchaseEvent(tables.find(x => x.semanticName === 'purchase') ?? null);
     });
     return () => { tables$.unsubscribe(); }
-  }, [])
+  }, []);
 
   async function onSubmit() {
     const updatedTables = dataTables.map(table => {

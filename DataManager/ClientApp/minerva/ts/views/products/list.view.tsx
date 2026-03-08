@@ -32,6 +32,5 @@ export function ProductListView() {
         </main>
       </div>
     </div>
-
   </>
 }

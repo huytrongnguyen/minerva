@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { ProductLayout } from './product-layout.component';
-import { ProductSelector } from './product-selector.component';
-import { CompleteViewComponent } from './complete-view.component';
-import { ProductDashboardModel } from 'minerva/core';
 import { Dictionary } from 'rosie/core';
+import { ProductDashboardModel } from 'minerva/core';
+import { ProductLayout, ProductSelector } from 'minerva/components';
+
+import { CompleteViewComponent } from './complete-view.component';
 
 export function DashboardView() {
   const params = useParams(),

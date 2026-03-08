@@ -1,3 +1,4 @@
+import { format } from 'd3';
 import { Dictionary } from 'rosie/core';
 
 type DataOriented = 'json' | 'rows' | 'columns';
@@ -54,3 +55,8 @@ export const chartConfig = {
     '#9da5b4', // slate gray
   ]
 }
+
+// https://github.com/d3/d3-format#locale_format
+// [​[fill]align][sign][symbol][0][width][,][.precision][~][type]
+export const d3Pattern = (specifier: string = ',.2~f') => format(specifier);
+export const d3Format = (value: number | { valueOf(): number } = 0, pattern: string = ',.2~f') => format(pattern)(value ?? 0)
