@@ -64101,11 +64101,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const { dataOriented, series, axes } = props, { xField, yField } = series, valueFields = typeof yField === "string" ? { [yField]: yField } : yField, seriesType = series.type ?? "bar", types = {};
       axes?.y?.fields?.forEach((field) => types[field] = axes?.y?.type ?? seriesType);
       axes?.y2?.fields?.forEach((field) => types[field] = axes?.y2?.type ?? seriesType);
+      const isColumns = (dataOriented ?? "json") === "columns";
       const config = {
         bindto: `#${chartId}`,
         data: {
           [dataOriented ?? "json"]: props.data,
-          keys: { x: xField, value: Object.keys(valueFields) },
+          ...isColumns ? { x: xField } : { keys: { x: xField, value: Object.keys(valueFields) } },
           names: valueFields,
           type: seriesType,
           types,
@@ -68582,8 +68583,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
 
   // ClientApp/minerva/ts/core/product/product-report.ts
-  var ProductDashboardModel = Model({
+  var DashboardLayoutModel = Model({
     proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}" }
+  });
+  var ReportModel = () => Model({
+    proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}" }
   });
 
   // ClientApp/minerva/ts/components/app-layout/require-auth.component.tsx
@@ -69274,55 +69278,94 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_react18 = __toESM(require_react());
+  var import_react19 = __toESM(require_react());
 
   // ClientApp/minerva/ts/views/reports/complete-view.component.tsx
+  var import_react18 = __toESM(require_react());
   var import_jsx_runtime23 = __toESM(require_jsx_runtime());
-  function CompleteViewComponent(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "container-fluid mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "row mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: "Installs & CPI" }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-        CartesianChart,
-        {
-          name: "installs-cpi",
-          data: props.data?.installs,
-          series: {
-            xField: "report_date",
-            yField: { installs: "Installs", cpi: "CPI" },
-            tooltip: {
-              renderer: (value, _, id) => {
-                return d3Format(value, id === "cpi" ? "$,.2~f" : ",.2~f");
+  function useReport(productId, dashboardId, reportId) {
+    const [result, setResult] = (0, import_react18.useState)(null);
+    (0, import_react18.useEffect)(() => {
+      const model = ReportModel();
+      const sub = model.subscribe(setResult);
+      model.load({ pathParams: { productId, dashboardId, reportId } });
+      return () => {
+        sub.unsubscribe();
+      };
+    }, [productId, dashboardId, reportId]);
+    return result;
+  }
+  function CompleteViewComponent({ layout, productId, dashboardId }) {
+    const [installsCpiStub, costByOsStub] = layout.reports;
+    const installsCpi = useReport(productId, dashboardId, installsCpiStub?.id);
+    const costByOs = useReport(productId, dashboardId, costByOsStub?.id);
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "container-fluid mb-2", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: installsCpiStub?.name }),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: installsCpi ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          CartesianChart,
+          {
+            name: "installs-cpi",
+            dataOriented: "columns",
+            data: installsCpi.data,
+            series: {
+              xField: "report_date",
+              yField: { installs: "Installs", cpi: "CPI" },
+              tooltip: {
+                renderer: (value, _, id) => {
+                  return d3Format(value, id === "cpi" ? "$,.2~f" : ",.2~f");
+                }
               }
+            },
+            axes: {
+              x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
+              y: { fields: ["installs"] },
+              y2: { fields: ["cpi"], type: "line", format: "$,.2~f" }
             }
-          },
-          axes: {
-            x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
-            y: { fields: ["installs"] },
-            y2: { fields: ["cpi"], type: "line", format: "$,.2~f" }
           }
-        }
-      ) })
-    ] }) }) }) }) });
+        ) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { className: "text-muted small", children: "Loading..." }) })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "card", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-header", children: costByOsStub?.name }),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "card-body", children: costByOs ? /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          CartesianChart,
+          {
+            name: "cost-by-os",
+            dataOriented: "columns",
+            data: costByOs.data,
+            series: {
+              xField: "report_date",
+              yField: Object.fromEntries(
+                costByOs.columns.slice(1).map((c) => [c.field, c.label])
+              )
+            },
+            axes: {
+              x: { type: "timeseries", format: "%Y-%m-%d", rotate: 25 },
+              y: { fields: costByOs.columns.slice(1).map((c) => c.field), stacked: true }
+            }
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("p", { className: "text-muted small", children: "Loading..." }) })
+      ] }) })
+    ] }) }) });
   }
 
   // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
   var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    const params = useParams(), [dashboardId, setDashboardId] = (0, import_react18.useState)(""), [data2, setData] = (0, import_react18.useState)({});
-    (0, import_react18.useEffect)(() => {
-      const data$ = ProductDashboardModel.subscribe(setData);
+    const params = useParams(), [layout, setLayout] = (0, import_react19.useState)(null);
+    (0, import_react19.useEffect)(() => {
+      const layout$ = DashboardLayoutModel.subscribe(setLayout);
       return () => {
-        data$.unsubscribe();
+        layout$.unsubscribe();
       };
     }, []);
-    (0, import_react18.useEffect)(() => {
-      const { productId, dashboardId: dashboardId2 } = params;
-      setDashboardId(dashboardId2);
-      ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, dashboardId: dashboardId2 } });
+    (0, import_react19.useEffect)(() => {
+      const { productId, dashboardId } = params;
+      DashboardLayoutModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
     }, [params]);
     return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(ProductSelector, { navPath: "/dashboard", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("li", { className: "breadcrumb-item active", children: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("main", { className: "fullscreen", children: dashboardId === "complete-view" && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CompleteViewComponent, { data: data2 }) })
+      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("main", { className: "fullscreen", children: params.dashboardId === "complete-view" && layout && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(CompleteViewComponent, { layout, productId: params.productId, dashboardId: params.dashboardId }) })
     ] });
   }
 

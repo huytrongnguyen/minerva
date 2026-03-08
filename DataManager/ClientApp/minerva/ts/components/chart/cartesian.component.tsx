@@ -18,11 +18,13 @@ export function CartesianChart(props: ChartProps) {
     axes?.y?.fields?.forEach(field => types[field] = axes?.y?.type ?? seriesType);
     axes?.y2?.fields?.forEach(field => types[field] = axes?.y2?.type ?? seriesType);
 
+    const isColumns = (dataOriented ?? 'json') === 'columns';
+
     const config = {
       bindto: `#${chartId}`,
       data: {
         [dataOriented ?? 'json']: props.data,
-        keys: { x: xField, value: Object.keys(valueFields) },
+        ...(isColumns ? { x: xField } : { keys: { x: xField, value: Object.keys(valueFields) } }),
         names: valueFields,
         type: seriesType,
         types,

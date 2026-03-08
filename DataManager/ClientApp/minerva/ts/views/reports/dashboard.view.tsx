@@ -1,25 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dictionary } from 'rosie/core';
-import { ProductDashboardModel } from 'minerva/core';
+import { DashboardLayout, DashboardLayoutModel } from 'minerva/core';
 import { ProductLayout, ProductSelector } from 'minerva/components';
 
 import { CompleteViewComponent } from './complete-view.component';
 
 export function DashboardView() {
   const params = useParams(),
-        [dashboardId, setDashboardId] = useState(''),
-        [data, setData] = useState({} as Dictionary<any[]>);
+        [layout, setLayout] = useState<DashboardLayout | null>(null);
 
   useEffect(() => {
-    const data$ = ProductDashboardModel.subscribe(setData);
-    return () => { data$.unsubscribe(); }
+    const layout$ = DashboardLayoutModel.subscribe(setLayout);
+    return () => { layout$.unsubscribe(); }
   }, []);
 
   useEffect(() => {
     const { productId, dashboardId } = params;
-    setDashboardId(dashboardId);
-    ProductDashboardModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
+    DashboardLayoutModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
   }, [params]);
 
   return <ProductLayout>
@@ -27,7 +24,8 @@ export function DashboardView() {
       <li className="breadcrumb-item active">Dashboard</li>
     </ProductSelector>
     <main className="fullscreen">
-      {dashboardId === 'complete-view' && <CompleteViewComponent data={data} />}
+      {params.dashboardId === 'complete-view' && layout &&
+        <CompleteViewComponent layout={layout} productId={params.productId} dashboardId={params.dashboardId} />}
     </main>
   </ProductLayout>
 }

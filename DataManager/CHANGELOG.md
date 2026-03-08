@@ -10,9 +10,10 @@
 
 - Add `Dashboard > Complete View` screen
   - Add `ProductDashboardController`
-    - Add GET `/api/products/{productId}/dashboard/{viewId}`
+    - Add GET `/api/products/{productId}/dashboard/{dashboardId}`
+    - Add GET `/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}`
   - Implement `CartesianChart` component
-  - Implement `QueryBuilder`
+  - Implement `ReportQueryBuilder`
 
 ## v0.0.3
 > 2026-03-07
