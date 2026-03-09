@@ -1,11 +1,3 @@
-drop table if exists product;
-create table product (
-  product_id text,
-  product_name text,
-  start_date date,
-  primary key (product_id)
-);
-
 create table product_info (
   product_id text not null,
   product_name text,
@@ -59,3 +51,19 @@ create table product_datacolumn (
   primary key (id)
 );
 create unique index product_datacolumn_uniq_idx on product_datacolumn(product_id, table_name, column_name);
+
+create table product_dashboard (
+  dashboard_id bigint not null default unique_rowid(),
+  product_id text not null,
+  dashboard_name text not null,
+  is_folder bool default false,
+  dashboard_order int default 1,
+  reports jsonb,
+  parent_id bigint,
+  created_at timestamp default now(),
+  created_by text default 'root',
+  updated_at timestamp,
+  updated_by text,
+  primary key (dashboard_id)
+);
+create index product_dashboard_product_id_idx on product_dashboard(product_id);

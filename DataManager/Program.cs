@@ -33,6 +33,7 @@ services
     .AddScoped<IProductDataSetStore, ProductDataSetStore>()
     .AddScoped<IProductDataTableStore, ProductDataTableStore>()
     .AddScoped<IProductDataColumnStore, ProductDataColumnStore>()
+    .AddScoped<IProductDashboardStore, ProductDashboardStore>()
     .AddScoped<ProductService>()
     .AddScoped<AuthService>()
     .AddCors()

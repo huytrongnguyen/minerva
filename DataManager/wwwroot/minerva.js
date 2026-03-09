@@ -68576,8 +68576,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var ProductConnectionModel = Model({
     proxy: { url: "/api/products/{productId}/connection" }
   });
-  var ProductNavigatorModel = Model({
-    proxy: { url: "/api/products/{productId}/navigator" }
+  var ProductDashboardTreeModel = Model({
+    proxy: { url: "/api/products/{productId}/dashboards" }
   });
 
   // ClientApp/minerva/ts/core/product/product-event.ts
@@ -68608,7 +68608,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // ClientApp/minerva/ts/core/product/product-report.ts
   var DashboardDefinitionModel = Model({
-    proxy: { url: "/api/products/{productId}/dashboard/{dashboardId}" }
+    proxy: { url: "/api/products/{productId}/dashboards/{dashboardId}" }
   });
   var ReportResultModel = Model({
     proxy: { url: "/api/products/{productId}/reports/execute", method: "post" }
@@ -68631,25 +68631,39 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function ProductNavigator() {
     const params = useParams(), [navigation2, setNavigation] = (0, import_react10.useState)([]);
     (0, import_react10.useEffect)(() => {
-      const navigator$ = ProductNavigatorModel.subscribe(setNavigation);
-      return () => {
-        navigator$.unsubscribe();
-      };
-    }, []);
-    (0, import_react10.useEffect)(() => {
       const { productId } = params;
       if (productId) {
-        ProductNavigatorModel.load({ pathParams: { productId } });
+        loadDashboardTree(productId);
       }
     }, [params]);
+    async function loadDashboardTree(productId) {
+      const dashboardTree = await ProductDashboardTreeModel.fetch({ pathParams: { productId } }) ?? [], navigator3 = [{
+        navId: "dashboards",
+        navName: "Dashboards",
+        children: dashboardTree
+      }, {
+        navId: "management",
+        navName: "Management",
+        children: [{
+          navId: "events",
+          navName: "Events",
+          navPath: `/products/${productId}/events`
+        }, {
+          navId: "settings",
+          navName: "Settings",
+          navPath: `/products/${productId}/settings`
+        }]
+      }];
+      setNavigation(navigator3);
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navigation2, level: 0 }) });
   }
   function NavItemList(props) {
     const location2 = useLocation(), { items = [], level = 0 } = props;
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, { children: items.map((navItem) => {
-      if (navItem.children && navItem.children.length > 0) {
+      if (!navItem.navPath || navItem.children && navItem.children.length > 0) {
         return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_react10.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "nav-link disabled text-body-tertiary py-1 pe-1", style: { paddingLeft: 4 + 8 * level }, children: navItem.navName }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "nav-link disabled py-1 pe-1", style: { paddingLeft: 4 + 8 * level }, children: navItem.navName }),
           /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navItem.children, level: level + 1 })
         ] }, navItem.navId);
       }

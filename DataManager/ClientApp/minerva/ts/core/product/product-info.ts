@@ -32,6 +32,6 @@ export const ProductConnectionModel = Model<ProductConnection>({
   proxy: { url: '/api/products/{productId}/connection' }
 });
 
-export const ProductNavigatorModel = Model<NavItem[]>({
-  proxy: { url: '/api/products/{productId}/navigator' }
+export const ProductDashboardTreeModel = Model<NavItem[]>({
+  proxy: { url: '/api/products/{productId}/dashboards' }
 });

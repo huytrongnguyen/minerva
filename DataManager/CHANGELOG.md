@@ -10,10 +10,15 @@
 
 - Add `Dashboard` screen
   - Add `ProductDashboardController`
-    - Add GET `/api/products/{productId}/dashboard/{dashboardId}`
-    - Add GET `/api/products/{productId}/dashboard/{dashboardId}/reports/{reportId}`
+    - Add GET `/api/products/{productId}/dashboards/{dashboardId}`
+    - Add POST `/api/products/{productId}/reports/execute`
   - Implement `CartesianChart` component
   - Implement `ReportQueryBuilder`
+
+**Improvements**
+
+- Update Product Navigation Sidebar
+  - Add GET `/api/products/{productId}/dashboards`
 
 ## v0.0.3
 > 2026-03-07

@@ -7,52 +7,48 @@ namespace DataManager.Controllers;
 
 [Route("api/products")] [ApiController] [AuthFilter]
 public class ProductController(ProductService productService) : ControllerBase {
-  [HttpGet] public List<ProductInfo> List()
-      => productService.List();
+  [HttpGet] public List<ProductInfo> List() => productService.List();
 
-  [HttpPost] public ProductInfo Create(string productId)
-      => productService.Get(productId);
+  [HttpPost] public ProductInfo Create(string productId) => productService.Get(productId);
 
-  [HttpGet("{productId}")] public ProductInfo Get(string productId)
-      => productService.Get(productId);
+  [HttpGet("{productId}")] public ProductInfo Get(string productId) => productService.Get(productId);
 
-  [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request)
-      => productService.Update(productId, request);
+  [HttpPatch("{productId}")] public ProductInfo Update(string productId, ProductInfoPatchRequest request) =>
+    productService.Update(productId, request);
 
-  [HttpGet("{productId}/datasets")] public List<ProductDataSet> ListProductDataSets(string productId)
-      => productService.ListProductDataSets(productId);
+  [HttpGet("{productId}/datasets")] public List<ProductDataSet> ListProductDataSets(string productId) =>
+    productService.ListProductDataSets(productId);
 
-  [HttpPatch("{productId}/datasets")] public List<ProductDataSet> UpdateProductDataSets(string productId, ProductDataSetUpdateRequest request)
-      => productService.UpdateProductDataSets(productId, request);
+  [HttpPatch("{productId}/datasets")] public List<ProductDataSet> UpdateProductDataSets(string productId, ProductDataSetUpdateRequest request) =>
+    productService.UpdateProductDataSets(productId, request);
 
-  [HttpGet("{productId}/tables")] public Task<List<ProductDataTable>> ListProductDataTables(string productId)
-      => productService.ListProductDataTables(productId);
+  [HttpGet("{productId}/tables")] public Task<List<ProductDataTable>> ListProductDataTables(string productId) =>
+    productService.ListProductDataTables(productId);
 
-  [HttpPatch("{productId}/tables")] public List<ProductDataTable> UpdateProductDataTables(string productId, ProductDataTablePatchRequest request)
-      => productService.UpdateProductDataTables(productId, request);
+  [HttpPatch("{productId}/tables")] public List<ProductDataTable> UpdateProductDataTables(string productId, ProductDataTablePatchRequest request) =>
+    productService.UpdateProductDataTables(productId, request);
 
-  [HttpGet("{productId}/tables/{tableName}")] public Task<List<ProductDataColumn>> ListProductDataColumns(string productId, string tableName)
-      => productService.ListProductDataColumns(productId, tableName);
+  [HttpGet("{productId}/tables/{tableName}")] public Task<List<ProductDataColumn>> ListProductDataColumns(string productId, string tableName) =>
+    productService.ListProductDataColumns(productId, tableName);
 
-  [HttpPatch("{productId}/tables/{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request)
-      => productService.UpdateProductDataColumns(productId, tableName, request);
+  [HttpPatch("{productId}/tables/{tableName}")] public List<ProductDataColumn> UpdateProductDataColumns(string productId, string tableName, ProductDataColumnPatchRequest request) =>
+    productService.UpdateProductDataColumns(productId, tableName, request);
 
-  [HttpGet("{productId}/dashboard/{dashboardId}")] public DashboardDefinition GetDashboardLayout(string productId, string dashboardId)
-      => productService.GetDashboardDefinition(dashboardId);
+  [HttpGet("{productId}/dashboards")] public List<NavItem> ListDashboards(string productId) =>
+    productService.ListDashboards(productId);
 
-  [HttpPost("{productId}/reports/execute")] public Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request)
-      => productService.ExecuteReport(productId, request);
+  [HttpGet("{productId}/dashboards/{dashboardId}")] public DashboardDefinition GetDashboardLayout(string productId, string dashboardId) =>
+    productService.GetDashboardDefinition(dashboardId);
 
-  [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId)
-      => productService.GetDataConnection(productId);
+  [HttpPost("{productId}/reports/execute")] public Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request) =>
+    productService.ExecuteReport(productId, request);
 
-  [HttpPost("{productId}/connection/datasets")] public Task<List<TrackedDataSet>> ListConnectionDataSets(string productId, DataConnection connection)
-      => productService.ListConnectionDataSets(connection);
+  [HttpGet("{productId}/connection")] public DataConnection GetConnection(string productId) =>
+    productService.GetDataConnection(productId);
 
-  [HttpPost("{productId}/connection/datasets/{dataSetName}")] public Task<TrackedDataSet> GetConnectionDataSet(string productId, string dataSetName, DataConnection connection)
-      => productService.GetConnectionDataSet(dataSetName, connection);
+  [HttpPost("{productId}/connection/datasets")] public Task<List<TrackedDataSet>> ListConnectionDataSets(string productId, DataConnection connection) =>
+    productService.ListConnectionDataSets(connection);
 
-
-  [HttpGet("{productId}/navigator")] public List<NavItem> GetNavigator(string productId)
-      => productService.GetNavigator(productId);
+  [HttpPost("{productId}/connection/datasets/{dataSetName}")] public Task<TrackedDataSet> GetConnectionDataSet(string productId, string dataSetName, DataConnection connection) =>
+    productService.GetConnectionDataSet(dataSetName, connection);
 }

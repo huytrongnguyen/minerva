@@ -1,10 +1,17 @@
 import { Model } from '../http';
 
+//#region API: /api/products/{productId}/dashboards/{dashboardId}
 export type DashboardDefinition = {
   name: string,
   reports: ReportDefinition[],
 }
 
+export const DashboardDefinitionModel = Model<DashboardDefinition>({
+  proxy: { url: '/api/products/{productId}/dashboards/{dashboardId}' }
+});
+//#endregion
+
+//#region API: /api/products/{productId}/reports
 export type ReportDefinition = {
   name: string,
   rowIndex: number,
@@ -52,10 +59,7 @@ export type ReportResult = {
   groups?: string[], // breakdown column names — present when Breakdown is set, used for C3 stacking
 }
 
-export const DashboardDefinitionModel = Model<DashboardDefinition>({
-  proxy: { url: '/api/products/{productId}/dashboard/{dashboardId}' }
-});
-
 export const ReportResultModel = Model<ReportResult>({
   proxy: { url: '/api/products/{productId}/reports/execute', method: 'post' }
 });
+//#endregion

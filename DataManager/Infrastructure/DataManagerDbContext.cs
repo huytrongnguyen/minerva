@@ -9,6 +9,7 @@ public class DataManagerDbContext(DbContextOptions<DataManagerDbContext> options
   public DbSet<PRODUCT_DATASET> ProductDataSet { get; set; }
   public DbSet<PRODUCT_DATATABLE> ProductDatatable { get; set; }
   public DbSet<PRODUCT_DATACOLUMN> ProductDatacolumn { get; set; }
+  public DbSet<PRODUCT_DASHBOARD> ProductDashboard { get; set; }
 }
 
 public abstract class DataStore<TEntity, T>(DataManagerDbContext _dbContext) where TEntity : class {

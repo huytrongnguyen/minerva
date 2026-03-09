@@ -6,18 +6,17 @@ public partial class ProductService(IProductStore productStore,
                                     IProductDataSetStore productDataSetStore,
                                     IProductDataTableStore productDataTableStore,
                                     IProductDataColumnStore productDataColumnStore,
-                                    ITrinoStore trinoStore, ILogger<ProductService> logger) {
-  public List<ProductInfo> List()
-      => productStore.List();
+                                    IProductDashboardStore productDashboardStore,
+                                    ITrinoStore trinoStore,
+                                    ILogger<ProductService> logger) {
+  public List<ProductInfo> List() => productStore.List();
 
-  public ProductInfo Create(string productId)
-      => productStore.Get(productId);
+  public ProductInfo Create(string productId) => productStore.Get(productId);
 
-  public ProductInfo Get(string productId)
-      => productStore.Get(productId);
+  public ProductInfo Get(string productId) => productStore.Get(productId);
 
-  public ProductInfo Update(string productId, ProductInfoPatchRequest request)
-      => productStore.Update(productId, request);
+  public ProductInfo Update(string productId, ProductInfoPatchRequest request) =>
+    productStore.Update(productId, request);
 
   public DataConnection GetDataConnection(string productId) {
     var connection = productStore.GetDataConnection(productId);
@@ -31,66 +30,29 @@ public partial class ProductService(IProductStore productStore,
     return connection;
   }
 
-  public Task<List<TrackedDataSet>> ListConnectionDataSets(DataConnection connection)
-      => trinoStore.ListDataSets(connection);
+  public Task<List<TrackedDataSet>> ListConnectionDataSets(DataConnection connection) =>
+    trinoStore.ListDataSets(connection);
 
-  public Task<TrackedDataSet> GetConnectionDataSet(string dataSetName, DataConnection connection)
-      => trinoStore.GetDataSet(dataSetName, connection);
+  public Task<TrackedDataSet> GetConnectionDataSet(string dataSetName, DataConnection connection) =>
+    trinoStore.GetDataSet(dataSetName, connection);
 
-  public List<NavItem> GetNavigator(string productId) {
-    return [
-      new(
-        NavId: "dashboard",
-        NavName: "Dashboard",
-        NavIcon: null,
-        NavPath: null,
-        Children: [
-          new(
-            NavId: "complete-view",
-            NavName: "Complete View",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/dashboard/complete-view",
-            Children: null
-          ),
-          new(
-            NavId: "smart-view",
-            NavName: "Smart View",
-            NavIcon: null,
-            NavPath: null,
-            Children: [
-              new(
-                NavId: "overview",
-                NavName: "Overview",
-                NavIcon: null,
-                NavPath: $"/products/{productId}/dashboard/smart-view:overview",
-                Children: null
-              )
-            ]
-          )
-        ]
-      ),
-      new(
-        NavId: "management",
-        NavName: "Management",
-        NavIcon: null,
-        NavPath: null,
-        Children: [
-          new(
-            NavId: "events",
-            NavName: "Events",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/events",
-            Children: null
-          ),
-          new(
-            NavId: "settings",
-            NavName: "Settings",
-            NavIcon: null,
-            NavPath: $"/products/{productId}/settings",
-            Children: null
-          )
-        ]
-      )
-    ];
+  public List<NavItem> ListDashboards(string productId) {
+    var dashboards = productDashboardStore.List(productId);
+    logger.Console($"dashboards = {ObjectUtils.Encode(dashboards, true)}");
+    var byParent = dashboards.GroupBy(x => x.ParentId ?? 0).ToDictionary(g => g.Key, g => g.ToList());
+    logger.Console($"byParent = {ObjectUtils.Encode(byParent, true)}");
+    return BuildNavItems(productId, 0, byParent);
+    // return [];
+  }
+
+  private static List<NavItem> BuildNavItems(string productId, long parentId, Dictionary<long, List<ProductDashboard>> byParent) {
+    if (!byParent.TryGetValue(parentId, out var children)) return [];
+    return [..children.Select(d => new NavItem(
+      NavId: d.DashboardId.ToString(),
+      NavName: d.DashboardName,
+      NavIcon: null,
+      NavPath: d.IsFolder ? null : $"/products/{productId}/dashboard/{d.DashboardId}",
+      Children: d.IsFolder ? BuildNavItems(productId, d.DashboardId, byParent) : null
+    ))];
   }
 }
