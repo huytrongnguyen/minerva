@@ -8,68 +8,33 @@ using DataManager.Shared;
 namespace DataManager.Auth;
 
 public class AuthService(HttpClient httpClient, IConfiguration configuration, ILogger<AuthService> logger) {
-  public AuthUser VerifyToken(string token, string redirectUrl) {
-    string url = configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{token}", token).Replace("{redirectUrl}", redirectUrl);
-    logger.Console($"url = {url}");
-    var httpClient = new HttpClient();
-    var response = httpClient.GetAsync(url).Result;
-    var responseText = response.Content.ReadAsStringAsync().Result;
-    logger.Console($"responseText = {responseText}");
-
-    var authUser = new AuthUser("", "", "");
-
-    // var response = HttpUtils.Get<AuthResponse>(url);
-    // if (response?.serviceResponse?.authenticationSuccess == null) { return null; }
-
-    // var authInfo = response.serviceResponse.authenticationSuccess;
-    // var authUser = authInfo.profile;
-    // authUser.username = authInfo.user;
-
-    // var tokenHandler = new JwtSecurityTokenHandler();
-    // var key = Encoding.UTF8.GetBytes(SecretKey);
-    // var tokenDescriptor = new SecurityTokenDescriptor {
-    //   Subject = new ClaimsIdentity(new[] {
-    //     new Claim("id", authUser.username),
-    //     new Claim("username", authUser.username),
-    //     new Claim("displayName", authUser.displayName),
-    //     new Claim("employeeID", authUser.employeeID),
-    //     new Claim("departmentID", authUser.departmentID),
-    //     new Claim("departmentCode", authUser.departmentCode),
-    //     new Claim("department", authUser.department),
-    //     new Claim("jobTitle", authUser.jobTitle),
-    //     new Claim("mail", authUser.mail),
-    //   }),
-    //   Expires = DateTime.UtcNow.AddDays(30),
-    //   SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256),
-    // };
-    // var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-    // var jwtToken = tokenHandler.WriteToken(securityToken);
-
-    // authUser.token = jwtToken; // return to client to cache in LocalStorage
-
-    return authUser;
-  }
-
   public async Task<AuthUser> VerifyAuthUser(string code) {
     var verifyUrl = configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{code}", code);
-    logger.Console($"verifyUrl = {verifyUrl}");
 
     var request = new HttpRequestMessage(HttpMethod.Get, verifyUrl);
     var responseMessage = await httpClient.SendAsync(request);
-    logger.Console($"StatusCode = {responseMessage.StatusCode}");
-    logger.Console($"ContentType = {responseMessage.Content.Headers.ContentType}");
+
+    if (!responseMessage.IsSuccessStatusCode) {
+      var location = responseMessage.Headers.Location?.ToString();
+      throw new Exception($"SSO serviceValidate returned {(int)responseMessage.StatusCode}. Redirect: {location}");
+    }
 
     var responseText = await responseMessage.Content.ReadAsStringAsync();
-    logger.Console($"responseText = {responseText}");
 
-    // var response = ObjectUtils.Decode<AuthResponse>(responseText);
-    // return ProcessAuthResponse(response);
+    var response = ObjectUtils.Decode<AuthResponse>(responseText);
+
+    if (response?.Result?.Success == null) {return null;}
+
+    var successResult = response.Result.Success;
+
+    // userService.AddOrUpdate(authUser);
 
     var authUser = new AuthUser(
-      Username: code,
-      DisplayName: code,
+      Username: successResult.Username,
+      DisplayName: successResult.UserInfo.DisplayName,
       Token: GenerateToken(new Dictionary<string, string> {
-        { "Username", code }
+        { "Username", successResult.Username },
+        { "DisplayName", successResult.UserInfo.DisplayName }
       }) // return to client to cache in LocalStorage
     );
 

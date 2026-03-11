@@ -15,16 +15,5 @@ namespace DataManager.Controllers;
     return Ok(authUser);
   }
 
-  [HttpGet("verify")] public ActionResult<object> VerifyToken(string token, string redirectUrl) {
-    var authUser = authService.VerifyToken(token, redirectUrl);
-    if (authUser == null || authUser.Username.IsEmpty()) {
-      return StatusCode(StatusCodes.Status401Unauthorized, new { message = UnauthorizedMessage });
-    }
-
-    // userService.AddOrUpdate(authUser);
-
-    return Ok(authUser);
-  }
-
   private const string UnauthorizedMessage = "Unauthorized";
 }

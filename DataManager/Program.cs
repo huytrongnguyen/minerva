@@ -39,7 +39,8 @@ services
     .AddControllers();
 
 services.AddHttpClient<ITrinoStore, TrinoStore>();
-services.AddHttpClient<AuthService>();
+services.AddHttpClient<AuthService>().ConfigurePrimaryHttpMessageHandler(() =>
+    new HttpClientHandler { AllowAutoRedirect = false });
 services.AddDataProtection();
 services.AddHealthChecks();
 services.AddRazorPages();
