@@ -44,6 +44,12 @@ export const chartConfig = {
   colorPatterns: [
     '#e97b98', // pink          — primary (bars)
     '#6765e8', // purple        — secondary (lines)
+    '#2383e2',
+    '#0f7b6c',
+    '#6e4fcb',
+    '#c87017',
+    '#c0392b',
+    '#acaba8',
     '#5b9bd5', // medium blue
     '#4dbdb5', // teal
     '#9b8dc4', // soft purple

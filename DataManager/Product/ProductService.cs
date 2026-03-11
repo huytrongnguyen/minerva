@@ -38,21 +38,18 @@ public partial class ProductService(IProductStore productStore,
 
   public List<NavItem> ListDashboards(string productId) {
     var dashboards = productDashboardStore.List(productId);
-    logger.Console($"dashboards = {ObjectUtils.Encode(dashboards, true)}");
     var byParent = dashboards.GroupBy(x => x.ParentId ?? 0).ToDictionary(g => g.Key, g => g.ToList());
-    logger.Console($"byParent = {ObjectUtils.Encode(byParent, true)}");
     return BuildNavItems(productId, 0, byParent);
-    // return [];
   }
 
   private static List<NavItem> BuildNavItems(string productId, long parentId, Dictionary<long, List<ProductDashboard>> byParent) {
     if (!byParent.TryGetValue(parentId, out var children)) return [];
     return [..children.Select(d => new NavItem(
       NavId: d.DashboardId.ToString(),
-      NavName: d.DashboardName,
+      NavName: d.Name,
       NavIcon: null,
-      NavPath: d.IsFolder ? null : $"/products/{productId}/dashboard/{d.DashboardId}",
-      Children: d.IsFolder ? BuildNavItems(productId, d.DashboardId, byParent) : null
+      NavPath: (d.IsFolder ?? false) ? null : $"/products/{productId}/dashboard/{d.DashboardId}",
+      Children: (d.IsFolder ?? false) ? BuildNavItems(productId, d.DashboardId, byParent) : null
     ))];
   }
 }

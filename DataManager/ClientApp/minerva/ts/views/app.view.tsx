@@ -8,6 +8,7 @@ import { ProductListView, ProductSettingsView } from './products';
 import { EventFieldListView, EventListView } from './events';
 import { DashboardView } from './reports';
 import { AdminView } from './admin.view';
+import { Auth } from './auth.view';
 
 export function AppView() {
   useEffect(() => {
@@ -25,6 +26,7 @@ export function AppView() {
         <Route path="/products/:productId/events" element={<RequireAuth component={EventListView} title="Events" />} />
         <Route path="/products/:productId/events/:tableName" element={<RequireAuth component={EventFieldListView} title="Event Fields" />} />
         <Route path="/products/:productId/dashboard/:dashboardId" element={<RequireAuth component={DashboardView} title="Dashboard" />} />
+        <Route path="/signin" element={<Auth />} />
         <Route path="*" element={<Navigate to="/products" />} />
       </Routes>
     </AppLayout>

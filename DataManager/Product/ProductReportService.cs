@@ -4,79 +4,86 @@ using DataManager.Shared;
 namespace DataManager.Product;
 
 public partial class ProductService {
-  public DashboardLayout GetDashboard(string dashboardId) {
-    return new DashboardLayout(
-      Name: "Complete View",
-      Reports: [
-        new ReportDefinition(
-          Name: "Installs & CPI",
-          RowIndex: 1, ColIndex: 1, ColWidth: 6,
-          Measures: [
-            new MeasureDefinition(
-              Name: "Installs",
-              EventName: "postgres_ballistar.public.mkt_user_active",
-              FieldName: "installs",
-              Aggregation: "sum",
-              ChartType: "bar",
-              Stacked: false,
-              SecondaryAxis: false,
-              Calculation: null
-            ),
-            new MeasureDefinition(
-              Name: "CPI",
-              EventName: null,
-              FieldName: null,
-              Aggregation: null,
-              ChartType: "line",
-              Stacked: false,
-              SecondaryAxis: true,
-              Calculation: [
-                new CalculationDefinition("operand",  "postgres_ballistar.public.mkt_user_active", "cost",     "sum"),
-                new CalculationDefinition("operator", null,                                         null,       "/"),
-                new CalculationDefinition("operand",  "postgres_ballistar.public.mkt_user_active", "installs", "sum"),
-              ]
-            )
-          ],
-          View: new ViewDefinition(
-            TimeField:        "report_date",
-            Breakdown:        null,
-            StartRollingDate: 30,
-            EndRollingDate:   1,
-            StartExactDate:   null,
-            EndExactDate:     null
-          )
-        ),
-        new ReportDefinition(
-          Name: "Cost by OS",
-          RowIndex: 1, ColIndex: 2, ColWidth: 6,
-          Measures: [
-            new MeasureDefinition(
-              Name: "Cost",
-              EventName: "postgres_ballistar.public.mkt_user_active",
-              FieldName: "cost",
-              Aggregation: "sum",
-              ChartType: "bar",
-              Stacked: true,
-              SecondaryAxis: false,
-              Calculation: null
-            )
-          ],
-          View: new ViewDefinition(
-            TimeField:        "report_date",
-            Breakdown:        new BreakdownDefinition("platform"),
-            StartRollingDate: 30,
-            EndRollingDate:   1,
-            StartExactDate:   null,
-            EndExactDate:     null
-          )
-        )
-      ]
-    );
-  }
-
-  // public DashboardLayout UpdateDashboard(string dashboardId, ProductDashboardUpdateRequest request) {
-  //   return GetDashboard(dashboardId);
+  public ProductDashboard GetDashboard(string productId, long dashboardId) =>
+    productDashboardStore.Get(productId, dashboardId);
+  // public ProductDashboard GetDashboard(string productId, long dashboardId) {
+  //   var dashboard = productDashboardStore.Get(productId, dashboardId);
+  //   return new ProductDashboard(
+  //     DashboardId: dashboard.DashboardId,
+  //     ProductId: dashboard.ProductId,
+  //     Name: dashboard.Name,
+  //     IsFolder: dashboard.IsFolder,
+  //     DashboardOrder: dashboard.DashboardOrder,
+  //     ParentId: dashboard.ParentId,
+  //     Reports: (dashboard?.IsFolder ?? false) ? null : [
+  //       new ReportDefinition(
+  //         Name: "Installs & CPI",
+  //         RowIndex: 1, ColIndex: 1, ColWidth: 6,
+  //         Measures: [
+  //           new MeasureDefinition(
+  //             Name: "Installs",
+  //             EventName: "postgres_ballistar.public.mkt_user_active",
+  //             FieldName: "installs",
+  //             Aggregation: "sum",
+  //             ChartType: "bar",
+  //             Stacked: false,
+  //             SecondaryAxis: false,
+  //             Calculation: null
+  //           ),
+  //           new MeasureDefinition(
+  //             Name: "CPI",
+  //             EventName: null,
+  //             FieldName: null,
+  //             Aggregation: null,
+  //             ChartType: "line",
+  //             Stacked: false,
+  //             SecondaryAxis: true,
+  //             Calculation: [
+  //               new CalculationDefinition("operand",  "postgres_ballistar.public.mkt_user_active", "cost",     "sum"),
+  //               new CalculationDefinition("operator", null,                                         null,       "/"),
+  //               new CalculationDefinition("operand",  "postgres_ballistar.public.mkt_user_active", "installs", "sum"),
+  //             ]
+  //           )
+  //         ],
+  //         View: new ViewDefinition(
+  //           TimeField:        "report_date",
+  //           Breakdown:        null,
+  //           StartRollingDate: 30,
+  //           EndRollingDate:   1,
+  //           StartExactDate:   null,
+  //           EndExactDate:     null
+  //         )
+  //       ),
+  //       new ReportDefinition(
+  //         Name: "Cost by OS",
+  //         RowIndex: 1, ColIndex: 2, ColWidth: 6,
+  //         Measures: [
+  //           new MeasureDefinition(
+  //             Name: "Cost",
+  //             EventName: "postgres_ballistar.public.mkt_user_active",
+  //             FieldName: "cost",
+  //             Aggregation: "sum",
+  //             ChartType: "bar",
+  //             Stacked: true,
+  //             SecondaryAxis: false,
+  //             Calculation: null
+  //           )
+  //         ],
+  //         View: new ViewDefinition(
+  //           TimeField:        "report_date",
+  //           Breakdown:        new BreakdownDefinition("platform"),
+  //           StartRollingDate: 30,
+  //           EndRollingDate:   1,
+  //           StartExactDate:   null,
+  //           EndExactDate:     null
+  //         )
+  //       )
+  //     ]
+  //   );
   // }
+
+  public ProductDashboard UpdateDashboard(string productId, long dashboardId, ProductDashboard request) =>
+    productDashboardStore.Update(productId, dashboardId, request);
 
   public async Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request) {
     var connection = GetDataConnection(productId);

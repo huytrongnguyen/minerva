@@ -53248,7 +53248,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react21 = __toESM(require_react());
+  var import_react22 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -68164,10 +68164,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var alertError = import_toastr.default.error;
 
   // ClientApp/minerva/ts/core/http.ts
+  var verifyUrl = "/api/auth/verify?token={token}&redirectUrl={redirectUrl}";
+  var redirectUrl = `${location.origin}/signin`;
   var AUTH_TOKEN = "auth_token";
   function redirectToLogin() {
     LocalCache.remove(AUTH_TOKEN);
     location.href = "/login";
+  }
+  async function verifyAuthToken(token) {
+    return await Ajax.request({
+      url: verifyUrl.replace("{token}", token).replace("{redirectUrl}", redirectUrl)
+    }).catch(onAjaxError);
   }
   function onAjaxError(reason) {
     const { status, data: data2 } = reason.response;
@@ -68253,11 +68260,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   });
 
   // ClientApp/minerva/ts/core/product/product-report.ts
-  var DashboardLayout = Model({
+  var ProductDashboard = Model({
     proxy: { url: "/api/products/{productId}/dashboards/{dashboardId}" }
   });
-  var UpdateDashboardLayoutModel = Model({
-    proxy: { url: "/api/products/{productId}/dashboards/{dashboardId}/reports", method: "patch" }
+  var UpdateProductDashboardModel = Model({
+    proxy: { url: "/api/products/{productId}/dashboards/{dashboardId}", method: "patch" }
   });
   var ReportResultModel = Model({
     proxy: { url: "/api/products/{productId}/reports/execute", method: "post" }
@@ -68273,6 +68280,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       // pink          — primary (bars)
       "#6765e8",
       // purple        — secondary (lines)
+      "#2383e2",
+      "#0f7b6c",
+      "#6e4fcb",
+      "#c87017",
+      "#c0392b",
+      "#acaba8",
       "#5b9bd5",
       // medium blue
       "#4dbdb5",
@@ -69410,9 +69423,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
   var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react20.useState)(""), [dashboardName, setDashboardName] = (0, import_react20.useState)(""), [layout, setLayout] = (0, import_react20.useState)([]);
+    const params = useParams(), [productId, setProductId] = (0, import_react20.useState)(""), [dashboardId, setDashboardId] = (0, import_react20.useState)(""), [dashboardName, setDashboardName] = (0, import_react20.useState)(""), [layout, setLayout] = (0, import_react20.useState)([]);
     (0, import_react20.useEffect)(() => {
-      const layout$ = DashboardLayout.subscribe((value) => {
+      const layout$ = ProductDashboard.subscribe((value) => {
         setDashboardName(value.name);
         const layout2 = value.reports.groupBy("rowIndex").orderBy("key").map((row) => {
           return row.elements.orderBy("colIndex");
@@ -69424,16 +69437,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, []);
     (0, import_react20.useEffect)(() => {
-      const { productId: productId2, dashboardId } = params;
+      const { productId: productId2, dashboardId: dashboardId2 } = params;
       setProductId(productId2);
-      DashboardLayout.loadWithSplashScreen({ pathParams: { productId: productId2, dashboardId } });
+      setDashboardId(dashboardId2);
+      ProductDashboard.loadWithSplashScreen({ pathParams: { productId: productId2, dashboardId: dashboardId2 } });
     }, [params]);
+    async function saveDashboardReports() {
+      const dashboard = await UpdateProductDashboardModel.fetch({
+        pathParams: { productId, dashboardId },
+        body: { productId, dashboardId, reports: layout.flatMap((x) => x) }
+      });
+      ProductDashboard.loadData(dashboard);
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(ProductLayout, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(ProductSelector, { navPath: "/dashboard", children: [
         /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("li", { className: "breadcrumb-item active", children: dashboardName ?? "Dashboard" }),
         /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "dropdown ms-auto", children: [
           /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "btn btn-sm btn-outline-secondary dropdown-toggle hide-indicator", "data-bs-toggle": "dropdown", "data-bs-auto-close": "true", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: "fa fa-ellipsis" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown-menu", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "dropdown-item", children: "Save Dashboard" }) })
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown-menu", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "dropdown-item", onClick: () => saveDashboardReports(), children: "Save Dashboard" }) })
         ] })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("main", { className: "fullscreen", children: [
@@ -69451,10 +69472,29 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_jsx_runtime26.Fragment, {});
   }
 
+  // ClientApp/minerva/ts/views/auth.view.tsx
+  var import_react21 = __toESM(require_react());
+  function Auth() {
+    const location2 = useLocation(), navigate = useNavigate();
+    (0, import_react21.useEffect)(() => {
+      const { ticket } = location2.search.decodeQS();
+      if (ticket) getAuthUser(ticket);
+    }, []);
+    async function getAuthUser(ticket) {
+      const user = await verifyAuthToken(ticket);
+      if (user) {
+        LocalCache.set(AUTH_TOKEN, user.token);
+        AuthUserModel.load();
+        navigate("/home");
+      }
+    }
+    return null;
+  }
+
   // ClientApp/minerva/ts/views/app.view.tsx
   var import_jsx_runtime27 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react21.useEffect)(() => {
+    (0, import_react22.useEffect)(() => {
       if (LocalCache.get(AUTH_TOKEN)) {
         AuthUserModel.load();
       }
@@ -69466,6 +69506,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
       /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/dashboard/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/signin", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Auth, {}) }),
       /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }

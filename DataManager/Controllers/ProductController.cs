@@ -37,11 +37,11 @@ public class ProductController(ProductService productService) : ControllerBase {
   [HttpGet("{productId}/dashboards")] public List<NavItem> ListDashboards(string productId) =>
     productService.ListDashboards(productId);
 
-  [HttpGet("{productId}/dashboards/{dashboardId}")] public DashboardLayout GetDashboardLayout(string productId, string dashboardId) =>
-    productService.GetDashboard(dashboardId);
+  [HttpGet("{productId}/dashboards/{dashboardId}")] public ProductDashboard GetDashboard(string productId, long dashboardId) =>
+    productService.GetDashboard(productId, dashboardId);
 
-  // [HttpPatch("{productId}/dashboards/{dashboardId}")] public DashboardLayout UpdateDashboardLayout(string productId, string dashboardId, DashboardLayoutUpdateRequest request) =>
-  //   productService.UpdateDashboardLayout(dashboardId, request);
+  [HttpPatch("{productId}/dashboards/{dashboardId}")] public ProductDashboard UpdateDashboardLayout(string productId, long dashboardId, ProductDashboard request) =>
+    productService.UpdateDashboard(productId, dashboardId, request);
 
   [HttpPost("{productId}/reports/execute")] public Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request) =>
     productService.ExecuteReport(productId, request);

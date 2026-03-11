@@ -1,13 +1,22 @@
 import { Ajax, AjaxError, DataModel, DataStore, HttpParams, LocalCache, ProxyConfig } from 'rosie/core';
 import { afterProcessing, alertError, beforeProcessing } from './shared';
 
+const verifyUrl = '/api/auth/verify?token={token}&redirectUrl={redirectUrl}',
+      redirectUrl = `${location.origin}/signin`;
+
 export const AUTH_TOKEN = 'auth_token';
 
 export function redirectToLogin() {
   LocalCache.remove(AUTH_TOKEN);
   location.href = '/login';
+  // location.href = loginUrl.replace('{redirectUrl}', redirectUrl);
 }
 
+export async function verifyAuthToken<T = any>(token: string) {
+  return await Ajax.request<T>({
+    url: verifyUrl.replace('{token}', token).replace('{redirectUrl}', redirectUrl),
+  }).catch(onAjaxError)
+}
 
 export function onAjaxError(reason: AjaxError) {
   const { status, data } = reason.response;

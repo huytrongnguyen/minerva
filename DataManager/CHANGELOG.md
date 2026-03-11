@@ -11,6 +11,7 @@
 - Add `Dashboard` screen
   - Add `ProductDashboardController`
     - Add GET `/api/products/{productId}/dashboards/{dashboardId}`
+    - Add PATCH `/api/products/{productId}/dashboards/{dashboardId}`
     - Add POST `/api/products/{productId}/reports/execute`
   - Implement `CartesianChart` component
   - Implement `ReportQueryBuilder`

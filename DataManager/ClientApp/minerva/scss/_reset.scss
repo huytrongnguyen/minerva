@@ -1,5 +1,7 @@
 @use 'variables' as *;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @font-face {
   font-display: swap;
   font-family: 'Noto Sans Arabic';
@@ -10,19 +12,22 @@
   unicode-range: u+06??, u+0750-077f, u+0870-088e, u+0890-0891, u+0897-08e1, u+08e3-08ff, u+200c-200e, u+2010-2011, u+204f, u+2e41, u+fb50-fdff, u+fe70-fe74, u+fe76-fefc, u+102e0-102fb, u+10e60-10e7e, u+10ec2-10ec4, u+10efc-10eff, u+1ee00-1ee03, u+1ee05-1ee1f, u+1ee21-1ee22, u+1ee24, u+1ee27, u+1ee29-1ee32, u+1ee34-1ee37, u+1ee39, u+1ee3b, u+1ee42, u+1ee47, u+1ee49, u+1ee4b, u+1ee4d-1ee4f, u+1ee51-1ee52, u+1ee54, u+1ee57, u+1ee59, u+1ee5b, u+1ee5d, u+1ee5f, u+1ee61-1ee62, u+1ee64, u+1ee67-1ee6a, u+1ee6c-1ee72, u+1ee74-1ee77, u+1ee79-1ee7c, u+1ee7e, u+1ee80-1ee89, u+1ee8b-1ee9b, u+1eea1-1eea3, u+1eea5-1eea9, u+1eeab-1eebb, u+1eef0-1eef1
 }
 
-body {
-  font-family: 'Noto Sans Arabic', Effra, Roboto, Helvetica, Open-Sans, Arial, sans-serif;
+html,
+body,
+#react-root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 aside {
   width: 15rem;
-  background-color: #f9f8f7;
+  background-color: #f7f7f5;
   .navbar-brand {
     color: #5f5e59;
     font-weight: 500;
   }
   // color: #7d7a75;
-//   .nav-link {
+  .nav-link {
+    height: 1.875rem;
 //     &:hover {
 //       // background-color: $component-hover-bg;
 //     }
@@ -30,7 +35,7 @@ aside {
 //       // color: $component-active-color;
 //       // background-color: $component-active-bg;
 //     }
-//   }
+  }
 }
 
 .app-wrapper { flex: 1 }

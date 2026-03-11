@@ -1,17 +1,17 @@
 import { Model } from '../http';
 
 //#region API: /api/products/{productId}/dashboards/{dashboardId}
-export type DashboardLayout = {
+export type ProductDashboard = {
   name: string,
   reports: ReportDefinition[],
 }
 
-export const DashboardLayout = Model<DashboardLayout>({
+export const ProductDashboard = Model<ProductDashboard>({
   proxy: { url: '/api/products/{productId}/dashboards/{dashboardId}' }
 });
 
-export const UpdateDashboardLayoutModel = Model<DashboardLayout>({
-  proxy: { url: '/api/products/{productId}/dashboards/{dashboardId}/reports', method: 'patch' }
+export const UpdateProductDashboardModel = Model<ProductDashboard>({
+  proxy: { url: '/api/products/{productId}/dashboards/{dashboardId}', method: 'patch' }
 });
 //#endregion
 

@@ -67,3 +67,4 @@ create table product_dashboard (
   primary key (dashboard_id)
 );
 create index product_dashboard_product_id_idx on product_dashboard(product_id);
+create unique index product_dashboard_uniq_idx on product_dashboard(product_id, dashboard_id);
