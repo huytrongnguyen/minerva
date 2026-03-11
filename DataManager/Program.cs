@@ -35,11 +35,11 @@ services
     .AddScoped<IProductDataColumnStore, ProductDataColumnStore>()
     .AddScoped<IProductDashboardStore, ProductDashboardStore>()
     .AddScoped<ProductService>()
-    .AddScoped<AuthService>()
     .AddCors()
     .AddControllers();
 
 services.AddHttpClient<ITrinoStore, TrinoStore>();
+services.AddHttpClient<AuthService>();
 services.AddDataProtection();
 services.AddHealthChecks();
 services.AddRazorPages();
@@ -57,7 +57,7 @@ app.UseHsts();
 app.Use(async (context, next) => {
   await next();
   if (context.Response.StatusCode == 404) {
-    context.Request.Path = "/";
+      context.Request.Path = "/";
     await next();
   }
 });

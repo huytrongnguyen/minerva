@@ -17,6 +17,11 @@ body {
 aside {
   width: 15rem;
   background-color: #f9f8f7;
+  .navbar-brand {
+    color: #5f5e59;
+    font-weight: 500;
+  }
+  // color: #7d7a75;
 //   .nav-link {
 //     &:hover {
 //       // background-color: $component-hover-bg;
@@ -27,6 +32,8 @@ aside {
 //     }
 //   }
 }
+
+.app-wrapper { flex: 1 }
 
 .c3 {
   // Axis text

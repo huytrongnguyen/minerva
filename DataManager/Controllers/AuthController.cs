@@ -4,9 +4,20 @@ using DataManager.Auth;
 
 namespace DataManager.Controllers;
 
-[Route("api/auth")] [ApiController] public class AuthController(AuthService authService) : ControllerBase {
-  [HttpGet("verify")] public ActionResult<object> VerifyAuthUser(string code) {
-    var authUser = authService.VerifyAuthUser(code);
+[Route("api/auth")] [ApiController] public class AuthController(AuthService authService, IConfiguration configuration) : ControllerBase {
+  [HttpGet("verify")] public async Task<ActionResult<object>> VerifyAuthUser(string code) {
+    var authUser = await authService.VerifyAuthUser(code);
+    if (authUser == null || authUser.Username.IsEmpty()) {
+      return StatusCode(StatusCodes.Status401Unauthorized, new { message = UnauthorizedMessage });
+    }
+
+    return Ok(authUser);
+  }
+
+  [HttpGet("verifyUrl")] public string GetVerifyUrl(string code) => configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{code}", code);
+
+  [HttpPost("verifyUser")] public ActionResult<object> VerifyUser(AuthResponse authResponse) {
+    var authUser = authService.ProcessAuthResponse(authResponse);
     if (authUser == null || authUser.Username.IsEmpty()) {
       return StatusCode(StatusCodes.Status401Unauthorized, new { message = UnauthorizedMessage });
     }

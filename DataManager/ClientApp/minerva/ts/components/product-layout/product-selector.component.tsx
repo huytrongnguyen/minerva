@@ -23,7 +23,7 @@ export function ProductSelector(props: ProductSelectorProps) {
     setProducts(products ?? []);
   }
 
-  return <ol className="breadcrumb py-0">
+  return <ol className="breadcrumb">
     <li className="breadcrumb-item">Products</li>
     <li className="breadcrumb-item dropdown">
       <InputDropdown options={products} value={selectedProduct ? [selectedProduct] : []}

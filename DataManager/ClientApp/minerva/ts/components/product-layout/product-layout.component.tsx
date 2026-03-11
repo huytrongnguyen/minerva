@@ -2,6 +2,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { CurrentProductModel } from 'minerva/core';
 import { ProductNavigator } from './product-navigator.component';
+import { AppSidebar } from '../app-layout';
 
 export function ProductLayout(props: PropsWithChildren<any>) {
   const params = useParams(),
@@ -16,13 +17,13 @@ export function ProductLayout(props: PropsWithChildren<any>) {
   }, [params])
 
   return <>
-    <aside className="app-sidebar d-flex flex-column border-end">
-      {productId && <div className="sidebar-body flex-1 overflow-y-auto">
-        <nav className="nav nav-pills d-flex flex-column">
+    <AppSidebar>
+      {productId && <div className="sidebar-body p-2 flex-1 overflow-y-auto">
+        <nav className="nav nav-pills flex-column">
           <ProductNavigator />
         </nav>
       </div>}
-    </aside>
+    </AppSidebar>
     <div className="app-wrapper fullscreen d-flex position-relative">
       <div className="app-body fullscreen d-flex flex-column">
         {props.children}

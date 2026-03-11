@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Link, useParams, useLocation } from 'react-router';
-import { Rosie } from 'rosie/core';
+import { Link, useLocation, useParams } from 'react-router';
 import { NavItem, ProductDashboardTreeModel } from 'minerva/core';
+import { Rosie } from 'rosie/core';
 
 export function ProductNavigator() {
   const params = useParams(),
@@ -42,7 +42,7 @@ export function ProductNavigator() {
   </>
 }
 
-function NavItemList(props: { items: NavItem[], level: number }) {
+export function NavItemList(props: { items: NavItem[], level: number }) {
   const location = useLocation(),
         { items = [], level = 0 } = props;
 
@@ -50,13 +50,25 @@ function NavItemList(props: { items: NavItem[], level: number }) {
     {items.map(navItem => {
       if (!navItem.navPath || (navItem.children && navItem.children.length > 0)) {
         return <Fragment key={navItem.navId}>
-          <div className="nav-link disabled py-1 pe-1" style={{paddingLeft: 4 + 8 * level}}>{navItem.navName}</div>
+          <div role="button" className={Rosie.classNames('nav-link py-1 pe-1 d-flex', { disabled: level === 0 })} style={{paddingLeft: 8 + 16 * level}}>
+            <div>{navItem.navName}</div>
+            {(level > 0) && <div className="dropdown ms-auto hidden-menu">
+              <button className="btn btn-sm p-0 dropdown-toggle hide-indicator" data-bs-toggle="dropdown" data-bs-auto-close="true">
+                <span className="fa fa-plus" />
+              </button>
+              <div className="dropdown-menu">
+                <div role="button" className="dropdown-item">New Dashboard</div>
+                <div role="button" className="dropdown-item">New Folder</div>
+              </div>
+            </div>}
+
+          </div>
           <NavItemList items={navItem.children} level={level + 1} />
         </Fragment>
       }
 
-      return <Link key={navItem.navId} to={navItem.navPath} style={{paddingLeft: 4 + 8 * level}}
-                    className={Rosie.classNames('nav-link rounded-0 py-1 pe-1', { active: location.pathname.startsWith(navItem.navPath) })}>
+      return <Link key={navItem.navId} to={navItem.navPath} style={{paddingLeft: 8 + 16 * level}}
+                    className={Rosie.classNames('nav-link py-1 pe-1', { active: location.pathname.startsWith(navItem.navPath) })}>
         {navItem.navIcon ? <span className={`fa fa-${navItem.navIcon} nav-icon`} /> : ''} {navItem.navName}
       </Link>
     })}

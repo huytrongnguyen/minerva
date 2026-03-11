@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import c3 from 'c3';
-import { DashboardDefinitionModel, ReportDefinition, ReportResultModel } from 'minerva/core';
-import { CartesianChart, ProductLayout, ProductSelector } from 'minerva/components';
+import { DashboardLayout, ReportDefinition } from 'minerva/core';
+import { ProductLayout, ProductSelector } from 'minerva/components';
+import { ReportComponent } from './report.component';
 
 export function DashboardView() {
   const params = useParams(),
@@ -11,7 +11,7 @@ export function DashboardView() {
         [layout, setLayout] = useState<ReportDefinition[][]>([]);
 
   useEffect(() => {
-    const layout$ = DashboardDefinitionModel.subscribe(value => {
+    const layout$ = DashboardLayout.subscribe(value => {
       setDashboardName(value.name);
       const layout = value.reports.groupBy('rowIndex').orderBy('key')
           .map((row: { key: string, elements: ReportDefinition[] }) => {
@@ -25,25 +25,27 @@ export function DashboardView() {
   useEffect(() => {
     const { productId, dashboardId } = params;
     setProductId(productId);
-    DashboardDefinitionModel.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
+    DashboardLayout.loadWithSplashScreen({ pathParams: { productId, dashboardId } });
   }, [params]);
 
   return <ProductLayout>
     <ProductSelector navPath='/dashboard'>
       <li className="breadcrumb-item active">{dashboardName ?? 'Dashboard'}</li>
+      <div className="dropdown ms-auto">
+        <button className="btn btn-sm btn-outline-secondary dropdown-toggle hide-indicator" data-bs-toggle="dropdown" data-bs-auto-close="true">
+          <span className="fa fa-ellipsis" />
+        </button>
+        <div className="dropdown-menu">
+          <button className="dropdown-item">Save Dashboard</button>
+        </div>
+      </div>
     </ProductSelector>
     <main className="fullscreen">
+      <h1 className="p-2">{dashboardName}</h1>
       {layout?.length > 0 && <div className="container-fluid mb-2">
         {layout.map((row, rowIndex) => {
           return <div key={rowIndex} className="row mt-2">
-            {row.map((col, colIndex) => {
-              return <div key={colIndex} className={`col-${col.colWidth}`}>
-                <div className="card">
-                  <div className="card-header">{col.name}</div>
-                  <div className="card-body"><ReportComponent productId={productId} definition={col} /></div>
-                </div>
-              </div>
-            })}
+            {row.map((col, colIndex) => <ReportComponent key={colIndex} productId={productId} definition={col} />)}
           </div>
         })}
       </div>}
@@ -51,38 +53,3 @@ export function DashboardView() {
   </ProductLayout>
 }
 
-export function ReportComponent(props: { productId: string, definition: ReportDefinition }) {
-  const [data,   setData]   = useState([]);
-  const [groups, setGroups] = useState<string[] | null>(null);
-
-  useEffect(() => {
-    if (props.definition) {
-      loadReport(props.productId, props.definition);
-    }
-  }, [props.definition]);
-
-  async function loadReport(productId: string, report: ReportDefinition) {
-    const result = await ReportResultModel.fetch({ pathParams: { productId }, body: { report } });
-    setData(result?.data ?? []);
-    setGroups(result?.groups ?? null);
-  }
-
-  const { measures, view } = props.definition;
-  const primaryFields      = groups ?? measures.filter(x => !x.secondaryAxis).map(x => x.name);
-  const secondaryMeasures  = measures.filter(x => x.secondaryAxis);
-  const isStacked          = groups != null || measures.some(x => x.stacked);
-
-  return <>
-    {data?.length > 0 && <CartesianChart dataOriented="columns" data={data}
-        series={{ xField: view.timeField }}
-        axes={{
-          x:  { type: 'timeseries', format: '%Y-%m-%d', rotate: 25 },
-          y:  { fields: primaryFields, stacked: isStacked },
-          y2: {
-            fields: secondaryMeasures.map(x => x.name),
-            type:   secondaryMeasures[0]?.chartType as c3.ChartType ?? 'bar',
-          }
-        }}
-    />}
-  </>
-}

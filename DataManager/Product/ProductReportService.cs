@@ -4,8 +4,8 @@ using DataManager.Shared;
 namespace DataManager.Product;
 
 public partial class ProductService {
-  public DashboardDefinition GetDashboardDefinition(string dashboardId) {
-    return new DashboardDefinition(
+  public DashboardLayout GetDashboard(string dashboardId) {
+    return new DashboardLayout(
       Name: "Complete View",
       Reports: [
         new ReportDefinition(
@@ -73,6 +73,10 @@ public partial class ProductService {
       ]
     );
   }
+
+  // public DashboardLayout UpdateDashboard(string dashboardId, ProductDashboardUpdateRequest request) {
+  //   return GetDashboard(dashboardId);
+  // }
 
   public async Task<ReportResult> ExecuteReport(string productId, ProductReportExecutePostRequest request) {
     var connection = GetDataConnection(productId);

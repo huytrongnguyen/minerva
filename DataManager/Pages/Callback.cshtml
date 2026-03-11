@@ -1,7 +1,21 @@
 @page
+@model DataManager.Pages.CallbackModel
 
-<div id="react-root"></div>
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <h1>Error</h1>
+    <p>@Model.ErrorMessage</p>
+}
+else
+{
+    <h1>Authenticating...</h1>
+    <p>Redirecting to home page...</p>
 
-@section Scripts {
-  <script src="/auth.js?dc=@(DateTime.Now.Ticks)"></script>
+    <script>
+        // Store tokens in localStorage
+        localStorage.setItem('auth_token', '@Model.AuthToken');
+
+        // Redirect to index page
+        window.location.href = '/';
+    </script>
 }

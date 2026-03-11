@@ -1,13 +1,11 @@
-using DataManager.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DataManager.Pages.Auth;
+namespace DataManager.Pages;
 
-public class LoginModel(AuthService authService) : PageModel {
+public class LoginModel(IConfiguration configuration) : PageModel {
   public IActionResult OnGet() {
-    var loginUrl = authService.GetLoginUrl();
-    var authCode = authService.MockAuthCode(loginUrl); // mock authorization code
-    return RedirectToPage("callback", new { code = authCode });
+    var loginUrl = configuration.GetValue<string>("OAuth:LoginUrl");
+    return Redirect(loginUrl);
   }
 }

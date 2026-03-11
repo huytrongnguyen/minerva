@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Grid, GridColumn } from 'rosie/components';
 import { ProductInfoStore } from 'minerva/core';
+import { AppSidebar } from 'minerva/components';
 
 export function ProductListView() {
   useEffect(() => {
@@ -9,6 +10,7 @@ export function ProductListView() {
   }, []);
 
   return <>
+    <AppSidebar />
     <div className="app-wrapper fullscreen d-flex position-relative">
       <div className="app-body fullscreen d-flex flex-column">
         <ol className="breadcrumb">
@@ -22,7 +24,7 @@ export function ProductListView() {
         <main className="fullscreen">
           <Grid fitScreen store={ProductInfoStore}>
             <GridColumn headerName="Product ID" field="productId" style={{flex:1}} renderer={(value: string) => <>
-              <Link to={`/products/${value}/dashboard/smart-view:overview`}>{value}</Link>
+              <Link to={`/products/${value}/events`}>{value}</Link>
             </>} />
             <GridColumn headerName="Start Date" field="startDate" style={{width:200}} renderer={(value: string) => Date.parseDate(value).format()} />
             <GridColumn headerName="Action" field="productId" style={{width:200}} renderer={(value: string) => <>

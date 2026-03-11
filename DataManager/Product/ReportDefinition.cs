@@ -1,9 +1,11 @@
 namespace DataManager.Product;
 
-public record DashboardDefinition(
+public record DashboardLayout(
   string Name,
   List<ReportDefinition> Reports
 );
+
+public record DashboardLayoutUpdateRequest(List<ReportDefinition>? Reports);
 
 public record ReportDefinition(
   string Name,

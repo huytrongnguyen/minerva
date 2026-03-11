@@ -19,6 +19,10 @@
 
 - Update Product Navigation Sidebar
   - Add GET `/api/products/{productId}/dashboards`
+- Update authentication flow
+  - Update `AuthService`
+  - Update `Login` screen
+  - Add `Callback` screen
 
 ## v0.0.3
 > 2026-03-07

@@ -1,0 +1,470 @@
+/* ── Shared Components ── */
+
+/* Cards */
+.nova-card {
+  background: var(--nova-surface);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-lg);
+  box-shadow: var(--nova-shadow);
+  padding: 16px;
+
+  &__title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--nova-text-secondary);
+    margin-bottom: 12px;
+  }
+}
+
+/* KPI Stat Card */
+.nova-kpi {
+  background: var(--nova-surface);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-lg);
+  box-shadow: var(--nova-shadow);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: var(--nova-shadow-md);
+  }
+
+  &__label {
+    font-size: 12px;
+    color: var(--nova-text-secondary);
+    font-weight: 500;
+  }
+
+  &__value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--nova-text);
+    line-height: 1.1;
+  }
+
+  &__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 100px;
+    width: fit-content;
+
+    &--up {
+      color: var(--nova-green);
+      background: var(--nova-green-bg);
+    }
+
+    &--down {
+      color: var(--nova-red);
+      background: var(--nova-red-bg);
+    }
+  }
+}
+
+/* Badges */
+.nova-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 100px;
+
+  &--green {
+    color: var(--nova-green);
+    background: var(--nova-green-bg);
+  }
+
+  &--blue {
+    color: var(--nova-blue);
+    background: var(--nova-blue-bg);
+  }
+
+  &--amber {
+    color: var(--nova-amber);
+    background: var(--nova-amber-bg);
+  }
+
+  &--purple {
+    color: var(--nova-purple);
+    background: var(--nova-purple-bg);
+  }
+
+  &--gray {
+    color: var(--nova-text-secondary);
+    background: var(--nova-gray-bg);
+  }
+
+  &--red {
+    color: var(--nova-red);
+    background: var(--nova-red-bg);
+  }
+}
+
+/* Filter Bar */
+.nova-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nova-border-muted);
+  margin-bottom: 20px;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--nova-text-muted);
+  }
+}
+
+.nova-select,
+.nova-input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius);
+  background: var(--nova-surface);
+  font-size: 13px;
+  color: var(--nova-text);
+  outline: none;
+  transition: border-color 0.15s;
+
+  &:focus {
+    border-color: var(--nova-blue);
+  }
+
+  &:hover {
+    border-color: #b0afac;
+  }
+}
+
+.nova-select {
+  padding-right: 28px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23787774' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+
+/* Buttons */
+.nova-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 32px;
+  border-radius: var(--nova-radius);
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.1s, border-color 0.1s;
+
+  &--primary {
+    background: var(--nova-text);
+    color: var(--nova-bg);
+
+    &:hover {
+      background: #2a2a28;
+    }
+  }
+
+  &--secondary {
+    background: var(--nova-surface);
+    color: var(--nova-text);
+    border: 1px solid var(--nova-border);
+
+    &:hover {
+      background: var(--nova-surface-2);
+    }
+  }
+
+  &--sm {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Grid helpers */
+.nova-grid {
+  display: grid;
+  gap: 16px;
+
+  &--4 {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  &--2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  &--3 {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+.nova-chart-row {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 3fr 2fr;
+  }
+}
+
+/* Data Table */
+.nova-table-wrapper {
+  background: var(--nova-surface);
+  border: 1px solid var(--nova-border);
+  border-radius: var(--nova-radius-lg);
+  box-shadow: var(--nova-shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--nova-border-muted);
+    gap: 8px;
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      flex: 1;
+    }
+  }
+}
+
+.nova-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  thead {
+    background: var(--nova-surface-2);
+    border-bottom: 1px solid var(--nova-border);
+
+    th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--nova-text-secondary);
+      white-space: nowrap;
+      cursor: pointer;
+      user-select: none;
+
+      &:hover {
+        color: var(--nova-text);
+      }
+
+      .sort-icon {
+        display: inline-block;
+        margin-left: 4px;
+        opacity: 0.4;
+        font-size: 10px;
+      }
+
+      &.sorted .sort-icon {
+        opacity: 1;
+        color: var(--nova-blue);
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--nova-border-muted);
+      transition: background 0.1s;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: var(--nova-surface-2);
+      }
+    }
+
+    td {
+      padding: 10px 16px;
+      color: var(--nova-text);
+    }
+  }
+}
+
+.nova-table-footer {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid var(--nova-border-muted);
+  font-size: 12px;
+  color: var(--nova-text-secondary);
+  gap: 8px;
+
+  &__info {
+    flex: 1;
+  }
+
+  &__pages {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__page-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--nova-radius-sm);
+    border: 1px solid var(--nova-border);
+    font-size: 12px;
+    background: var(--nova-surface);
+    cursor: pointer;
+    transition: background 0.1s;
+
+    &:hover:not(:disabled) {
+      background: var(--nova-surface-2);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    &.active {
+      background: var(--nova-text);
+      color: var(--nova-bg);
+      border-color: var(--nova-text);
+    }
+  }
+}
+
+/* Search input */
+.nova-search {
+  position: relative;
+
+  svg {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    color: var(--nova-text-muted);
+  }
+
+  input {
+    padding-left: 28px;
+    width: 200px;
+  }
+}
+
+/* Section divider */
+.nova-section {
+  margin-bottom: 24px;
+}
+
+.nova-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nova-text-secondary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Empty state */
+.nova-empty {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--nova-text-secondary);
+  font-size: 14px;
+
+  svg {
+    width: 40px;
+    height: 40px;
+    color: var(--nova-text-muted);
+    margin-bottom: 12px;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--nova-text);
+    margin-bottom: 6px;
+  }
+}
+
+/* Form elements */
+.nova-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+  }
+}
+
+/* Tabs */
+.nova-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--nova-border);
+  margin-bottom: 20px;
+  gap: 0;
+}
+
+.nova-tab {
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--nova-text-secondary);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--nova-text);
+  }
+
+  &.active {
+    color: var(--nova-text);
+    font-weight: 600;
+    border-bottom-color: var(--nova-text);
+  }
+}
+
+/* Tooltip */
+.nova-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+}

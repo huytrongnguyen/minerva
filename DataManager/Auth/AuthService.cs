@@ -7,35 +7,29 @@ using DataManager.Shared;
 
 namespace DataManager.Auth;
 
-public class AuthService(IConfiguration configuration, ILogger<AuthService> logger) {
-  public string GetLoginUrl() {
-    var queryParams = string.Join("&",
-      new Dictionary<string, string> {
-        { "client_id", ClientId },
-        { "redirect_uri", RedirectUri },
-        { "response_type", "code" },
-        { "scope", string.Join("%20", [
-          "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile",
-          "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email"
-        ]) },
-      }.Select(kvp => $"{kvp.Key}={kvp.Value}")
-    );
+public class AuthService(HttpClient httpClient, IConfiguration configuration, ILogger<AuthService> logger) {
+  public async Task<AuthUser> VerifyAuthUser(string code) {
+    var verifyUrl = configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{code}", code);
+    logger.Console($"verifyUrl = {verifyUrl}");
 
-    return "https://accounts.google.com/o/oauth2/v2/auth?" + queryParams;
-  }
+    var request = new HttpRequestMessage(HttpMethod.Get, verifyUrl);
+    var responseMessage = await httpClient.SendAsync(request);
+    logger.Console($"StatusCode = {responseMessage.StatusCode}");
+    logger.Console($"ContentType = {responseMessage.Content.Headers.ContentType}");
 
-  public string MockAuthCode(string loginUrl) => GenerateToken(new Dictionary<string, string> { { "loginUrl", loginUrl } });
+    var responseText = await responseMessage.Content.ReadAsStringAsync();
+    logger.Console($"responseText = {responseText}");
 
-  public AuthUser VerifyAuthUser(string code) {
-    var verifyResponse = Verify(code);
-    var userInfo = GetUserInfo(verifyResponse.IdToken, verifyResponse.AccessToken);
+    // var response = ObjectUtils.Decode<AuthResponse>(responseText);
+    // return ProcessAuthResponse(response);
 
-    var authUser = new AuthUser {
-      Username = userInfo.Username,
-      Token = GenerateToken(new Dictionary<string, string> {
-        { "Username", userInfo.Username }
+    var authUser = new AuthUser(
+      Username: code,
+      DisplayName: code,
+      Token: GenerateToken(new Dictionary<string, string> {
+        { "Username", code }
       }) // return to client to cache in LocalStorage
-    };
+    );
 
     return authUser;
   }
@@ -62,27 +56,6 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
     }
   }
 
-  private AuthVerifyResponse Verify(string code) {
-    // var verifyUrl = "https://oauth2.googleapis.com/token";
-    var body = new Dictionary<string, string> {
-      { "code", code },
-      { "client_id", ClientId },
-      { "client_secret", ClientSecret },
-      { "redirect_uri", RedirectUri },
-      { "grant_type", "authorization_code" },
-    };
-
-    var idToken = GenerateToken(new Dictionary<string, string> { { "client_id", ClientId }, { "code", code } });
-    var accessToken = GenerateToken(new Dictionary<string, string> { { "code", code } });
-
-    return new AuthVerifyResponse(idToken, accessToken);// mock access token
-  }
-
-  private AuthUserInfoResponse GetUserInfo(string idToken, string accessToken) {
-    // var userInfoUrl = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + accessToken;
-    // var userInfoHeader = new Dictionary<string, string> { { "Authorization", $"Bearer {idToken}" } };
-    return new AuthUserInfoResponse("1", "test", "test@minerva.com"); // mock user info
-  }
 
   private string GenerateToken(Dictionary<string, string> authInfo) {
     var token = new JwtSecurityToken(
@@ -95,28 +68,27 @@ public class AuthService(IConfiguration configuration, ILogger<AuthService> logg
 
   private readonly SecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
   private readonly SecurityKey signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-  private readonly string ClientId = configuration["OAuth:ClientId"];
-  private readonly string ClientSecret = configuration["OAuth:ClientSecret"];
-  private readonly string RedirectUri = configuration["OAuth:RedirectUri"];
 }
 
-public class AuthResponse {
-  public bool Result { get; set; }
-  public AuthUser User { get; set; }
+public record AuthResponse([property: JsonPropertyName("serviceResponse")] AuthResponse.AuthResult Result) {
+  public record AuthResult(
+    [property: JsonPropertyName("authenticationFailure")] AuthFailure? Failure,
+    [property: JsonPropertyName("authenticationSuccess")] AuthSuccess? Success
+  );
+
+  public record AuthFailure(
+    [property: JsonPropertyName("code")] string Code,
+    [property: JsonPropertyName("description")] string Description
+  );
+
+  public record AuthSuccess(
+    [property: JsonPropertyName("user")] string Username,
+    [property: JsonPropertyName("profile")] UserInfo UserInfo
+  );
+
+  public record UserInfo(
+    [property: JsonPropertyName("displayName")] string DisplayName
+  );
 }
 
-public class AuthUser {
-  public string Username { get; set; }
-  public string Token { get; set; }
-}
-
-public record AuthVerifyResponse(
-  [property: JsonPropertyName("id_token")] string IdToken,
-  [property: JsonPropertyName("access_token")] string AccessToken
-);
-
-public record AuthUserInfoResponse(
-  [property: JsonPropertyName("sub")] string Id,
-  [property: JsonPropertyName("name")] string Username,
-  [property: JsonPropertyName("email")] string Email
-);
+public record AuthUser(string Username, string DisplayName, string? Token);
