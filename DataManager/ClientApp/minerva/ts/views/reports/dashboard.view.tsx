@@ -5,14 +5,14 @@ import { ProductLayout, ProductSelector } from 'minerva/components';
 import { ReportComponent } from './report.component';
 import { useDialog } from 'rosie/components';
 import { Rosie } from 'rosie/core';
-import { ReportCreationDialog } from './report-creation.component';
+import { ReportEditingDialog } from './report-editing.component';
 
 export function DashboardView() {
   const params = useParams(),
         [productId, setProductId] = useState(''),
         [dashboardId, setDashboardId] = useState(''),
         [dashboardName, setDashboardName] = useState(''),
-        reportCreationDialog = useDialog('#report-creation-dialog'),
+        reportEditingDialog = useDialog('#report-editing-dialog'),
         [layout, setLayout] = useState<ReportDefinition[][]>([]);
 
   useEffect(() => {
@@ -42,12 +42,12 @@ export function DashboardView() {
     ProductDashboard.loadData(dashboard);
   }
 
-  function onCreateReportSuccess() {
-    Rosie.hideModal('#report-creation-dialog');
+  function onUpdateReportSuccess() {
+    Rosie.hideModal('#report-editing-dialog');
   }
 
   return <ProductLayout>
-    <ProductSelector navPath='/dashboard'>
+    <ProductSelector navPath='/dashboards'>
       <li className="breadcrumb-item active">{dashboardName ?? 'Dashboard'}</li>
       <div className="d-flex ms-auto">
         <div className="dropdown me-1">
@@ -58,7 +58,7 @@ export function DashboardView() {
             <button className="dropdown-item" onClick={() => saveDashboardReports()}>Save Dashboard</button>
           </div>
         </div>
-        <button className="btn btn-sm btn-primary" onClick={() => reportCreationDialog.show()}>
+        <button className="btn btn-sm btn-primary" onClick={() => reportEditingDialog.show()}>
           <span className="fa fa-plus" />
         </button>
       </div>
@@ -73,8 +73,8 @@ export function DashboardView() {
         })}
       </div>}
     </main>
-    {reportCreationDialog.isShown && <ReportCreationDialog productId={productId} dashboardId={dashboardId}
-            onCreateSuccess={onCreateReportSuccess} />}
+    {reportEditingDialog.isShown && <ReportEditingDialog productId={productId} dashboardId={dashboardId} reportId="-1"
+            onUpdateSuccess={onUpdateReportSuccess} />}
   </ProductLayout>
 }
 

@@ -2,6 +2,9 @@
 
 ## vNext
 
+## v0.0.4
+> 2026-03-11
+
 **Breaking Changes**
 
 - Restructure codebase
@@ -15,6 +18,7 @@
     - Add POST `/api/products/{productId}/reports/execute`
   - Implement `CartesianChart` component
   - Implement `ReportQueryBuilder`
+- Add `Create Report` dialog
 
 **Improvements**
 

@@ -53248,7 +53248,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react22 = __toESM(require_react());
+  var import_react24 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -55422,21 +55422,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         nextLocationPathname = stripBasename(nextLocationPathname, basename) || nextLocationPathname;
       }
       const endSlashPosition = toPathname !== "/" && toPathname.endsWith("/") ? toPathname.length - 1 : toPathname.length;
-      let isActive = locationPathname === toPathname || !end2 && locationPathname.startsWith(toPathname) && locationPathname.charAt(endSlashPosition) === "/";
+      let isActive2 = locationPathname === toPathname || !end2 && locationPathname.startsWith(toPathname) && locationPathname.charAt(endSlashPosition) === "/";
       let isPending = nextLocationPathname != null && (nextLocationPathname === toPathname || !end2 && nextLocationPathname.startsWith(toPathname) && nextLocationPathname.charAt(toPathname.length) === "/");
       let renderProps = {
-        isActive,
+        isActive: isActive2,
         isPending,
         isTransitioning
       };
-      let ariaCurrent = isActive ? ariaCurrentProp : void 0;
+      let ariaCurrent = isActive2 ? ariaCurrentProp : void 0;
       let className;
       if (typeof classNameProp === "function") {
         className = classNameProp(renderProps);
       } else {
         className = [
           classNameProp,
-          isActive ? "active" : null,
+          isActive2 ? "active" : null,
           isPending ? "pending" : null,
           isTransitioning ? "transitioning" : null
         ].filter(Boolean).join(" ");
@@ -60973,13 +60973,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     _setInitialAttributesOnChild(child) {
       child = this._getInnerElement(child);
-      const isActive = this._elemIsActive(child);
+      const isActive2 = this._elemIsActive(child);
       const outerElem = this._getOuterElement(child);
-      child.setAttribute("aria-selected", isActive);
+      child.setAttribute("aria-selected", isActive2);
       if (outerElem !== child) {
         this._setAttributeIfNotExists(outerElem, "role", "presentation");
       }
-      if (!isActive) {
+      if (!isActive2) {
         child.setAttribute("tabindex", "-1");
       }
       this._setAttributeIfNotExists(child, "role", "tab");
@@ -68164,17 +68164,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var alertError = import_toastr.default.error;
 
   // ClientApp/minerva/ts/core/http.ts
-  var verifyUrl = "/api/auth/verify?token={token}&redirectUrl={redirectUrl}";
   var redirectUrl = `${location.origin}/signin`;
   var AUTH_TOKEN = "auth_token";
   function redirectToLogin() {
     LocalCache.remove(AUTH_TOKEN);
     location.href = "/login";
-  }
-  async function verifyAuthToken(token) {
-    return await Ajax.request({
-      url: verifyUrl.replace("{token}", token).replace("{redirectUrl}", redirectUrl)
-    }).catch(onAjaxError);
   }
   function onAjaxError(reason) {
     const { status, data: data2 } = reason.response;
@@ -68269,6 +68263,56 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var ReportResultModel = Model({
     proxy: { url: "/api/products/{productId}/reports/execute", method: "post" }
   });
+
+  // ClientApp/minerva/ts/core/report/index.ts
+  var NUMERIC_TYPES = ["int", "bigint", "float", "double", "decimal", "real", "numeric", "integer", "long"];
+  var DATE_TYPES = ["date", "timestamp", "datetime"];
+  var isNumeric = (t = "") => NUMERIC_TYPES.some((k) => t.toLowerCase().includes(k));
+  var isDate3 = (t = "") => DATE_TYPES.some((k) => t.toLowerCase().includes(k));
+  var aggsFor = (t = "") => isNumeric(t) ? ["SUM", "AVG", "MIN", "MAX", "COUNT"] : ["COUNT"];
+  var defaultAgg = (t = "") => isNumeric(t) ? "SUM" : "COUNT";
+  var autoName = (m) => m.fieldName ? `${m.aggregation}(${m.fieldName})` : "";
+  var newDraft = () => ({
+    id: Rosie.guid("m-"),
+    tableName: "",
+    fieldName: "",
+    aggregation: "",
+    name: "",
+    chartType: "bar",
+    stacked: false,
+    secondaryAxis: false
+  });
+  var buildReportDefinition = (reportName, measures, view) => ({
+    name: reportName || "New Report",
+    rowIndex: 0,
+    colIndex: 0,
+    colWidth: 6,
+    measures: measures.map((m) => ({
+      name: m.name || autoName(m),
+      eventName: m.tableName,
+      fieldName: m.fieldName,
+      aggregation: m.aggregation,
+      chartType: m.chartType,
+      stacked: m.stacked,
+      secondaryAxis: m.secondaryAxis,
+      calculation: []
+    })),
+    view: {
+      timeField: view.timeField,
+      breakdown: view.breakdownField ? { fieldName: view.breakdownField } : null,
+      startRollingDate: view.startExactDate ? null : view.startRollingDate ?? 7,
+      endRollingDate: view.endExactDate ? null : view.endRollingDate ?? 1,
+      startExactDate: view.startExactDate ?? null,
+      endExactDate: view.endExactDate ?? null
+    }
+  });
+  var toRows = (data2) => {
+    if (!data2?.length) return { headers: [], rows: [] };
+    const headers = data2.map((col) => String(col[0]));
+    const rowCount = (data2[0]?.length ?? 1) - 1;
+    const rows = Array.from({ length: rowCount }, (_, i) => data2.map((col) => col[i + 1] ?? ""));
+    return { headers, rows };
+  };
 
   // ClientApp/minerva/ts/components/chart/types.ts
   var import_d3 = __toESM(require_d3_node());
@@ -68522,12 +68566,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       valueField = "value",
       multiple = false,
       defaultText = "Select",
-      separator = ": ",
       smartButtonText = true,
       rightAligned = false,
       searchBox = true,
       buttonClass = "",
-      buttonStyle = {}
+      buttonStyle = {},
+      menuClass = "",
+      menuStyle = {},
+      itemClass = "",
+      itemStyle = {}
     } = props;
     const [searchFilter, setSearchFilter] = (0, import_react6.useState)(""), [options, setOptions] = (0, import_react6.useState)(props.options || []), [selection, setSelection] = (0, import_react6.useState)(props.value || []);
     (0, import_react6.useEffect)(() => setSelection(props?.value || []), [props.value]);
@@ -68536,8 +68583,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       if (!smartButtonText || !selection || !selection.length) {
         return defaultText;
       }
-      const names = selection.map((item) => item?.[displayField] ?? "").join(",");
-      return `${defaultText}${separator}${names}`;
+      return selection.map((item) => item?.[displayField] ?? "").join(",");
     }
     function isSelected(opt) {
       return selection.findIndex((item) => item[valueField] === opt[valueField]) > -1;
@@ -68556,7 +68602,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { type: "button", className: Rosie.classNames("btn dropdown-toggle", buttonClass), style: buttonStyle, "data-bs-toggle": "dropdown", children: displayText() }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", { "dropdown-menu-right": rightAligned }), children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", menuClass, { "dropdown-menu-right": rightAligned }), style: menuStyle, children: [
         searchBox && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "p-1 border-bottom", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
           "input",
           {
@@ -68569,8 +68615,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         ) }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dropdown-item-list", children: options.map((opt, index) => {
-          if (searchFilter && !opt[displayField].toLowerCase().startsWith(searchFilter.toLowerCase())) return null;
-          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", { active: isSelected(opt) }), onClick: () => select(opt), children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
+          if (searchFilter && !opt[displayField].toLowerCase().includes(searchFilter.toLowerCase())) return null;
+          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", itemClass, { active: isSelected(opt) }), style: itemStyle, onClick: () => select(opt), children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
         }) })
       ] })
     ] });
@@ -69374,7 +69420,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_react20 = __toESM(require_react());
+  var import_react23 = __toESM(require_react());
 
   // ClientApp/minerva/ts/views/reports/report.component.tsx
   var import_react19 = __toESM(require_react());
@@ -69420,11 +69466,536 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     ] }) });
   }
 
-  // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
+  // ClientApp/minerva/ts/views/reports/report-editing.component.tsx
+  var import_react22 = __toESM(require_react());
+
+  // ClientApp/minerva/ts/views/reports/mesure-row.component.tsx
+  var import_react20 = __toESM(require_react());
   var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  function MeasureRowComponent(props) {
+    const { measure: m, events: tables, fields: columns } = props;
+    const valueCols = columns.filter((c) => !isDate3(c.type));
+    const colType = columns.find((c) => c.name === m.fieldName)?.type ?? "";
+    const aggs = m.fieldName ? aggsFor(colType) : [];
+    const [table, setTable] = (0, import_react20.useState)(null), [column, setColumn] = (0, import_react20.useState)(null);
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "border rounded p-2 mb-2", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "row g-1 mb-1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown col-6", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          InputDropdown,
+          {
+            options: tables,
+            valueField: "name",
+            displayField: "displayName",
+            searchBox: true,
+            defaultText: "Event",
+            menuStyle: { width: "12rem" },
+            itemClass: "text-break text-wrap",
+            buttonClass: "text-truncate",
+            buttonStyle: { maxWidth: "8rem" },
+            value: table ? [table] : [],
+            onChange: (value) => {
+              setTable(value[0]);
+              props.onEventChange(value[0].name);
+            }
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown col-6", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          InputDropdown,
+          {
+            options: columns,
+            valueField: "name",
+            displayField: "displayName",
+            searchBox: true,
+            defaultText: "Field",
+            menuStyle: { width: "12rem" },
+            itemClass: "text-break text-wrap",
+            buttonClass: "text-truncate",
+            buttonStyle: { maxWidth: "8rem" },
+            value: column ? [column] : [],
+            onChange: (value) => {
+              setColumn(value[0]);
+              props.onFieldChange(value[0].name);
+            }
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "row g-1 mb-1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "col-4", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
+          "select",
+          {
+            className: "form-select form-select-sm",
+            value: m.aggregation,
+            onChange: (e) => props.onChange({ aggregation: e.target.value }),
+            disabled: !m.fieldName,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("option", { value: "", children: "Agg" }),
+              aggs.map((a) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("option", { value: a, children: a }, a))
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "col-8", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          "input",
+          {
+            className: "form-control form-control-sm",
+            placeholder: "Metric name",
+            value: m.name,
+            onChange: (e) => props.onChange({ name: e.target.value })
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "d-flex align-items-center gap-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "btn-group btn-group-sm", children: ["bar", "line"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+          "button",
+          {
+            className: `btn btn-outline-secondary ${m.chartType === t ? "active" : ""}`,
+            onClick: () => props.onChange({ chartType: t }),
+            children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: `fa fa-chart-${t === "bar" ? "bar" : "line"}` })
+          },
+          t
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "form-check form-check-inline mb-0 small", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            "input",
+            {
+              type: "checkbox",
+              className: "form-check-input",
+              id: `sec-${m.id}`,
+              checked: m.secondaryAxis,
+              onChange: (e) => props.onChange({ secondaryAxis: e.target.checked })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("label", { className: "form-check-label", htmlFor: `sec-${m.id}`, children: "Y2" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "form-check form-check-inline mb-0 small", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            "input",
+            {
+              type: "checkbox",
+              className: "form-check-input",
+              id: `stk-${m.id}`,
+              checked: m.stacked,
+              onChange: (e) => props.onChange({ stacked: e.target.checked })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("label", { className: "form-check-label", htmlFor: `stk-${m.id}`, children: "Stacked" })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "btn btn-link btn-sm ms-auto p-0 text-danger", onClick: props.onRemove, children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: "fa fa-trash" }) })
+      ] })
+    ] });
+  }
+
+  // ClientApp/minerva/ts/views/reports/date-range-picker.component.tsx
+  var import_react21 = __toESM(require_react());
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var PRESET_ROWS = [
+    [{ label: "Yesterday", start: 1, end: 1 }, { label: "Today", start: 0, end: 0 }],
+    [{ label: "Last Week", start: 14, end: 8 }, { label: "This Week", start: 7, end: 1 }],
+    [{ label: "Last Month", start: 62, end: 32 }, { label: "This Month", start: 31, end: 1 }],
+    [{ label: "Last 7D", start: 7, end: 1 }, { label: "Recent 7D", start: 8, end: 2 }],
+    [{ label: "Last 30D", start: 30, end: 1 }, { label: "Recent 30D", start: 31, end: 2 }]
+  ];
+  var SINGLE_PRESETS = [
+    { label: "Until Yesterday", start: 90, end: 1 },
+    { label: "Until Today", start: 90, end: 0 }
+  ];
+  var ALL_PRESETS = [...PRESET_ROWS.flat(), ...SINGLE_PRESETS];
+  function daysAgoFmt(n) {
+    const d = /* @__PURE__ */ new Date();
+    d.setDate(d.getDate() - n);
+    return d.toISOString().slice(0, 10).replace(/-/g, "/");
+  }
+  function matchPreset(start2, end2) {
+    if (start2 == null || end2 == null) return void 0;
+    return ALL_PRESETS.find((p) => p.start === start2 && p.end === end2);
+  }
+  function isActive(draft, p) {
+    return draft.startMode === "rolling" && draft.startRolling === p.start && draft.endRolling === p.end;
+  }
+  function DateRangePicker({ view, onChange }) {
+    const [open, setOpen] = (0, import_react21.useState)(false);
+    const [draft, setDraft] = (0, import_react21.useState)(viewToDraft(view));
+    const ref = (0, import_react21.useRef)(null);
+    function viewToDraft(v) {
+      return {
+        startMode: v.startExactDate ? "exact" : "rolling",
+        endMode: v.endExactDate ? "exact" : "rolling",
+        startRolling: v.startRollingDate ?? 7,
+        endRolling: v.endRollingDate ?? 1,
+        startExact: v.startExactDate ?? "",
+        endExact: v.endExactDate ?? ""
+      };
+    }
+    function openPicker() {
+      setDraft(viewToDraft(view));
+      setOpen(true);
+    }
+    (0, import_react21.useEffect)(() => {
+      if (!open) return;
+      const handler = (e) => {
+        if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+      };
+      document.addEventListener("mousedown", handler);
+      return () => document.removeEventListener("mousedown", handler);
+    }, [open]);
+    function apply() {
+      onChange({
+        startRollingDate: draft.startMode === "rolling" ? draft.startRolling : void 0,
+        endRollingDate: draft.endMode === "rolling" ? draft.endRolling : void 0,
+        startExactDate: draft.startMode === "exact" ? draft.startExact : void 0,
+        endExactDate: draft.endMode === "exact" ? draft.endExact : void 0
+      });
+      setOpen(false);
+    }
+    function selectPreset(p) {
+      setDraft((d) => ({ ...d, startMode: "rolling", endMode: "rolling", startRolling: p.start, endRolling: p.end }));
+    }
+    const matched = matchPreset(view.startRollingDate, view.endRollingDate);
+    const triggerStart = view.startExactDate?.replace(/-/g, "/") ?? daysAgoFmt(view.startRollingDate ?? 7);
+    const triggerEnd = view.endExactDate?.replace(/-/g, "/") ?? daysAgoFmt(view.endRollingDate ?? 1);
+    const triggerLabel = matched?.label ?? `${triggerStart} \u2192 ${triggerEnd}`;
+    const draftMatched = isActive(draft, ALL_PRESETS.find((p) => isActive(draft, p))) ? matchPreset(draft.startRolling, draft.endRolling) : void 0;
+    const previewStart = draft.startMode === "exact" ? draft.startExact?.replace(/-/g, "/") : daysAgoFmt(draft.startRolling);
+    const previewEnd = draft.endMode === "exact" ? draft.endExact?.replace(/-/g, "/") : daysAgoFmt(draft.endRolling);
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { ref, className: "date-range-picker position-relative d-inline-block", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("button", { className: "btn btn-sm btn-outline-secondary d-flex align-items-center gap-1", onClick: openPicker, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "fa fa-calendar" }),
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { children: triggerLabel })
+      ] }),
+      open && /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
+        "div",
+        {
+          className: "date-range-panel shadow border bg-body rounded position-absolute top-100 start-0 mt-1",
+          style: { zIndex: 1050, minWidth: 680 },
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "border-bottom px-3 py-2", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "small text-muted", children: "Date Range" }),
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "fw-semibold", children: draftMatched ? /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
+                draftMatched.label,
+                " ",
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("span", { className: "fw-normal text-muted", children: [
+                  "(",
+                  previewStart,
+                  " \u2192 ",
+                  previewEnd,
+                  ")"
+                ] })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
+                previewStart,
+                " \u2192 ",
+                previewEnd
+              ] }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "d-flex", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "presets border-end p-2 d-flex flex-column gap-1", style: { minWidth: 220 }, children: [
+                PRESET_ROWS.map((row, i) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "d-flex gap-1", children: row.map((p) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                  "button",
+                  {
+                    className: `btn btn-sm flex-fill ${isActive(draft, p) ? "btn-primary" : "btn-light"}`,
+                    onClick: () => selectPreset(p),
+                    children: p.label
+                  },
+                  p.label
+                )) }, i)),
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("hr", { className: "my-1" }),
+                SINGLE_PRESETS.map((p) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                  "button",
+                  {
+                    className: `btn btn-sm w-100 text-start ${isActive(draft, p) ? "btn-primary" : "btn-light"}`,
+                    onClick: () => selectPreset(p),
+                    children: p.label
+                  },
+                  p.label
+                ))
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "d-flex flex-fill p-3 gap-3", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                  RangeSidePanel,
+                  {
+                    label: "start",
+                    mode: draft.startMode,
+                    rolling: draft.startRolling,
+                    exact: draft.startExact,
+                    suffix: "days ago \u2192",
+                    onModeChange: (m) => setDraft((d) => ({ ...d, startMode: m })),
+                    onRollingChange: (n) => setDraft((d) => ({ ...d, startRolling: n })),
+                    onExactChange: (s) => setDraft((d) => ({ ...d, startExact: s }))
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                  RangeSidePanel,
+                  {
+                    label: "end",
+                    mode: draft.endMode,
+                    rolling: draft.endRolling,
+                    exact: draft.endExact,
+                    suffix: "days ago",
+                    onModeChange: (m) => setDraft((d) => ({ ...d, endMode: m })),
+                    onRollingChange: (n) => setDraft((d) => ({ ...d, endRolling: n })),
+                    onExactChange: (s) => setDraft((d) => ({ ...d, endExact: s }))
+                  }
+                )
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "border-top px-3 py-2 d-flex justify-content-end gap-2", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("button", { className: "btn btn-sm btn-outline-secondary", onClick: () => setOpen(false), children: "Cancel" }),
+              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("button", { className: "btn btn-sm btn-primary", onClick: apply, children: "Apply" })
+            ] })
+          ]
+        }
+      )
+    ] });
+  }
+  function RangeSidePanel({ mode, rolling, exact, suffix, onModeChange, onRollingChange, onExactChange }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "flex-fill", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "btn-group btn-group-sm w-100 mb-3", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+          "button",
+          {
+            className: `btn ${mode === "rolling" ? "btn-secondary active" : "btn-outline-secondary"}`,
+            onClick: () => onModeChange("rolling"),
+            children: "Rolling Date"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+          "button",
+          {
+            className: `btn ${mode === "exact" ? "btn-secondary active" : "btn-outline-secondary"}`,
+            onClick: () => onModeChange("exact"),
+            children: "Exact Date"
+          }
+        )
+      ] }),
+      mode === "rolling" ? /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "input-group input-group-sm", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+          "input",
+          {
+            type: "number",
+            min: 0,
+            className: "form-control text-center",
+            value: rolling,
+            onChange: (e) => onRollingChange(+e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "input-group-text", children: suffix })
+      ] }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+        "input",
+        {
+          type: "date",
+          className: "form-control form-control-sm",
+          value: exact,
+          onChange: (e) => onExactChange(e.target.value)
+        }
+      )
+    ] });
+  }
+
+  // ClientApp/minerva/ts/views/reports/report-editing.component.tsx
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+  function ReportEditingComponent(props) {
+    const { productId } = props;
+    const [reportName, setReportName] = (0, import_react22.useState)("");
+    const [measures, setMeasures] = (0, import_react22.useState)([newDraft()]);
+    const [view, setView] = (0, import_react22.useState)({ timeField: "", breakdownField: "", startRollingDate: 30, endRollingDate: 1 });
+    const [events, setEvents] = (0, import_react22.useState)([]);
+    const [fieldsByEvent, setFieldsByEvent] = (0, import_react22.useState)({});
+    const [result, setResult] = (0, import_react22.useState)(null);
+    const [isCalculating, setIsCalculating] = (0, import_react22.useState)(false);
+    (0, import_react22.useEffect)(() => {
+      const reportResult$ = ReportResultModel.subscribe(setResult);
+      return () => {
+        reportResult$.unsubscribe();
+      };
+    }, []);
+    (0, import_react22.useEffect)(() => {
+      console.log({ props });
+      ProductDataTableStore.fetch({ pathParams: { productId } }).then(setEvents);
+    }, [productId]);
+    async function loadColumns(tableName) {
+      if (!tableName || fieldsByEvent[tableName]) return;
+      const cols = await ProductDataColumnStore.fetch({ pathParams: { productId, tableName } });
+      setFieldsByEvent((prev) => ({ ...prev, [tableName]: cols ?? [] }));
+    }
+    const addMeasure = () => setMeasures((prev) => [...prev, newDraft()]);
+    const removeMeasure = (id) => setMeasures((prev) => prev.filter((m) => m.id !== id));
+    const updateMeasure = (id, patch) => setMeasures((prev) => prev.map((m) => m.id === id ? { ...m, ...patch } : m));
+    async function onTableChange(id, tableName) {
+      updateMeasure(id, { tableName, fieldName: "", aggregation: "", name: "" });
+      await loadColumns(tableName);
+    }
+    function onFieldChange(id, fieldName) {
+      const m = measures.find((x) => x.id === id);
+      const col = fieldsByEvent[m.tableName]?.find((c) => c.name === fieldName);
+      const agg = defaultAgg(col?.type);
+      updateMeasure(id, { fieldName, aggregation: agg, name: `${agg}(${fieldName})` });
+    }
+    async function calculate() {
+      setIsCalculating(true);
+      beforeProcessing();
+      const report = buildReportDefinition(reportName, measures, view);
+      ReportResultModel.load(
+        { pathParams: { productId }, body: { report } },
+        null,
+        () => {
+          setIsCalculating(false);
+          afterProcessing();
+        }
+      );
+    }
+    const primaryCols = fieldsByEvent[measures[0]?.tableName ?? ""] ?? [];
+    const dateCols = primaryCols.filter((c) => isDate3(c.type));
+    const dimCols = primaryCols.filter((c) => !isDate3(c.type));
+    const primaryFields = result?.groups ?? measures.filter((x) => !x.secondaryAxis).map((x) => x.name || autoName(x));
+    const secondaryMeasures = measures.filter((x) => x.secondaryAxis);
+    const isStacked = (result?.groups?.length ?? 0) > 0 || measures.some((x) => x.stacked);
+    const { headers, rows } = toRows(result?.data ?? []);
+    const canCalculate = !!measures[0]?.tableName && !!view.timeField && !isCalculating;
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "report-builder d-flex flex-column fullscreen", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-row p-2 border-bottom", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "flex-fill", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+          "input",
+          {
+            className: "form-control form-control-sm border-0",
+            placeholder: "Report Name",
+            value: reportName,
+            onChange: (e) => setReportName(e.target.value)
+          }
+        ) }),
+        result && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "ms-2", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+          "button",
+          {
+            className: "btn btn-success btn-sm",
+            onClick: () => props.onUpdateSuccess(buildReportDefinition(reportName, measures, view)),
+            children: "Add to Dashboard"
+          }
+        ) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-row fullscreen", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "metric-selection d-flex flex-column border-end", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "p-2 d-flex flex-column fullscreen", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex justify-content-between align-items-center mb-2", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "fw-semibold small", children: "Metrics" }),
+              /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("button", { className: "btn btn-link btn-sm p-0", onClick: addMeasure, children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "fa fa-plus" }) })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex flex-column fullscreen overflow-y-auto", children: measures.map((m) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+              MeasureRowComponent,
+              {
+                measure: m,
+                events,
+                fields: fieldsByEvent[m.tableName] ?? [],
+                onEventChange: (t) => onTableChange(m.id, t),
+                onFieldChange: (f) => onFieldChange(m.id, f),
+                onChange: (patch) => updateMeasure(m.id, patch),
+                onRemove: () => removeMeasure(m.id)
+              },
+              m.id
+            )) }),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("label", { className: "form-label fw-semibold small mb-1", children: [
+                "Breakdown ",
+                /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "text-muted fw-normal", children: "(optional)" })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+                "select",
+                {
+                  className: "form-select form-select-sm",
+                  value: view.breakdownField,
+                  onChange: (e) => setView((v) => ({ ...v, breakdownField: e.target.value })),
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: "", children: "\u2014 None \u2014" }),
+                    dimCols.map((c) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: c.name, children: c.displayName || c.name }, c.name))
+                  ]
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex p-2 border-top", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("button", { className: "btn btn-sm btn-primary", onClick: calculate, disabled: !canCalculate, children: "Calculate" }) }) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-column fullscreen", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "time-range border-bottom px-2 py-1 d-flex align-items-center gap-2", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+              "select",
+              {
+                className: "form-select form-select-sm",
+                style: { width: "auto" },
+                value: view.timeField,
+                onChange: (e) => setView((v) => ({ ...v, timeField: e.target.value })),
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: "", children: "\u2014 Time Field \u2014" }),
+                  dateCols.map((c) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: c.name, children: c.displayName || c.name }, c.name))
+                ]
+              }
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(DateRangePicker, { view, onChange: (patch) => setView((v) => ({ ...v, ...patch })) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "report-result d-flex flex-column fullscreen overflow-y-auto", children: !result ? /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex align-items-center justify-content-center h-100 text-muted small", children: "Configure a metric and click Calculate to preview" }) : /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_jsx_runtime27.Fragment, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+              CartesianChart,
+              {
+                dataOriented: "columns",
+                data: result.data,
+                series: { xField: view.timeField },
+                axes: {
+                  x: { type: "timeseries", format: "%Y-%m-%d", rotate: -25 },
+                  y: { fields: primaryFields, stacked: isStacked },
+                  y2: {
+                    fields: secondaryMeasures.map((x) => x.name || autoName(x)),
+                    type: secondaryMeasures[0]?.chartType ?? "bar"
+                  }
+                }
+              }
+            ),
+            headers.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ReportGridTable, { headers, rows })
+          ] }) })
+        ] })
+      ] })
+    ] });
+  }
+  function ReportGridTable({ headers, rows }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", style: { maxHeight: 280 }, children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-header fw-bold overflow-hidden d-flex", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [
+        headers.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-cell p-1 small", children: h }, i)),
+        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { style: { width: 8 } })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-body fullscreen overflow-x-auto d-flex flex-column overflow-y-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { children: rows.map((row, i) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-row d-flex flex-row", children: row.map((cell, j) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-cell p-1 small", children: String(cell ?? "") }, j)) }, i)) }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-footer border-top d-flex p-2", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("span", { className: "text-body-tertiary small", children: [
+        rows.length,
+        " record",
+        rows.length !== 1 ? "s" : ""
+      ] }) })
+    ] }) });
+  }
+  function ReportEditingView() {
+    const params = useParams(), [productId, setProductId] = (0, import_react22.useState)(""), [dashboardId, setDashboardId] = (0, import_react22.useState)(""), [reportId, setReportId] = (0, import_react22.useState)("");
+    (0, import_react22.useEffect)(() => {
+      const { productId: productId2, dashboardId: dashboardId2, reportId: reportId2 } = params;
+      setProductId(productId2);
+      setDashboardId(dashboardId2);
+      setReportId(reportId2);
+    }, [params]);
+    function onUpdateSuccess(report) {
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ProductSelector, { navPath: "/reports", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("li", { className: "breadcrumb-item active", children: "Create New Report" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("main", { className: "fullscreen", children: reportId && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+        ReportEditingComponent,
+        {
+          productId,
+          dashboardId,
+          reportId,
+          onUpdateSuccess
+        }
+      ) })
+    ] });
+  }
+  function ReportEditingDialog(props) {
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Dialog, { fitScreen: true, id: "report-editing-dialog", title: "Create New Report", dialogClass: "modal-xl", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "modal-body fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ReportEditingComponent, { ...props }) }) });
+  }
+
+  // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
+  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
   function DashboardView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react20.useState)(""), [dashboardId, setDashboardId] = (0, import_react20.useState)(""), [dashboardName, setDashboardName] = (0, import_react20.useState)(""), [layout, setLayout] = (0, import_react20.useState)([]);
-    (0, import_react20.useEffect)(() => {
+    const params = useParams(), [productId, setProductId] = (0, import_react23.useState)(""), [dashboardId, setDashboardId] = (0, import_react23.useState)(""), [dashboardName, setDashboardName] = (0, import_react23.useState)(""), reportEditingDialog = useDialog("#report-editing-dialog"), [layout, setLayout] = (0, import_react23.useState)([]);
+    (0, import_react23.useEffect)(() => {
       const layout$ = ProductDashboard.subscribe((value) => {
         setDashboardName(value.name);
         const layout2 = value.reports.groupBy("rowIndex").orderBy("key").map((row) => {
@@ -69436,7 +70007,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         layout$.unsubscribe();
       };
     }, []);
-    (0, import_react20.useEffect)(() => {
+    (0, import_react23.useEffect)(() => {
       const { productId: productId2, dashboardId: dashboardId2 } = params;
       setProductId(productId2);
       setDashboardId(dashboardId2);
@@ -69449,71 +70020,67 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       ProductDashboard.loadData(dashboard);
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(ProductSelector, { navPath: "/dashboard", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("li", { className: "breadcrumb-item active", children: dashboardName ?? "Dashboard" }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "dropdown ms-auto", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "btn btn-sm btn-outline-secondary dropdown-toggle hide-indicator", "data-bs-toggle": "dropdown", "data-bs-auto-close": "true", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: "fa fa-ellipsis" }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown-menu", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "dropdown-item", onClick: () => saveDashboardReports(), children: "Save Dashboard" }) })
+    function onUpdateReportSuccess() {
+      Rosie.hideModal("#report-editing-dialog");
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ProductLayout, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ProductSelector, { navPath: "/dashboards", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("li", { className: "breadcrumb-item active", children: dashboardName ?? "Dashboard" }),
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "d-flex ms-auto", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "dropdown me-1", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "btn btn-sm btn-outline-secondary dropdown-toggle hide-indicator", "data-bs-toggle": "dropdown", "data-bs-auto-close": "true", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "fa fa-ellipsis" }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "dropdown-menu", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "dropdown-item", onClick: () => saveDashboardReports(), children: "Save Dashboard" }) })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => reportEditingDialog.show(), children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "fa fa-plus" }) })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("main", { className: "fullscreen", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("h1", { className: "p-2", children: dashboardName }),
-        layout?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "container-fluid mb-2", children: layout.map((row, rowIndex) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "row mt-2", children: row.map((col, colIndex) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(ReportComponent, { productId, definition: col }, colIndex)) }, rowIndex);
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("main", { className: "fullscreen", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("h1", { className: "p-2", children: dashboardName }),
+        layout?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "container-fluid mb-2", children: layout.map((row, rowIndex) => {
+          return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "row mt-2", children: row.map((col, colIndex) => /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(ReportComponent, { productId, definition: col }, colIndex)) }, rowIndex);
         }) })
-      ] })
+      ] }),
+      reportEditingDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+        ReportEditingDialog,
+        {
+          productId,
+          dashboardId,
+          reportId: "-1",
+          onUpdateSuccess: onUpdateReportSuccess
+        }
+      )
     ] });
   }
 
   // ClientApp/minerva/ts/views/admin.view.tsx
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
   function AdminView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(import_jsx_runtime26.Fragment, {});
-  }
-
-  // ClientApp/minerva/ts/views/auth.view.tsx
-  var import_react21 = __toESM(require_react());
-  function Auth() {
-    const location2 = useLocation(), navigate = useNavigate();
-    (0, import_react21.useEffect)(() => {
-      const { ticket } = location2.search.decodeQS();
-      if (ticket) getAuthUser(ticket);
-    }, []);
-    async function getAuthUser(ticket) {
-      const user = await verifyAuthToken(ticket);
-      if (user) {
-        LocalCache.set(AUTH_TOKEN, user.token);
-        AuthUserModel.load();
-        navigate("/home");
-      }
-    }
-    return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_jsx_runtime29.Fragment, {});
   }
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react22.useEffect)(() => {
+    (0, import_react24.useEffect)(() => {
       if (LocalCache.get(AUTH_TOKEN)) {
         AuthUserModel.load();
       }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/products/:productId/dashboard/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(RequireAuth, { component: DashboardView, title: "Dashboard" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "/signin", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Auth, {}) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Navigate, { to: "/products" }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/dashboards/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: DashboardView, title: "Dashboards" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/dashboards/:dashboardId/reports/:reportId", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ReportEditingView, title: "Reports" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Navigate, { to: "/products" }) })
     ] }) }) });
   }
 
   // ClientApp/minerva/ts/app.tsx
-  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
-  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime28.jsx)(AppView, {}));
+  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
+  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime31.jsx)(AppView, {}));
 })();
 /*! Bundled license information:
 

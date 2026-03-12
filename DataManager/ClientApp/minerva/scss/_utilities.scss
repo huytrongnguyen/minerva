@@ -1,0 +1,10 @@
+@use 'variables' as *;
+
+.report-builder {
+  .metric-selection {
+    width: 25rem;
+  }
+  .report-result {
+    flex: 1;
+  }
+}

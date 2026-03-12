@@ -48,7 +48,7 @@ public partial class ProductService(IProductStore productStore,
       NavId: d.DashboardId.ToString(),
       NavName: d.Name,
       NavIcon: null,
-      NavPath: (d.IsFolder ?? false) ? null : $"/products/{productId}/dashboard/{d.DashboardId}",
+      NavPath: (d.IsFolder ?? false) ? null : $"/products/{productId}/dashboards/{d.DashboardId}",
       Children: (d.IsFolder ?? false) ? BuildNavItems(productId, d.DashboardId, byParent) : null
     ))];
   }
