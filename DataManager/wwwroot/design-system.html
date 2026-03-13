@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minerva — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:           #FAFAF9;
+      --surface:      #FFFFFF;
+      --border:       #E9E8E4;
+      --border-subtle:#F2F1EE;
+      --text:         #1C1B18;
+      --text-2:       #6B6966;
+      --text-3:       #ADA9A4;
+      --blue:         #2D7FF9;
+      --blue-bg:      #EBF3FF;
+      --teal:         #0B9B6E;
+      --teal-bg:      #E4F5EE;
+      --amber:        #CA8B0A;
+      --amber-bg:     #FFF4DC;
+      --red:          #D14140;
+      --red-bg:       #FFECEC;
+      --purple:       #7B5EA7;
+      --purple-bg:    #F2EDFF;
+      --cyan:         #0E96B4;
+      --cyan-bg:      #E0F5FA;
+      --c1:  #2D7FF9;
+      --c2:  #10B981;
+      --c3:  #8B5CF6;
+      --c4:  #F59E0B;
+      --c5:  #06B6D4;
+      --c6:  #EC4899;
+      --radius:     8px;
+      --radius-sm:  5px;
+      --shadow-xs:  0 1px 2px rgba(0,0,0,0.05);
+      --shadow-sm:  0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --font:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono:  'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    svg { display: block; }
+
+    /* Layout */
+    .page { max-width: 960px; margin: 0 auto; padding: 48px 32px; }
+    .page-title { font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; margin-bottom: 6px; }
+    .page-subtitle { font-size: 15px; color: var(--text-2); margin-bottom: 48px; }
+
+    .section { margin-bottom: 52px; }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Color palette grid */
+    .color-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+    .color-swatch {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-xs);
+    }
+    .color-block { height: 64px; }
+    .color-meta { padding: 8px 10px; background: var(--surface); }
+    .color-name  { font-size: 12px; font-weight: 600; color: var(--text); }
+    .color-hex   { font-size: 11px; color: var(--text-3); font-family: var(--font-mono); margin-top: 1px; }
+    .color-role  { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
+
+    /* Chart palette strip */
+    .chart-palette { display: flex; gap: 0; border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; box-shadow: var(--shadow-xs); }
+    .chart-palette-swatch { flex: 1; height: 48px; display: flex; align-items: center; justify-content: center; }
+    .chart-palette-swatch span { font-size: 10px; font-weight: 600; color: white; font-family: var(--font-mono); opacity: 0.9; }
+
+    /* Typography */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .type-row:last-child { border-bottom: none; }
+    .type-spec {
+      width: 160px;
+      flex-shrink: 0;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-3);
+    }
+    .type-sample { flex: 1; }
+
+    /* Component showcase */
+    .component-row {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-xs);
+      margin-bottom: 12px;
+    }
+    .component-label {
+      width: 100%;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500; line-height: 1;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-primary  { background: var(--blue); color: white; }
+    .btn-primary:hover { background: #1A6FE8; cursor:pointer; }
+    .btn-outline  { border: 1px solid var(--border); color: var(--text-2); background: var(--surface); }
+    .btn-outline:hover { background: var(--bg); cursor:pointer; }
+    .btn-ghost    { color: var(--text-2); }
+    .btn-ghost:hover { background: var(--bg); cursor:pointer; }
+    .btn-danger   { background: var(--red-bg); color: var(--red); }
+    .btn-sm { padding: 4px 9px; font-size: 12px; }
+    .btn-lg { padding: 9px 18px; font-size: 14px; }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-blue   { background: var(--blue-bg);   color: var(--blue);   }
+    .badge-teal   { background: var(--teal-bg);   color: var(--teal);   }
+    .badge-amber  { background: var(--amber-bg);  color: var(--amber);  }
+    .badge-red    { background: var(--red-bg);    color: var(--red);    }
+    .badge-purple { background: var(--purple-bg); color: var(--purple); }
+    .badge-gray   { background: var(--border-subtle); color: var(--text-2); }
+
+    /* KPI delta badges */
+    .delta { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: 11.5px; font-weight: 600; }
+    .delta svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .delta-up   { background: var(--teal-bg);  color: var(--teal); }
+    .delta-down { background: var(--red-bg);   color: var(--red);  }
+    .delta-flat { background: var(--border-subtle); color: var(--text-2); }
+
+    /* Inputs */
+    .input-row { display: flex; flex-direction: column; gap: 6px; width: 240px; }
+    .form-label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+    .form-input {
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px; color: var(--text);
+      background: var(--surface);
+      outline: none;
+      transition: border-color 0.12s, box-shadow 0.12s;
+      font-family: var(--font);
+    }
+    .form-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(45,127,249,0.1); }
+    .form-input.error { border-color: var(--red); }
+    .form-hint { font-size: 11.5px; color: var(--text-3); }
+    .form-error { font-size: 11.5px; color: var(--red); }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow-xs);
+    }
+    .card-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .card-body  { font-size: 13px; color: var(--text-2); }
+
+    /* Spacing tokens display */
+    .spacing-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .spacing-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .spacing-block { background: var(--blue); border-radius: 3px; opacity: 0.7; height: 24px; }
+    .spacing-label { font-size: 11px; font-family: var(--font-mono); color: var(--text-3); }
+
+    /* Elevation */
+    .elevation-row { display: flex; gap: 20px; align-items: flex-end; flex-wrap: wrap; }
+    .elevation-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      min-width: 100px;
+      text-align: center;
+    }
+    .elevation-name { font-size: 11px; font-family: var(--font-mono); color: var(--text-3); margin-top: 8px; }
+
+    /* Library recommendation cards */
+    .lib-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .lib-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow-xs);
+    }
+    .lib-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .lib-icon {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .lib-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .lib-category { font-size: 11px; color: var(--text-3); }
+    .lib-rec {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+      margin-left: auto;
+    }
+    .lib-rec-primary { background: var(--teal-bg); color: var(--teal); }
+    .lib-rec-alt     { background: var(--border-subtle); color: var(--text-2); }
+    .lib-desc { font-size: 13px; color: var(--text-2); margin-bottom: 10px; line-height: 1.6; }
+    .lib-pros { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .lib-pros li { font-size: 12.5px; color: var(--text-2); display: flex; gap: 6px; }
+    .lib-pros li::before { content: "✓"; color: var(--teal); font-weight: 700; flex-shrink: 0; }
+    .lib-cons li::before { content: "–"; color: var(--text-3); font-weight: 700; flex-shrink: 0; }
+    .lib-cons { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+    .lib-cons li { font-size: 12px; color: var(--text-3); display: flex; gap: 6px; }
+    .lib-verdict {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--blue-bg);
+      border-radius: var(--radius-sm);
+      font-size: 12.5px;
+      color: var(--blue);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    .lib-verdict.alt { background: var(--border-subtle); color: var(--text-2); }
+
+    .nav-link-list { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+    .nav-link {
+      padding: 6px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-2);
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .nav-link:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-bg); }
+    a { text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <h1 class="page-title">Minerva Design System</h1>
+  <p class="page-subtitle">Notion-inspired light theme — Component tokens, library recommendations, and rationale.</p>
+
+  <!-- Quick nav -->
+  <div class="nav-link-list">
+    <a href="#colors"><div class="nav-link">Colors</div></a>
+    <a href="#charts"><div class="nav-link">Chart Palette</div></a>
+    <a href="#typography"><div class="nav-link">Typography</div></a>
+    <a href="#components"><div class="nav-link">Components</div></a>
+    <a href="#elevation"><div class="nav-link">Elevation & Radius</div></a>
+    <a href="#libraries"><div class="nav-link">Library Recommendations</div></a>
+    <a href="#screens"><div class="nav-link">Screen Previews</div></a>
+  </div>
+
+  <!-- ═══════════ COLORS ═══════════ -->
+  <div class="section" id="colors">
+    <div class="section-title">Color Palette — UI Surfaces &amp; Semantic</div>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Surfaces &amp; Text</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-block" style="background:#FAFAF9;border-bottom:1px solid #E9E8E4;"></div>
+          <div class="color-meta">
+            <div class="color-name">Background</div>
+            <div class="color-hex">#FAFAF9</div>
+            <div class="color-role">Page bg, hover state</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#FFFFFF;border-bottom:1px solid #E9E8E4;"></div>
+          <div class="color-meta">
+            <div class="color-name">Surface</div>
+            <div class="color-hex">#FFFFFF</div>
+            <div class="color-role">Cards, sidebar, topbar</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#E9E8E4;"></div>
+          <div class="color-meta">
+            <div class="color-name">Border</div>
+            <div class="color-hex">#E9E8E4</div>
+            <div class="color-role">Card borders, dividers</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#F2F1EE;"></div>
+          <div class="color-meta">
+            <div class="color-name">Border Subtle</div>
+            <div class="color-hex">#F2F1EE</div>
+            <div class="color-role">Table row separators</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#1C1B18;"></div>
+          <div class="color-meta">
+            <div class="color-name">Text / Primary</div>
+            <div class="color-hex">#1C1B18</div>
+            <div class="color-role">Headings, body text</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#6B6966;"></div>
+          <div class="color-meta">
+            <div class="color-name">Text / Secondary</div>
+            <div class="color-hex">#6B6966</div>
+            <div class="color-role">Labels, descriptions</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#ADA9A4;"></div>
+          <div class="color-meta">
+            <div class="color-name">Text / Muted</div>
+            <div class="color-hex">#ADA9A4</div>
+            <div class="color-role">Placeholders, captions</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Semantic Accents</div>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-block" style="background:#2D7FF9;"></div>
+          <div class="color-meta">
+            <div class="color-name">Blue</div>
+            <div class="color-hex">#2D7FF9</div>
+            <div class="color-role">Primary action, links</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#EBF3FF;border-bottom:1px solid #C5DCFD;"></div>
+          <div class="color-meta">
+            <div class="color-name">Blue / Soft</div>
+            <div class="color-hex">#EBF3FF</div>
+            <div class="color-role">Hover bg, chips</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#0B9B6E;"></div>
+          <div class="color-meta">
+            <div class="color-name">Teal</div>
+            <div class="color-hex">#0B9B6E</div>
+            <div class="color-role">Positive delta, success</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#E4F5EE;border-bottom:1px solid #BEE5D4;"></div>
+          <div class="color-meta">
+            <div class="color-name">Teal / Soft</div>
+            <div class="color-hex">#E4F5EE</div>
+            <div class="color-role">Success backgrounds</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#CA8B0A;"></div>
+          <div class="color-meta">
+            <div class="color-name">Amber</div>
+            <div class="color-hex">#CA8B0A</div>
+            <div class="color-role">Warnings, neutral</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#FFF4DC;border-bottom:1px solid #EFDEA5;"></div>
+          <div class="color-meta">
+            <div class="color-name">Amber / Soft</div>
+            <div class="color-hex">#FFF4DC</div>
+            <div class="color-role">Warning backgrounds</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#D14140;"></div>
+          <div class="color-meta">
+            <div class="color-name">Red</div>
+            <div class="color-hex">#D14140</div>
+            <div class="color-role">Negative delta, errors</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#FFECEC;border-bottom:1px solid #F5C5C5;"></div>
+          <div class="color-meta">
+            <div class="color-name">Red / Soft</div>
+            <div class="color-hex">#FFECEC</div>
+            <div class="color-role">Error backgrounds</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#7B5EA7;"></div>
+          <div class="color-meta">
+            <div class="color-name">Purple</div>
+            <div class="color-hex">#7B5EA7</div>
+            <div class="color-role">AI/ML, predictions</div>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-block" style="background:#F2EDFF;border-bottom:1px solid #CFC0F0;"></div>
+          <div class="color-meta">
+            <div class="color-name">Purple / Soft</div>
+            <div class="color-hex">#F2EDFF</div>
+            <div class="color-role">ML feature bg</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ CHART PALETTE ═══════════ -->
+  <div class="section" id="charts">
+    <div class="section-title">Chart Series Palette — 6-Color Sequence</div>
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;">Designed for perceptual distinctness at small sizes, accessible in most forms of color blindness (avoid relying on red/green alone), and consistent with the semantic palette.</p>
+    <div class="chart-palette">
+      <div class="chart-palette-swatch" style="background:#2D7FF9;"><span>#2D7FF9</span></div>
+      <div class="chart-palette-swatch" style="background:#10B981;"><span>#10B981</span></div>
+      <div class="chart-palette-swatch" style="background:#8B5CF6;"><span>#8B5CF6</span></div>
+      <div class="chart-palette-swatch" style="background:#F59E0B;"><span>#F59E0B</span></div>
+      <div class="chart-palette-swatch" style="background:#06B6D4;"><span>#06B6D4</span></div>
+      <div class="chart-palette-swatch" style="background:#EC4899;"><span>#EC4899</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C1 · Blue<br><span style="color:var(--text-3);">Primary series</span></div>
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C2 · Emerald<br><span style="color:var(--text-3);">Secondary</span></div>
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C3 · Violet<br><span style="color:var(--text-3);">Tertiary</span></div>
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C4 · Amber<br><span style="color:var(--text-3);">4th series</span></div>
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C5 · Cyan<br><span style="color:var(--text-3);">5th series</span></div>
+      <div style="text-align:center;font-size:11px;color:var(--text-2);">C6 · Pink<br><span style="color:var(--text-3);">6th series</span></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ TYPOGRAPHY ═══════════ -->
+  <div class="section" id="typography">
+    <div class="section-title">Typography — Inter (sans) + JetBrains Mono</div>
+    <div class="type-row">
+      <div class="type-spec">28px / 700<br>letter-spacing: -0.5px</div>
+      <div class="type-sample" style="font-size:28px;font-weight:700;letter-spacing:-0.5px;">Page Title</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">20px / 700<br>letter-spacing: -0.3px</div>
+      <div class="type-sample" style="font-size:20px;font-weight:700;letter-spacing:-0.3px;">Section Heading</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">14px / 600</div>
+      <div class="type-sample" style="font-size:14px;font-weight:600;">Chart Title / Card Heading</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">13.5px / 500</div>
+      <div class="type-sample" style="font-size:13.5px;font-weight:500;">Navigation Item (active)</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">13px / 400</div>
+      <div class="type-sample" style="font-size:13px;">Body text. Table cells. Secondary content shown at normal weight for comfortable reading across the dashboard.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">12px / 600<br>uppercase 0.05em</div>
+      <div class="type-sample" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">KPI LABEL / COLUMN HEADER</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">11px / 500</div>
+      <div class="type-sample" style="font-size:11px;font-weight:500;color:var(--text-3);">Caption text · muted · badges · axis tick labels</div>
+    </div>
+    <div class="type-row">
+      <div class="type-spec">13px mono</div>
+      <div class="type-sample" style="font-size:13px;font-family:var(--font-mono);">2026-03-11 · $1.482 · 14,280 · SELECT * FROM curated.ltv_labels</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ COMPONENTS ═══════════ -->
+  <div class="section" id="components">
+    <div class="section-title">Components</div>
+
+    <div class="component-row">
+      <div class="component-label">Buttons</div>
+      <button class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+        New Report
+      </button>
+      <button class="btn btn-outline">
+        <svg viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+        Export
+      </button>
+      <button class="btn btn-ghost">
+        <svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Refresh
+      </button>
+      <button class="btn btn-danger">Delete</button>
+      <button class="btn btn-primary btn-sm">Run</button>
+      <button class="btn btn-outline btn-sm">Duplicate</button>
+      <button class="btn btn-primary btn-lg">Save Dashboard</button>
+    </div>
+
+    <div class="component-row">
+      <div class="component-label">Status Badges</div>
+      <span class="badge badge-blue">Mature</span>
+      <span class="badge badge-teal">Active</span>
+      <span class="badge badge-amber">Maturing</span>
+      <span class="badge badge-red">Failed</span>
+      <span class="badge badge-purple">AI Predicted</span>
+      <span class="badge badge-gray">Archived</span>
+    </div>
+
+    <div class="component-row">
+      <div class="component-label">Delta / KPI Indicators</div>
+      <span class="delta delta-up">
+        <svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
+        +11.2%
+      </span>
+      <span class="delta delta-up">
+        <svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
+        +0.41pp
+      </span>
+      <span class="delta delta-down">
+        <svg viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+        −1.8%
+      </span>
+      <span class="delta delta-flat">→ 0.0%</span>
+    </div>
+
+    <div class="component-row" style="flex-direction:column;gap:14px;">
+      <div class="component-label">Form Inputs</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;">
+        <div class="input-row">
+          <label class="form-label">Cohort start date</label>
+          <input class="form-input" type="text" value="2026-01-01" placeholder="YYYY-MM-DD" />
+          <span class="form-hint">Must be on or after launch date.</span>
+        </div>
+        <div class="input-row">
+          <label class="form-label">Max rows</label>
+          <input class="form-input error" type="text" value="abc" />
+          <span class="form-error">Must be a positive integer.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="component-row" style="gap:16px;align-items:stretch;">
+      <div class="component-label">Cards</div>
+      <div class="card" style="width:200px;">
+        <div class="card-title">Cohort Health</div>
+        <div class="card-body">8 cohorts active. Model confidence: 87%.</div>
+      </div>
+      <div class="card" style="width:200px;border-color:var(--blue);box-shadow:0 0 0 1px rgba(45,127,249,0.2);">
+        <div class="card-title" style="color:var(--blue);">Selected</div>
+        <div class="card-body">Card with selection state (blue border + glow).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ ELEVATION ═══════════ -->
+  <div class="section" id="elevation">
+    <div class="section-title">Elevation / Shadow &amp; Border Radius</div>
+    <div class="elevation-row" style="margin-bottom:24px;">
+      <div>
+        <div class="elevation-card" style="box-shadow:none;">
+          <div style="font-size:22px;text-align:center;color:var(--text-3);">Aa</div>
+          <div class="elevation-name">Flat</div>
+          <div class="elevation-name">border only</div>
+        </div>
+      </div>
+      <div>
+        <div class="elevation-card" style="box-shadow:var(--shadow-xs);">
+          <div style="font-size:22px;text-align:center;color:var(--text-2);">Aa</div>
+          <div class="elevation-name">shadow-xs</div>
+          <div class="elevation-name">0 1px 2px / 5%</div>
+        </div>
+      </div>
+      <div>
+        <div class="elevation-card" style="box-shadow:var(--shadow-sm);">
+          <div style="font-size:22px;text-align:center;color:var(--text);">Aa</div>
+          <div class="elevation-name">shadow-sm</div>
+          <div class="elevation-name">0 1px 3px + 1px 2px</div>
+        </div>
+      </div>
+      <div>
+        <div class="elevation-card" style="box-shadow:0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);">
+          <div style="font-size:22px;text-align:center;color:var(--text);font-weight:600;">Aa</div>
+          <div class="elevation-name">shadow-md</div>
+          <div class="elevation-name">Dropdowns, modals</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:10px;">Border Radius Tokens</div>
+    <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:32px;height:32px;background:var(--blue);border-radius:4px;opacity:0.8;"></div>
+        <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-3);">radius-xs · 4px<br>Badges, tags</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:40px;height:40px;background:var(--blue);border-radius:5px;opacity:0.8;"></div>
+        <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-3);">radius-sm · 5px<br>Buttons, inputs</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:56px;height:56px;background:var(--blue);border-radius:8px;opacity:0.8;"></div>
+        <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-3);">radius · 8px<br>Cards, panels</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:64px;height:32px;background:var(--blue);border-radius:20px;opacity:0.8;"></div>
+        <div style="font-size:11px;font-family:var(--font-mono);color:var(--text-3);">radius-pill · 20px<br>Chips, badges</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ LIBRARY RECS ═══════════ -->
+  <div class="section" id="libraries">
+    <div class="section-title">Library Recommendations</div>
+
+    <div class="lib-grid">
+
+      <!-- ECharts -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <div class="lib-icon" style="background:#c23531;color:white;font-weight:700;font-size:14px;">EC</div>
+          <div>
+            <div class="lib-name">Apache ECharts</div>
+            <div class="lib-category">Chart library · via echarts-for-react</div>
+          </div>
+          <span class="lib-rec lib-rec-primary" style="margin-left:auto;">★ Recommended</span>
+        </div>
+        <div class="lib-desc">
+          The most feature-complete charting library for analytics. Powers ThinkingData, Alibaba Cloud, and major data platforms. Replaces C3.js completely.
+        </div>
+        <ul class="lib-pros">
+          <li>30+ chart types: line, bar, scatter, heatmap, funnel, sankey, treemap, gauge, calendar</li>
+          <li>First-class TypeScript types</li>
+          <li>Canvas renderer — handles 100k+ data points smoothly</li>
+          <li>Rich built-in tooltip, legend, zoom, brush interactions</li>
+          <li>LTV-specific: cohort heatmap, funnel drop-off, geo map</li>
+        </ul>
+        <ul class="lib-cons">
+          <li>~600KB bundle — use dynamic import for lazy loading</li>
+          <li>More verbose config vs Recharts</li>
+        </ul>
+        <div class="lib-verdict">
+          <strong>Use for:</strong> All production charts in ReportComponent. Drop-in C3.js replacement with vastly more power. The declarative option config maps cleanly to ReportDefinition.
+        </div>
+      </div>
+
+      <!-- Recharts -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <div class="lib-icon" style="background:#8B5CF6;color:white;font-size:12px;font-weight:700;">RC</div>
+          <div>
+            <div class="lib-name">Recharts</div>
+            <div class="lib-category">Chart library · already in nova/</div>
+          </div>
+          <span class="lib-rec lib-rec-alt">Alt / Simple</span>
+        </div>
+        <div class="lib-desc">
+          Pure-React declarative charts. Already used in the nova/ mockup. Good for simple KPI sparklines.
+        </div>
+        <ul class="lib-pros">
+          <li>Pure React component model — very easy to integrate</li>
+          <li>Good for sparklines, simple line/bar in KPI cards</li>
+          <li>Smaller bundle when tree-shaken</li>
+        </ul>
+        <ul class="lib-cons">
+          <li>Limited chart types (no heatmap, funnel, sankey)</li>
+          <li>Performance degrades above 5,000 data points</li>
+          <li>Custom rendering requires deep hacks</li>
+        </ul>
+        <div class="lib-verdict alt">
+          <strong>Keep for:</strong> Sparklines in KPI cards (very lightweight). Replace with ECharts for all main report charts.
+        </div>
+      </div>
+
+      <!-- TanStack Table -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <div class="lib-icon" style="background:#F59E0B;color:white;font-size:13px;font-weight:700;">TT</div>
+          <div>
+            <div class="lib-name">TanStack Table v8</div>
+            <div class="lib-category">Headless data grid · React</div>
+          </div>
+          <span class="lib-rec lib-rec-primary">★ Recommended</span>
+        </div>
+        <div class="lib-desc">
+          The gold standard headless table for React. Gives you all the logic (sort, filter, paginate, group, column pin) while you own the rendering.
+        </div>
+        <ul class="lib-pros">
+          <li>Headless — full design control; pairs perfectly with this design system</li>
+          <li>Virtual rows (TanStack Virtual) for 50k+ rows</li>
+          <li>Column pinning, row grouping, multi-sort</li>
+          <li>Excellent TypeScript — generics on row data type</li>
+          <li>12k GitHub stars, actively maintained</li>
+        </ul>
+        <ul class="lib-cons">
+          <li>More setup than a batteries-included grid</li>
+          <li>No built-in cell editors (need separate lib)</li>
+        </ul>
+        <div class="lib-verdict">
+          <strong>Use for:</strong> Cohort table, raw data table in report builder. Replaces the hand-rolled DataTable component in nova/ with proper sorting/filtering/pagination logic.
+        </div>
+      </div>
+
+      <!-- AG Grid -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <div class="lib-icon" style="background:#0B9B6E;color:white;font-size:12px;font-weight:700;">AG</div>
+          <div>
+            <div class="lib-name">AG Grid Community</div>
+            <div class="lib-category">Data grid · Enterprise-grade</div>
+          </div>
+          <span class="lib-rec lib-rec-alt">Alt / Heavy</span>
+        </div>
+        <div class="lib-desc">
+          The most powerful grid available. Excel-like features, column groups, pivot, nested rows. Community edition is free.
+        </div>
+        <ul class="lib-pros">
+          <li>Most feature-complete (pivot, tree data, Master-Detail)</li>
+          <li>Exceptional performance with virtual scrolling</li>
+          <li>Built-in cell editing, clipboard integration</li>
+        </ul>
+        <ul class="lib-cons">
+          <li>~1MB bundle — significant for a web app</li>
+          <li>Hard to override default styling; fights with custom design systems</li>
+          <li>Advanced features (row grouping, pivot) require Enterprise license</li>
+        </ul>
+        <div class="lib-verdict alt">
+          <strong>Consider only if:</strong> You need Excel-like in-cell editing or pivot tables in a future analytics workbench. For current use cases, TanStack Table is sufficient and lighter.
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div style="margin-top:20px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-xs);">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">Recommended Stack Summary</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13px;">
+        <span style="color:var(--text-3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Charts (main)</span>
+        <span>Apache ECharts via <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:3px;">echarts-for-react</code> — drop C3.js entirely</span>
+        <span style="color:var(--text-3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Charts (sparklines)</span>
+        <span>Keep Recharts <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:3px;">AreaChart</code> in KPI cards — already in nova/</span>
+        <span style="color:var(--text-3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Data Grid</span>
+        <span>TanStack Table v8 — headless, full design control, great TypeScript</span>
+        <span style="color:var(--text-3);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">Virtual Scroll</span>
+        <span><code style="font-family:var(--font-mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:3px;">@tanstack/react-virtual</code> — pair with TanStack Table for large datasets</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN LINKS ═══════════ -->
+  <div class="section" id="screens">
+    <div class="section-title">Screen Previews</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <a href="index.html" style="display:block;">
+        <div class="card" style="cursor:pointer;transition:box-shadow 0.15s;" onmouseenter="this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.boxShadow='var(--shadow-xs)'">
+          <div style="height:140px;background:linear-gradient(135deg,#EBF3FF 0%,#F2EDFF 100%);border-radius:6px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
+            <span style="font-size:32px;">📊</span>
+          </div>
+          <div class="card-title">Dashboard — Overview</div>
+          <div class="card-body">KPI cards, LTV trend line chart, revenue stacked bar, cohort analysis table.</div>
+        </div>
+      </a>
+      <a href="report-builder.html" style="display:block;">
+        <div class="card" style="cursor:pointer;transition:box-shadow 0.15s;" onmouseenter="this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.boxShadow='var(--shadow-xs)'">
+          <div style="height:140px;background:linear-gradient(135deg,#FFF4DC 0%,#E4F5EE 100%);border-radius:6px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);">
+            <span style="font-size:32px;">🔧</span>
+          </div>
+          <div class="card-title">Report Builder</div>
+          <div class="card-body">Mixpanel-style query builder: config panel (measures, breakdown, filters) + chart canvas + data table.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
