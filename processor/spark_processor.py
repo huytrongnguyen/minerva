@@ -1,4 +1,5 @@
 import sys, json, logging, psycopg2
+import pandas as pd
 from typing import Any, Optional, Dict, List
 from datetime import datetime, timedelta
 from functools import reduce
@@ -75,6 +76,7 @@ def handler(event: Dict[str, str]):
     )
 
     spark.sparkContext.setLogLevel('INFO') # make Spark log visible in Airflow
+    enable_arrow(spark)
 
     for file_name in job_settings.models.split(','):
       file_path = f'{job_settings.model_paths}/{file_name}'
@@ -110,12 +112,15 @@ def process_sql_model(model: str, spark: SparkSession, product_info: Dict[str, A
 
   jinja_env.globals['source'] = lambda params: source(spark, SourceOrTargetSettings(**params), vars)
   jinja_env.globals['create_or_replace_table'] = lambda params: target(targets, SourceOrTargetSettings(**params))
+  jinja_env.globals['insert_overwrite'] = lambda table_name: iceberg_table(targets, 'insert_overwrite', table_name, vars)
+  jinja_env.globals['insert_into'] = lambda table_name: iceberg_table(targets, 'insert_into', table_name, vars)
+  jinja_env.globals['merge_into'] = lambda table_name: iceberg_table(targets, 'merge_into', table_name, vars)
   jinja_env.globals['date_range'] = lambda before, after = 0: f"{{{','.join(date_range(job_settings.event_date, before, after))}}}"
 
   sql_query = jinja_env.from_string(model).render(**vars)
   logger.info(f'sql_query = {sql_query}')
   target_data = spark.sql(sql_query)
-  save_data(target_data, targets[0], vars)
+  save_data(spark, target_data, targets[0], vars)
 
 def source(spark: SparkSession, source_settings: SourceOrTargetSettings, vars: Dict[str, Any]) -> str:
   vars = {**source_settings.vars, **vars}
@@ -130,6 +135,15 @@ def source(spark: SparkSession, source_settings: SourceOrTargetSettings, vars: D
 def target(targets: List[SourceOrTargetSettings], target_model: SourceOrTargetSettings) -> str:
   targets.append(target_model)
   return ''
+
+
+def iceberg_table(targets: List[SourceOrTargetSettings], mode: str, table_name: str, vars: Dict[str, Any]) -> str:
+  name = jinja_env.from_string(table_name).render(**vars)
+  targets.append(SourceOrTargetSettings(location = '', type = 'iceberg', name = name))
+  if mode == 'insert_overwrite': return f'insert overwrite {name}'
+  elif mode == 'insert_into': return f'insert into {name}'
+  elif mode == 'merge_into': return f'merge into {name}'
+  else: return ''
 #endregion
 
 #region ===== JSON Model =====
@@ -195,9 +209,15 @@ def load_data_with_jdbc(spark: SparkSession, path: str, source_settings: SourceO
 
   return spark.read.format(source_settings.type).options(**options).load()
 
-def save_data(data: DataFrame, target_settings: SourceOrTargetSettings, vars: Dict[str, Any]):
+def load_parquet_as_pandas(spark: SparkSession, path: str, **options) -> pd.DataFrame:
+  logger.info(f'Load parquet as pandas from "{path}"')
+  return spark.read.format('parquet').options(**options).load(path).toPandas()
+
+def save_data(spark: SparkSession, data: DataFrame, target_settings: SourceOrTargetSettings, vars: Dict[str, Any]):
   if target_settings.type == 'jdbc':
     save_data_with_jdbc(data, target_settings, vars)
+  elif target_settings.type == 'iceberg':
+    expire_snapshots(spark, data, target_settings, vars)
   else:
     path = jinja_env.from_string(target_settings.location).render(**vars)
     logger.info(f'Save data to "{path}" as {target_settings.type}, num_partitions = {target_settings.num_partitions}, partition_by = {target_settings.partition_by}, columns = {"|".join(data.columns)}')
@@ -227,6 +247,29 @@ def save_data_with_jdbc(data: DataFrame, target_settings: SourceOrTargetSettings
     sql_file = jinja_env.from_string(target_settings.postprocess).render(**vars)
     sql_query = load_text(sql_file)
     execute_query(sql_query, cred)
+
+def save_pandas_as_parquet(spark: SparkSession, df: pd.DataFrame, path: str,
+                            num_partitions: int = 1, partition_by: List[str] = None):
+  logger.info(f'Save pandas as parquet to "{path}", num_partitions={num_partitions}, partition_by={partition_by}')
+  sdf = spark.createDataFrame(df)
+  writer = sdf.coalesce(num_partitions).write.format('parquet').mode('overwrite')
+  if partition_by:
+    writer = writer.partitionBy(partition_by)
+  writer.save(path)
+
+def expire_snapshots(spark: SparkSession, data: DataFrame, target_settings: SourceOrTargetSettings, vars: Dict[str, Any]):
+  # Expire old snapshots — keep only the latest
+  table_id = target_settings.name
+  catalog = table_id.split('.')[0]
+  cutoff  = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+  spark.sql(f"""
+    CALL {catalog}.system.expire_snapshots(
+      table       => '{table_id}',
+      older_than  => TIMESTAMP '{cutoff}',
+      retain_last => 1
+    )
+  """)
+  logger.info(f'Iceberg "{table_id}" saved, snapshots expired')
 #endregion
 
 #region ===== Utils =====
@@ -235,6 +278,17 @@ def render_template(template: str, vars: Dict[str, Any]): return jinja_env.from_
 def date_range(base: str, before: int, after: int = 0) -> List[str]:
   base_date = datetime.strptime(base, '%Y-%m-%d')
   return [(base_date + timedelta(days = x)).strftime('%Y-%m-%d') for x in range(-before, after + 1)]
+
+def enable_arrow(spark: SparkSession):
+  spark.conf.set('spark.sql.execution.arrow.pyspark.enabled', 'true')
+  spark.conf.set('spark.sql.execution.arrow.maxRecordsPerBatch', '50000')
+  logger.info('Arrow-based Pandas conversion enabled')
+
+def to_pandas(df: DataFrame) -> pd.DataFrame:
+  return df.toPandas()
+
+def to_spark(spark: SparkSession, df: pd.DataFrame, schema=None) -> DataFrame:
+  return spark.createDataFrame(df, schema=schema)
 
 def execute_query(query: str, cred: Dict[str, str]):
   try:

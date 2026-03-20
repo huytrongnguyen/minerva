@@ -37,5 +37,13 @@ spark-submit \
   --conf spark.sql.adaptive.enabled=true \
   --conf spark.sql.adaptive.coalescePartitions.enabled=true \
   --conf spark.sql.sources.partitionOverwriteMode=dynamic \
-  --jars /opt/airflow/libs/hadoop-aws-3.3.4.jar,/opt/airflow/libs/aws-java-sdk-bundle-1.12.262.jar$libs \
+  --conf spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions \
+  --conf spark.sql.catalog.iceberg=org.apache.iceberg.spark.SparkCatalog \
+  --conf spark.sql.catalog.iceberg.type=rest \
+  --conf spark.sql.catalog.iceberg.uri=http://lakekeeper:8181/catalog \
+  --conf spark.sql.catalog.iceberg.warehouse=lakehouse \
+  --conf spark.sql.catalog.iceberg.io-impl=org.apache.iceberg.hadoop.HadoopFileIO \
+  --conf spark.sql.iceberg.merge-schema=true \
+  --conf spark.sql.iceberg.check-ordering=false \
+  --jars /opt/airflow/libs/hadoop-aws-3.3.4.jar,/opt/airflow/libs/aws-java-sdk-bundle-1.12.262.jar,/opt/airflow/libs/iceberg-spark-runtime-3.5_2.12-1.7.2.jar$libs \
   /opt/airflow/jobs/spark_processor.py model_paths=$model_paths product_id=$product_id event_date=$event_date models=$models
