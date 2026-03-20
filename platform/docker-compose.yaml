@@ -29,6 +29,11 @@ services:
       - ./postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - spark-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   jupyter:
     build:
@@ -38,6 +43,7 @@ services:
     depends_on:
       - minio
       - postgres
+      - lakekeeper
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password
@@ -45,48 +51,67 @@ services:
       AWS_SECRET_ACCESS_KEY: password
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: iceberg # Iceberg catalog DB
-      SPARK_CONF_spark_sql_catalog_iceberg: org.apache.iceberg.spark.SparkCatalog
-      SPARK_CONF_spark_sql_catalog_iceberg_type: rest
-      SPARK_CONF_spark_sql_catalog_iceberg_uri: http://iceberg-rest:8181
-      SPARK_CONF_spark_sql_catalog_iceberg_warehouse: s3://lakehouse/
-      SPARK_CONF_spark_sql_catalog_iceberg_io__impl: org.apache.iceberg.aws.s3.S3FileIO
-      SPARK_CONF_spark_sql_catalog_iceberg_s3_endpoint: http://minio:9000
     volumes:
-      - ../notebooks:/home/iceberg/notebooks # for Jupyter work
+      - ../analyses:/home/iceberg/notebooks # for Jupyter work
       - ../processor:/home/iceberg/processor
       - ./libs/hadoop-aws-3.3.4.jar:/opt/spark/jars/hadoop-aws-3.3.4.jar
       - ./libs/aws-java-sdk-bundle-1.12.262.jar:/opt/spark/jars/aws-java-sdk-bundle-1.12.262.jar
       - ./libs/postgresql-42.7.8.jar:/opt/spark/jars/postgresql-42.7.8.jar
       - ./libs/trino-jdbc-368.jar:/opt/spark/jars/trino-jdbc-368.jar
       - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
-      - ../../data/lakehouse:/home/iceberg/data # Local CSV files for Jupyter work
     ports:
       - 8888:8888 # JupyterLab -> localhost:8888
     networks:
       - spark-network
 
-  rest:
-    image: apache/iceberg-rest-fixture
-    container_name: iceberg-rest
+  lakekeeper-db-init:
+    image: postgres:16
+    container_name: lakekeeper-db-init
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-      AWS_ACCESS_KEY_ID: admin
-      AWS_SECRET_ACCESS_KEY: password
-      CATALOG_WAREHOUSE: s3://lakehouse/
-      CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
-      CATALOG_S3_ENDPOINT: http://minio:9000
-      CATALOG_S3_PATH_STYLE_ACCESS: "true"
-    ports:
-      - 8181:8181
+      PGPASSWORD: postgres
+    entrypoint: ["/bin/bash", "-c", "psql -h postgres -U postgres -c 'CREATE DATABASE lakekeeper' || true"]
     networks:
       - spark-network
+    restart: "no"
+
+  lakekeeper-migrate:
+    image: quay.io/lakekeeper/catalog:latest
+    container_name: lakekeeper-migrate
     depends_on:
-    - minio
+      lakekeeper-db-init:
+        condition: service_completed_successfully
+    environment:
+      LAKEKEEPER__PG_ENCRYPTION_KEY: 'change-this-to-a-random-32-char-key!'
+      LAKEKEEPER__PG_DATABASE_URL_READ:  postgresql://postgres:postgres@postgres:5432/lakekeeper
+      LAKEKEEPER__PG_DATABASE_URL_WRITE: postgresql://postgres:postgres@postgres:5432/lakekeeper
+    command: ["migrate"]
+    networks:
+      - spark-network
+    restart: "no"
+
+  lakekeeper:
+    image: quay.io/lakekeeper/catalog:latest
+    container_name: lakekeeper
+    depends_on:
+      lakekeeper-migrate:
+        condition: service_completed_successfully
+    environment:
+      LAKEKEEPER__PG_ENCRYPTION_KEY: 'change-this-to-a-random-32-char-key!'
+      LAKEKEEPER__PG_DATABASE_URL_READ:  postgresql://postgres:postgres@postgres:5432/lakekeeper
+      LAKEKEEPER__PG_DATABASE_URL_WRITE: postgresql://postgres:postgres@postgres:5432/lakekeeper
+    command: ["serve"]
+    ports:
+      - 8181:8181 # UI + REST catalog API
+    networks:
+      - spark-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8181/v1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:8181/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
 
   airflow:
     build:
@@ -95,6 +120,9 @@ services:
     container_name: airflow
     restart: always
     environment:
+      ENDPOINT_URL: minio:9000 # FIXME
+      AWS_ACCESS_KEY_ID: admin # FIXME
+      AWS_SECRET_ACCESS_KEY: password # FIXME
       AIRFLOW__CORE__EXECUTOR: LocalExecutor
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
       AIRFLOW__CORE__FERNET_KEY: 'gVqOwBQL2OeREGfnmwnuhR5QliF0yRHcXYr5x7cyxPU='
@@ -111,7 +139,6 @@ services:
       - ../pipelines:/opt/airflow/dags # DAG files (Python DAG definitions)
       - ../processor:/opt/airflow/jobs # The container that actually runs spark-submit needs access to the .py file
       - ../models:/opt/airflow/models
-      - ../../data/lakehouse:/opt/airflow/data # Local CSV files
     networks:
       - spark-network
     command: |
