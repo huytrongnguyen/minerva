@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" class="fullscreen">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +8,7 @@
   <link rel="stylesheet" href="/minerva.css?_dc=@(DateTime.Now.Ticks)" />
   @RenderSection("Styles", required: false)
 </head>
-<body class="fullscreen">
-  <script src="/bootstrap.bundle.min.js?dc=@(DateTime.Now.Ticks)"></script>
+<body>
   @RenderBody()
   @RenderSection("Scripts", required: false)
 </body>

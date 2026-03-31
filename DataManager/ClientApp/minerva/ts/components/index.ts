@@ -1,3 +1,3 @@
 export * from './chart';
-export * from './app-layout';
+export * from './layout';
 export * from './product-layout';

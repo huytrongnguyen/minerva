@@ -9,32 +9,22 @@ namespace DataManager.Auth;
 
 public class AuthService(HttpClient httpClient, IConfiguration configuration, ILogger<AuthService> logger) {
   public async Task<AuthUser> VerifyAuthUser(string code) {
-    var verifyUrl = configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{code}", code);
+    var verifyUrl = configuration.GetValue<string>("OAuth:VerifyUrl").Replace("{token}", code);
 
     var request = new HttpRequestMessage(HttpMethod.Get, verifyUrl);
     var responseMessage = await httpClient.SendAsync(request);
 
-    if (!responseMessage.IsSuccessStatusCode) {
-      var location = responseMessage.Headers.Location?.ToString();
-      throw new Exception($"SSO serviceValidate returned {(int)responseMessage.StatusCode}. Redirect: {location}");
-    }
-
     var responseText = await responseMessage.Content.ReadAsStringAsync();
+    logger.Console($"responseText = {responseText}");
 
     var response = ObjectUtils.Decode<AuthResponse>(responseText);
 
-    if (response?.Result?.Success == null) {return null;}
-
-    var successResult = response.Result.Success;
-
-    // userService.AddOrUpdate(authUser);
-
     var authUser = new AuthUser(
-      Username: successResult.Username,
-      DisplayName: successResult.UserInfo.DisplayName,
+      Username: response.User.Username,
+      DisplayName: response.User.Name,
       Token: GenerateToken(new Dictionary<string, string> {
-        { "Username", successResult.Username },
-        { "DisplayName", successResult.UserInfo.DisplayName }
+        { "Username", response.User.Username },
+        { "DisplayName", response.User.Name }
       }) // return to client to cache in LocalStorage
     );
 
@@ -77,24 +67,13 @@ public class AuthService(HttpClient httpClient, IConfiguration configuration, IL
   private readonly SecurityKey signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
 }
 
-public record AuthResponse([property: JsonPropertyName("serviceResponse")] AuthResponse.AuthResult Result) {
-  public record AuthResult(
-    [property: JsonPropertyName("authenticationFailure")] AuthFailure? Failure,
-    [property: JsonPropertyName("authenticationSuccess")] AuthSuccess? Success
-  );
-
-  public record AuthFailure(
-    [property: JsonPropertyName("code")] string Code,
-    [property: JsonPropertyName("description")] string Description
-  );
-
-  public record AuthSuccess(
-    [property: JsonPropertyName("user")] string Username,
-    [property: JsonPropertyName("profile")] UserInfo UserInfo
-  );
-
+public record AuthResponse(
+  [property: JsonPropertyName("access_token")] string AccessToken,
+  [property: JsonPropertyName("data")] AuthResponse.UserInfo User
+) {
   public record UserInfo(
-    [property: JsonPropertyName("displayName")] string DisplayName
+    [property: JsonPropertyName("username")] string Username,
+    [property: JsonPropertyName("name")] string Name
   );
 }
 

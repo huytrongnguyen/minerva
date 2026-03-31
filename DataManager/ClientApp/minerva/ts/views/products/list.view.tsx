@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router';
 import { Grid, GridColumn } from 'rosie/components';
 import { ProductInfoStore } from 'minerva/core';
-import { AppSidebar } from 'minerva/components';
+import { NavigatorComponent } from 'minerva/components';
 
 export function ProductListView() {
   useEffect(() => {
@@ -10,7 +10,7 @@ export function ProductListView() {
   }, []);
 
   return <>
-    <AppSidebar />
+    <NavigatorComponent />
     <div className="app-wrapper fullscreen d-flex position-relative">
       <div className="app-body fullscreen d-flex flex-column">
         <ol className="breadcrumb">

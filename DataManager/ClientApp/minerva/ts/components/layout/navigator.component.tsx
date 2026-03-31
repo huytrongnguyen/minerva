@@ -13,7 +13,7 @@ export const navigator: NavItem[] = [{
   navPath: '/admin'
 }]
 
-export function AppSidebar(props: PropsWithChildren<any>) {
+export function NavigatorComponent(props: PropsWithChildren<any>) {
   const [navigation, setNavigation] = useState([] as NavItem[]);
 
   useEffect(() => {
@@ -28,13 +28,15 @@ export function AppSidebar(props: PropsWithChildren<any>) {
     }]);
   }, []);
 
-  return <aside className="app-sidebar d-flex flex-column border-end">
-    <div role="button" className="navbar-brand p-2">Minerva</div>
-    <nav className="nav nav-pills flex-column border-bottom p-2">
-      <NavItemList items={navigation} level={0} />
-    </nav>
-    {props.children}
-  </aside>
+  return <></>
+
+  // return <aside>
+  //   <div role="button" className="navbar-brand p-2">Minerva</div>
+  //   <nav className="nav nav-pills flex-column border-bottom p-2">
+  //     <NavItemList items={navigation} level={0} />
+  //   </nav>
+  //   {props.children}
+  // </aside>
 }
 
 export function NavItemList(props: { items: NavItem[], level: number }) {

@@ -21794,7 +21794,7 @@
           const e2 = t2.target.closest(Y);
           U.getOrCreateInstance(e2).toggle();
         }), g(U);
-        const G = ".bs.swipe", J = `touchstart${G}`, Z = `touchmove${G}`, tt = `touchend${G}`, et = `pointerdown${G}`, it = `pointerup${G}`, nt = { endCallback: null, leftCallback: null, rightCallback: null }, st = { endCallback: "(function|null)", leftCallback: "(function|null)", rightCallback: "(function|null)" };
+        const G2 = ".bs.swipe", J = `touchstart${G2}`, Z = `touchmove${G2}`, tt = `touchend${G2}`, et = `pointerdown${G2}`, it = `pointerup${G2}`, nt = { endCallback: null, leftCallback: null, rightCallback: null }, st = { endCallback: "(function|null)", leftCallback: "(function|null)", rightCallback: "(function|null)" };
         class ot extends W {
           constructor(t2, e2) {
             super(), this._element = t2, t2 && ot.isSupported() && (this._config = this._getConfig(e2), this._deltaX = 0, this._supportPointerEvents = Boolean(window.PointerEvent), this._initEvents());
@@ -21809,7 +21809,7 @@
             return "swipe";
           }
           dispose() {
-            P.off(this._element, G);
+            P.off(this._element, G2);
           }
           _start(t2) {
             this._supportPointerEvents ? this._eventIsPointerPenTouch(t2) && (this._deltaX = t2.clientX) : this._deltaX = t2.touches[0].clientX;
@@ -22408,8 +22408,8 @@
           var e2 = t2.state, i2 = t2.options, n2 = t2.name, s2 = i2.mainAxis, o2 = void 0 === s2 || s2, r2 = i2.altAxis, a2 = void 0 !== r2 && r2, l2 = i2.boundary, c2 = i2.rootBoundary, h2 = i2.altBoundary, d2 = i2.padding, u2 = i2.tether, f2 = void 0 === u2 || u2, p2 = i2.tetherOffset, m2 = void 0 === p2 ? 0 : p2, g2 = oi(e2, { boundary: l2, rootBoundary: c2, padding: d2, altBoundary: h2 }), _2 = we(e2.placement), b2 = Be(e2.placement), v2 = !b2, y2 = je(_2), w2 = "x" === y2 ? "y" : "x", A2 = e2.modifiersData.popperOffsets, E2 = e2.rects.reference, T2 = e2.rects.popper, C2 = "function" == typeof m2 ? m2(Object.assign({}, e2.rects, { placement: e2.placement })) : m2, O2 = "number" == typeof C2 ? { mainAxis: C2, altAxis: C2 } : Object.assign({ mainAxis: 0, altAxis: 0 }, C2), x2 = e2.modifiersData.offset ? e2.modifiersData.offset[e2.placement] : null, k2 = { x: 0, y: 0 };
           if (A2) {
             if (o2) {
-              var L2, S2 = "y" === y2 ? Vt : Xt, D2 = "y" === y2 ? Kt : Qt, $2 = "y" === y2 ? "height" : "width", I2 = A2[y2], N2 = I2 + g2[S2], P2 = I2 - g2[D2], j2 = f2 ? -T2[$2] / 2 : 0, M2 = b2 === Gt ? E2[$2] : T2[$2], F2 = b2 === Gt ? -T2[$2] : -E2[$2], H2 = e2.elements.arrow, W2 = f2 && H2 ? ke(H2) : { width: 0, height: 0 }, B2 = e2.modifiersData["arrow#persistent"] ? e2.modifiersData["arrow#persistent"].padding : { top: 0, right: 0, bottom: 0, left: 0 }, z2 = B2[S2], R2 = B2[D2], q2 = Me(0, E2[$2], W2[$2]), V2 = v2 ? E2[$2] / 2 - j2 - q2 - z2 - O2.mainAxis : M2 - q2 - z2 - O2.mainAxis, K2 = v2 ? -E2[$2] / 2 + j2 + q2 + R2 + O2.mainAxis : F2 + q2 + R2 + O2.mainAxis, Q2 = e2.elements.arrow && Pe(e2.elements.arrow), X2 = Q2 ? "y" === y2 ? Q2.clientTop || 0 : Q2.clientLeft || 0 : 0, Y2 = null != (L2 = null == x2 ? void 0 : x2[y2]) ? L2 : 0, U2 = I2 + K2 - Y2, G2 = Me(f2 ? Ee(N2, I2 + V2 - Y2 - X2) : N2, I2, f2 ? Ae(P2, U2) : P2);
-              A2[y2] = G2, k2[y2] = G2 - I2;
+              var L2, S2 = "y" === y2 ? Vt : Xt, D2 = "y" === y2 ? Kt : Qt, $2 = "y" === y2 ? "height" : "width", I2 = A2[y2], N2 = I2 + g2[S2], P2 = I2 - g2[D2], j2 = f2 ? -T2[$2] / 2 : 0, M2 = b2 === Gt ? E2[$2] : T2[$2], F2 = b2 === Gt ? -T2[$2] : -E2[$2], H2 = e2.elements.arrow, W2 = f2 && H2 ? ke(H2) : { width: 0, height: 0 }, B2 = e2.modifiersData["arrow#persistent"] ? e2.modifiersData["arrow#persistent"].padding : { top: 0, right: 0, bottom: 0, left: 0 }, z2 = B2[S2], R2 = B2[D2], q2 = Me(0, E2[$2], W2[$2]), V2 = v2 ? E2[$2] / 2 - j2 - q2 - z2 - O2.mainAxis : M2 - q2 - z2 - O2.mainAxis, K2 = v2 ? -E2[$2] / 2 + j2 + q2 + R2 + O2.mainAxis : F2 + q2 + R2 + O2.mainAxis, Q2 = e2.elements.arrow && Pe(e2.elements.arrow), X2 = Q2 ? "y" === y2 ? Q2.clientTop || 0 : Q2.clientLeft || 0 : 0, Y2 = null != (L2 = null == x2 ? void 0 : x2[y2]) ? L2 : 0, U2 = I2 + K2 - Y2, G3 = Me(f2 ? Ee(N2, I2 + V2 - Y2 - X2) : N2, I2, f2 ? Ae(P2, U2) : P2);
+              A2[y2] = G3, k2[y2] = G3 - I2;
             }
             if (a2) {
               var J2, Z2 = "x" === y2 ? Vt : Xt, tt2 = "x" === y2 ? Kt : Qt, et2 = A2[w2], it2 = "y" === w2 ? "height" : "width", nt2 = et2 + g2[Z2], st2 = et2 - g2[tt2], ot2 = -1 !== [Vt, Xt].indexOf(_2), rt2 = null != (J2 = null == x2 ? void 0 : x2[w2]) ? J2 : 0, at2 = ot2 ? nt2 : et2 - E2[it2] - T2[it2] - rt2 + O2.altAxis, lt2 = ot2 ? et2 + E2[it2] + T2[it2] - rt2 - O2.altAxis : st2, ct2 = f2 && ot2 ? (function(t3, e3, i3) {
@@ -53248,7 +53248,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react24 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -53985,13 +53985,13 @@
       // router loaded. We can help them understand how to avoid that.
       `useHref() may be used only in the context of a <Router> component.`
     );
-    let { basename, navigator: navigator2 } = React2.useContext(NavigationContext);
+    let { basename, navigator: navigator3 } = React2.useContext(NavigationContext);
     let { hash: hash3, pathname, search } = useResolvedPath(to, { relative });
     let joinedPathname = pathname;
     if (basename !== "/") {
       joinedPathname = pathname === "/" ? basename : joinPaths([basename, pathname]);
     }
-    return navigator2.createHref({ pathname: joinedPathname, search, hash: hash3 });
+    return navigator3.createHref({ pathname: joinedPathname, search, hash: hash3 });
   }
   function useInRouterContext() {
     return React2.useContext(LocationContext) != null;
@@ -54024,7 +54024,7 @@
       `useNavigate() may be used only in the context of a <Router> component.`
     );
     let dataRouterContext = React2.useContext(DataRouterContext);
-    let { basename, navigator: navigator2 } = React2.useContext(NavigationContext);
+    let { basename, navigator: navigator3 } = React2.useContext(NavigationContext);
     let { matches } = React2.useContext(RouteContext);
     let { pathname: locationPathname } = useLocation();
     let routePathnamesJson = JSON.stringify(getResolveToMatches(matches));
@@ -54037,7 +54037,7 @@
         warning(activeRef.current, navigateEffectWarning);
         if (!activeRef.current) return;
         if (typeof to === "number") {
-          navigator2.go(to);
+          navigator3.go(to);
           return;
         }
         let path = resolveTo(
@@ -54049,7 +54049,7 @@
         if (dataRouterContext == null && basename !== "/") {
           path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
         }
-        (!!options.replace ? navigator2.replace : navigator2.push)(
+        (!!options.replace ? navigator3.replace : navigator3.push)(
           path,
           options.state,
           options
@@ -54057,7 +54057,7 @@
       },
       [
         basename,
-        navigator2,
+        navigator3,
         routePathnamesJson,
         locationPathname,
         dataRouterContext
@@ -54066,11 +54066,6 @@
     return navigate;
   }
   var OutletContext = React2.createContext(null);
-  function useParams() {
-    let { matches } = React2.useContext(RouteContext);
-    let routeMatch = matches[matches.length - 1];
-    return routeMatch ? routeMatch.params : {};
-  }
   function useResolvedPath(to, { relative } = {}) {
     let { matches } = React2.useContext(RouteContext);
     let { pathname: locationPathname } = useLocation();
@@ -54095,7 +54090,7 @@
       // router loaded. We can help them understand how to avoid that.
       `useRoutes() may be used only in the context of a <Router> component.`
     );
-    let { navigator: navigator2 } = React2.useContext(NavigationContext);
+    let { navigator: navigator3 } = React2.useContext(NavigationContext);
     let { matches: parentMatches } = React2.useContext(RouteContext);
     let routeMatch = parentMatches[parentMatches.length - 1];
     let parentParams = routeMatch ? routeMatch.params : {};
@@ -54152,7 +54147,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             // Pre-encode `?` and `#` ahead of `encodeLocation` because it uses
             // `new URL()` internally and we need to prevent it from treating
             // them as separators
-            navigator2.encodeLocation ? navigator2.encodeLocation(
+            navigator3.encodeLocation ? navigator3.encodeLocation(
               match.pathname.replace(/\?/g, "%3F").replace(/#/g, "%23")
             ).pathname : match.pathname
           ]),
@@ -54162,7 +54157,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             // Pre-encode `?` and `#` ahead of `encodeLocation` because it uses
             // `new URL()` internally and we need to prevent it from treating
             // them as separators
-            navigator2.encodeLocation ? navigator2.encodeLocation(
+            navigator3.encodeLocation ? navigator3.encodeLocation(
               match.pathnameBase.replace(/\?/g, "%3F").replace(/#/g, "%23")
             ).pathname : match.pathnameBase
           ])
@@ -54593,7 +54588,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     children = null,
     location: locationProp,
     navigationType = "POP",
-    navigator: navigator2,
+    navigator: navigator3,
     static: staticProp = false,
     unstable_useTransitions
   }) {
@@ -54605,12 +54600,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     let navigationContext = React3.useMemo(
       () => ({
         basename,
-        navigator: navigator2,
+        navigator: navigator3,
         static: staticProp,
         unstable_useTransitions,
         future: {}
       }),
-      [basename, navigator2, staticProp, unstable_useTransitions]
+      [basename, navigator3, staticProp, unstable_useTransitions]
     );
     if (typeof locationProp === "string") {
       locationProp = parsePath(locationProp);
@@ -54725,29 +54720,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return event.button === 0 && // Ignore everything but left clicks
     (!target || target === "_self") && // Let browser handle "target=_blank" etc.
     !isModifiedEvent(event);
-  }
-  function createSearchParams(init = "") {
-    return new URLSearchParams(
-      typeof init === "string" || Array.isArray(init) || init instanceof URLSearchParams ? init : Object.keys(init).reduce((memo2, key) => {
-        let value = init[key];
-        return memo2.concat(
-          Array.isArray(value) ? value.map((v) => [key, v]) : [[key, value]]
-        );
-      }, [])
-    );
-  }
-  function getSearchParamsForLocation(locationSearch, defaultSearchParams) {
-    let searchParams = createSearchParams(locationSearch);
-    if (defaultSearchParams) {
-      defaultSearchParams.forEach((_, key) => {
-        if (!searchParams.has(key)) {
-          defaultSearchParams.getAll(key).forEach((value) => {
-            searchParams.append(key, value);
-          });
-        }
-      });
-    }
-    return searchParams;
   }
   var _formDataSupportsSubmitter = null;
   function isFormDataSubmitterSupported() {
@@ -55406,11 +55378,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       let path = useResolvedPath(to, { relative: rest.relative });
       let location2 = useLocation();
       let routerState = React10.useContext(DataRouterStateContext);
-      let { navigator: navigator2, basename } = React10.useContext(NavigationContext);
+      let { navigator: navigator3, basename } = React10.useContext(NavigationContext);
       let isTransitioning = routerState != null && // Conditional usage is OK here because the usage of a data router is static
       // eslint-disable-next-line react-hooks/rules-of-hooks
       useViewTransitionState(path) && viewTransition === true;
-      let toPathname = navigator2.encodeLocation ? navigator2.encodeLocation(path).pathname : path.pathname;
+      let toPathname = navigator3.encodeLocation ? navigator3.encodeLocation(path).pathname : path.pathname;
       let locationPathname = location2.pathname;
       let nextLocationPathname = routerState && routerState.navigation && routerState.navigation.location ? routerState.navigation.location.pathname : null;
       if (!caseSensitive) {
@@ -55422,21 +55394,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         nextLocationPathname = stripBasename(nextLocationPathname, basename) || nextLocationPathname;
       }
       const endSlashPosition = toPathname !== "/" && toPathname.endsWith("/") ? toPathname.length - 1 : toPathname.length;
-      let isActive2 = locationPathname === toPathname || !end2 && locationPathname.startsWith(toPathname) && locationPathname.charAt(endSlashPosition) === "/";
+      let isActive = locationPathname === toPathname || !end2 && locationPathname.startsWith(toPathname) && locationPathname.charAt(endSlashPosition) === "/";
       let isPending = nextLocationPathname != null && (nextLocationPathname === toPathname || !end2 && nextLocationPathname.startsWith(toPathname) && nextLocationPathname.charAt(toPathname.length) === "/");
       let renderProps = {
-        isActive: isActive2,
+        isActive,
         isPending,
         isTransitioning
       };
-      let ariaCurrent = isActive2 ? ariaCurrentProp : void 0;
+      let ariaCurrent = isActive ? ariaCurrentProp : void 0;
       let className;
       if (typeof classNameProp === "function") {
         className = classNameProp(renderProps);
       } else {
         className = [
           classNameProp,
-          isActive2 ? "active" : null,
+          isActive ? "active" : null,
           isPending ? "pending" : null,
           isTransitioning ? "transitioning" : null
         ].filter(Boolean).join(" ");
@@ -55636,39 +55608,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         unstable_useTransitions
       ]
     );
-  }
-  function useSearchParams(defaultInit) {
-    warning(
-      typeof URLSearchParams !== "undefined",
-      `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`
-    );
-    let defaultSearchParamsRef = React10.useRef(createSearchParams(defaultInit));
-    let hasSetSearchParamsRef = React10.useRef(false);
-    let location2 = useLocation();
-    let searchParams = React10.useMemo(
-      () => (
-        // Only merge in the defaults if we haven't yet called setSearchParams.
-        // Once we call that we want those to take precedence, otherwise you can't
-        // remove a param with setSearchParams({}) if it has an initial value
-        getSearchParamsForLocation(
-          location2.search,
-          hasSetSearchParamsRef.current ? null : defaultSearchParamsRef.current
-        )
-      ),
-      [location2.search]
-    );
-    let navigate = useNavigate();
-    let setSearchParams = React10.useCallback(
-      (nextInit, navigateOptions) => {
-        const newSearchParams = createSearchParams(
-          typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit
-        );
-        hasSetSearchParamsRef.current = true;
-        navigate("?" + newSearchParams, navigateOptions);
-      },
-      [navigate, searchParams]
-    );
-    return [searchParams, setSearchParams];
   }
   var fetcherId = 0;
   var getUniqueFetcherId = () => `__${String(++fetcherId)}__`;
@@ -60973,13 +60912,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     _setInitialAttributesOnChild(child) {
       child = this._getInnerElement(child);
-      const isActive2 = this._elemIsActive(child);
+      const isActive = this._elemIsActive(child);
       const outerElem = this._getOuterElement(child);
-      child.setAttribute("aria-selected", isActive2);
+      child.setAttribute("aria-selected", isActive);
       if (outerElem !== child) {
         this._setAttributeIfNotExists(outerElem, "role", "presentation");
       }
-      if (!isActive2) {
+      if (!isActive) {
         child.setAttribute("tabindex", "-1");
       }
       this._setAttributeIfNotExists(child, "role", "tab");
@@ -61299,12 +61238,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var isDate2 = kindOfTest("Date");
   var isFile = kindOfTest("File");
+  var isReactNativeBlob = (value) => {
+    return !!(value && typeof value.uri !== "undefined");
+  };
+  var isReactNative = (formData) => formData && typeof formData.getParts !== "undefined";
   var isBlob = kindOfTest("Blob");
   var isFileList = kindOfTest("FileList");
   var isStream = (val) => isObject2(val) && isFunction(val.pipe);
+  function getGlobal() {
+    if (typeof globalThis !== "undefined") return globalThis;
+    if (typeof self !== "undefined") return self;
+    if (typeof window !== "undefined") return window;
+    if (typeof global !== "undefined") return global;
+    return {};
+  }
+  var G = getGlobal();
+  var FormDataCtor = typeof G.FormData !== "undefined" ? G.FormData : void 0;
   var isFormData = (thing) => {
     let kind;
-    return thing && (typeof FormData === "function" && thing instanceof FormData || isFunction(thing.append) && ((kind = kindOf(thing)) === "formdata" || // detect form-data instance
+    return thing && (FormDataCtor && thing instanceof FormDataCtor || isFunction(thing.append) && ((kind = kindOf(thing)) === "formdata" || // detect form-data instance
     kind === "object" && isFunction(thing.toString) && thing.toString() === "[object FormData]"));
   };
   var isURLSearchParams = kindOfTest("URLSearchParams");
@@ -61314,7 +61266,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     "Response",
     "Headers"
   ].map(kindOfTest);
-  var trim = (str) => str.trim ? str.trim() : str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  var trim = (str) => {
+    return str.trim ? str.trim() : str.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+  };
   function forEach(obj, fn2, { allOwnKeys = false } = {}) {
     if (obj === null || typeof obj === "undefined") {
       return;
@@ -61416,10 +61370,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return content;
   };
   var inherits = (constructor, superConstructor, props, descriptors) => {
-    constructor.prototype = Object.create(
-      superConstructor.prototype,
-      descriptors
-    );
+    constructor.prototype = Object.create(superConstructor.prototype, descriptors);
     Object.defineProperty(constructor.prototype, "constructor", {
       value: constructor,
       writable: true,
@@ -61618,6 +61569,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     isUndefined,
     isDate: isDate2,
     isFile,
+    isReactNativeBlob,
+    isReactNative,
     isBlob,
     isRegExp,
     isFunction,
@@ -61666,6 +61619,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       const axiosError = new _AxiosError(error.message, code || error.code, config, request, response);
       axiosError.cause = error;
       axiosError.name = error.name;
+      if (error.status != null && axiosError.status == null) {
+        axiosError.status = error.status;
+      }
       customProps && Object.assign(axiosError, customProps);
       return axiosError;
     }
@@ -61682,6 +61638,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
      */
     constructor(message, code, config, request, response) {
       super(message);
+      Object.defineProperty(this, "message", {
+        value: message,
+        enumerable: true,
+        writable: true,
+        configurable: true
+      });
       this.name = "AxiosError";
       this.isAxiosError = true;
       code && (this.code = code);
@@ -61754,13 +61716,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       throw new TypeError("target must be an object");
     }
     formData = formData || new (null_default || FormData)();
-    options = utils_default.toFlatObject(options, {
-      metaTokens: true,
-      dots: false,
-      indexes: false
-    }, false, function defined(option, source) {
-      return !utils_default.isUndefined(source[option]);
-    });
+    options = utils_default.toFlatObject(
+      options,
+      {
+        metaTokens: true,
+        dots: false,
+        indexes: false
+      },
+      false,
+      function defined(option, source) {
+        return !utils_default.isUndefined(source[option]);
+      }
+    );
     const metaTokens = options.metaTokens;
     const visitor = options.visitor || defaultVisitor;
     const dots = options.dots;
@@ -61788,6 +61755,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     function defaultVisitor(value, key, path) {
       let arr = value;
+      if (utils_default.isReactNative(formData) && utils_default.isReactNativeBlob(value)) {
+        formData.append(renderKey(path, key, dots), convertValue(value));
+        return false;
+      }
       if (value && !path && typeof value === "object") {
         if (utils_default.endsWith(key, "{}")) {
           key = metaTokens ? key : key.slice(0, -2);
@@ -61823,13 +61794,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
       stack.push(value);
       utils_default.forEach(value, function each(el, key) {
-        const result = !(utils_default.isUndefined(el) || el === null) && visitor.call(
-          formData,
-          el,
-          utils_default.isString(key) ? key.trim() : key,
-          path,
-          exposedHelpers
-        );
+        const result = !(utils_default.isUndefined(el) || el === null) && visitor.call(formData, el, utils_default.isString(key) ? key.trim() : key, path, exposedHelpers);
         if (result === true) {
           build(el, path ? path.concat(key) : [key]);
         }
@@ -62107,70 +62072,74 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var defaults = {
     transitional: transitional_default,
     adapter: ["xhr", "http", "fetch"],
-    transformRequest: [function transformRequest(data2, headers) {
-      const contentType = headers.getContentType() || "";
-      const hasJSONContentType = contentType.indexOf("application/json") > -1;
-      const isObjectPayload = utils_default.isObject(data2);
-      if (isObjectPayload && utils_default.isHTMLForm(data2)) {
-        data2 = new FormData(data2);
-      }
-      const isFormData2 = utils_default.isFormData(data2);
-      if (isFormData2) {
-        return hasJSONContentType ? JSON.stringify(formDataToJSON_default(data2)) : data2;
-      }
-      if (utils_default.isArrayBuffer(data2) || utils_default.isBuffer(data2) || utils_default.isStream(data2) || utils_default.isFile(data2) || utils_default.isBlob(data2) || utils_default.isReadableStream(data2)) {
-        return data2;
-      }
-      if (utils_default.isArrayBufferView(data2)) {
-        return data2.buffer;
-      }
-      if (utils_default.isURLSearchParams(data2)) {
-        headers.setContentType("application/x-www-form-urlencoded;charset=utf-8", false);
-        return data2.toString();
-      }
-      let isFileList2;
-      if (isObjectPayload) {
-        if (contentType.indexOf("application/x-www-form-urlencoded") > -1) {
-          return toURLEncodedForm(data2, this.formSerializer).toString();
+    transformRequest: [
+      function transformRequest(data2, headers) {
+        const contentType = headers.getContentType() || "";
+        const hasJSONContentType = contentType.indexOf("application/json") > -1;
+        const isObjectPayload = utils_default.isObject(data2);
+        if (isObjectPayload && utils_default.isHTMLForm(data2)) {
+          data2 = new FormData(data2);
         }
-        if ((isFileList2 = utils_default.isFileList(data2)) || contentType.indexOf("multipart/form-data") > -1) {
-          const _FormData = this.env && this.env.FormData;
-          return toFormData_default(
-            isFileList2 ? { "files[]": data2 } : data2,
-            _FormData && new _FormData(),
-            this.formSerializer
-          );
+        const isFormData2 = utils_default.isFormData(data2);
+        if (isFormData2) {
+          return hasJSONContentType ? JSON.stringify(formDataToJSON_default(data2)) : data2;
         }
-      }
-      if (isObjectPayload || hasJSONContentType) {
-        headers.setContentType("application/json", false);
-        return stringifySafely(data2);
-      }
-      return data2;
-    }],
-    transformResponse: [function transformResponse(data2) {
-      const transitional2 = this.transitional || defaults.transitional;
-      const forcedJSONParsing = transitional2 && transitional2.forcedJSONParsing;
-      const JSONRequested = this.responseType === "json";
-      if (utils_default.isResponse(data2) || utils_default.isReadableStream(data2)) {
-        return data2;
-      }
-      if (data2 && utils_default.isString(data2) && (forcedJSONParsing && !this.responseType || JSONRequested)) {
-        const silentJSONParsing = transitional2 && transitional2.silentJSONParsing;
-        const strictJSONParsing = !silentJSONParsing && JSONRequested;
-        try {
-          return JSON.parse(data2, this.parseReviver);
-        } catch (e) {
-          if (strictJSONParsing) {
-            if (e.name === "SyntaxError") {
-              throw AxiosError_default.from(e, AxiosError_default.ERR_BAD_RESPONSE, this, null, this.response);
-            }
-            throw e;
+        if (utils_default.isArrayBuffer(data2) || utils_default.isBuffer(data2) || utils_default.isStream(data2) || utils_default.isFile(data2) || utils_default.isBlob(data2) || utils_default.isReadableStream(data2)) {
+          return data2;
+        }
+        if (utils_default.isArrayBufferView(data2)) {
+          return data2.buffer;
+        }
+        if (utils_default.isURLSearchParams(data2)) {
+          headers.setContentType("application/x-www-form-urlencoded;charset=utf-8", false);
+          return data2.toString();
+        }
+        let isFileList2;
+        if (isObjectPayload) {
+          if (contentType.indexOf("application/x-www-form-urlencoded") > -1) {
+            return toURLEncodedForm(data2, this.formSerializer).toString();
+          }
+          if ((isFileList2 = utils_default.isFileList(data2)) || contentType.indexOf("multipart/form-data") > -1) {
+            const _FormData = this.env && this.env.FormData;
+            return toFormData_default(
+              isFileList2 ? { "files[]": data2 } : data2,
+              _FormData && new _FormData(),
+              this.formSerializer
+            );
           }
         }
+        if (isObjectPayload || hasJSONContentType) {
+          headers.setContentType("application/json", false);
+          return stringifySafely(data2);
+        }
+        return data2;
       }
-      return data2;
-    }],
+    ],
+    transformResponse: [
+      function transformResponse(data2) {
+        const transitional2 = this.transitional || defaults.transitional;
+        const forcedJSONParsing = transitional2 && transitional2.forcedJSONParsing;
+        const JSONRequested = this.responseType === "json";
+        if (utils_default.isResponse(data2) || utils_default.isReadableStream(data2)) {
+          return data2;
+        }
+        if (data2 && utils_default.isString(data2) && (forcedJSONParsing && !this.responseType || JSONRequested)) {
+          const silentJSONParsing = transitional2 && transitional2.silentJSONParsing;
+          const strictJSONParsing = !silentJSONParsing && JSONRequested;
+          try {
+            return JSON.parse(data2, this.parseReviver);
+          } catch (e) {
+            if (strictJSONParsing) {
+              if (e.name === "SyntaxError") {
+                throw AxiosError_default.from(e, AxiosError_default.ERR_BAD_RESPONSE, this, null, this.response);
+              }
+              throw e;
+            }
+          }
+        }
+        return data2;
+      }
+    ],
     /**
      * A timeout in milliseconds to abort a request. If set to 0 (default) a
      * timeout is not created.
@@ -62189,7 +62158,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     },
     headers: {
       common: {
-        "Accept": "application/json, text/plain, */*",
+        Accept: "application/json, text/plain, */*",
         "Content-Type": void 0
       }
     }
@@ -62253,7 +62222,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (value === false || value == null) {
       return value;
     }
-    return utils_default.isArray(value) ? value.map(normalizeValue) : String(value);
+    return utils_default.isArray(value) ? value.map(normalizeValue) : String(value).replace(/[\r\n]+$/, "");
   }
   function parseTokens(str) {
     const tokens = /* @__PURE__ */ Object.create(null);
@@ -62460,7 +62429,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return this;
     }
   };
-  AxiosHeaders.accessor(["Content-Type", "Content-Length", "Accept", "Accept-Encoding", "User-Agent", "Authorization"]);
+  AxiosHeaders.accessor([
+    "Content-Type",
+    "Content-Length",
+    "Accept",
+    "Accept-Encoding",
+    "User-Agent",
+    "Authorization"
+  ]);
   utils_default.reduceDescriptors(AxiosHeaders.prototype, ({ value }, key) => {
     let mapped = key[0].toUpperCase() + key.slice(1);
     return {
@@ -62516,13 +62492,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (!response.status || !validateStatus2 || validateStatus2(response.status)) {
       resolve(response);
     } else {
-      reject(new AxiosError_default(
-        "Request failed with status code " + response.status,
-        [AxiosError_default.ERR_BAD_REQUEST, AxiosError_default.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4],
-        response.config,
-        response.request,
-        response
-      ));
+      reject(
+        new AxiosError_default(
+          "Request failed with status code " + response.status,
+          [AxiosError_default.ERR_BAD_REQUEST, AxiosError_default.ERR_BAD_RESPONSE][Math.floor(response.status / 100) - 4],
+          response.config,
+          response.request,
+          response
+        )
+      );
     }
   }
 
@@ -62630,11 +62608,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var progressEventDecorator = (total, throttled) => {
     const lengthComputable = total != null;
-    return [(loaded) => throttled[0]({
-      lengthComputable,
-      total,
-      loaded
-    }), throttled[1]];
+    return [
+      (loaded) => throttled[0]({
+        lengthComputable,
+        total,
+        loaded
+      }),
+      throttled[1]
+    ];
   };
   var asyncDecorator = (fn2) => (...args) => utils_default.asap(() => fn2(...args));
 
@@ -62787,16 +62768,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       validateStatus: mergeDirectKeys,
       headers: (a, b, prop) => mergeDeepProperties(headersToObject(a), headersToObject(b), prop, true)
     };
-    utils_default.forEach(
-      Object.keys({ ...config1, ...config2 }),
-      function computeConfigValue(prop) {
-        if (prop === "__proto__" || prop === "constructor" || prop === "prototype")
-          return;
-        const merge2 = utils_default.hasOwnProp(mergeMap, prop) ? mergeMap[prop] : mergeDeepProperties;
-        const configValue = merge2(config1[prop], config2[prop], prop);
-        utils_default.isUndefined(configValue) && merge2 !== mergeDirectKeys || (config[prop] = configValue);
-      }
-    );
+    utils_default.forEach(Object.keys({ ...config1, ...config2 }), function computeConfigValue(prop) {
+      if (prop === "__proto__" || prop === "constructor" || prop === "prototype") return;
+      const merge2 = utils_default.hasOwnProp(mergeMap, prop) ? mergeMap[prop] : mergeDeepProperties;
+      const configValue = merge2(config1[prop], config2[prop], prop);
+      utils_default.isUndefined(configValue) && merge2 !== mergeDirectKeys || (config[prop] = configValue);
+    });
     return config;
   }
 
@@ -62805,11 +62782,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const newConfig = mergeConfig({}, config);
     let { data: data2, withXSRFToken, xsrfHeaderName, xsrfCookieName, headers, auth } = newConfig;
     newConfig.headers = headers = AxiosHeaders_default.from(headers);
-    newConfig.url = buildURL(buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls), config.params, config.paramsSerializer);
+    newConfig.url = buildURL(
+      buildFullPath(newConfig.baseURL, newConfig.url, newConfig.allowAbsoluteUrls),
+      config.params,
+      config.paramsSerializer
+    );
     if (auth) {
       headers.set(
         "Authorization",
-        "Basic " + btoa((auth.username || "") + ":" + (auth.password ? unescape(encodeURIComponent(auth.password)) : ""))
+        "Basic " + btoa(
+          (auth.username || "") + ":" + (auth.password ? unescape(encodeURIComponent(auth.password)) : "")
+        )
       );
     }
     if (utils_default.isFormData(data2)) {
@@ -62873,13 +62856,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           config,
           request
         };
-        settle(function _resolve(value) {
-          resolve(value);
-          done();
-        }, function _reject(err) {
-          reject(err);
-          done();
-        }, response);
+        settle(
+          function _resolve(value) {
+            resolve(value);
+            done();
+          },
+          function _reject(err) {
+            reject(err);
+            done();
+          },
+          response
+        );
         request = null;
       }
       if ("onloadend" in request) {
@@ -62915,12 +62902,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         if (_config.timeoutErrorMessage) {
           timeoutErrorMessage = _config.timeoutErrorMessage;
         }
-        reject(new AxiosError_default(
-          timeoutErrorMessage,
-          transitional2.clarifyTimeoutError ? AxiosError_default.ETIMEDOUT : AxiosError_default.ECONNABORTED,
-          config,
-          request
-        ));
+        reject(
+          new AxiosError_default(
+            timeoutErrorMessage,
+            transitional2.clarifyTimeoutError ? AxiosError_default.ETIMEDOUT : AxiosError_default.ECONNABORTED,
+            config,
+            request
+          )
+        );
         request = null;
       };
       requestData === void 0 && requestHeaders.setContentType(null);
@@ -62960,7 +62949,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
       const protocol = parseProtocol(_config.url);
       if (protocol && platform_default.protocols.indexOf(protocol) === -1) {
-        reject(new AxiosError_default("Unsupported protocol " + protocol + ":", AxiosError_default.ERR_BAD_REQUEST, config));
+        reject(
+          new AxiosError_default(
+            "Unsupported protocol " + protocol + ":",
+            AxiosError_default.ERR_BAD_REQUEST,
+            config
+          )
+        );
         return;
       }
       request.send(requestData || null);
@@ -62978,7 +62973,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           aborted = true;
           unsubscribe();
           const err = reason instanceof Error ? reason : this.reason;
-          controller.abort(err instanceof AxiosError_default ? err : new CanceledError_default(err instanceof Error ? err.message : err));
+          controller.abort(
+            err instanceof AxiosError_default ? err : new CanceledError_default(err instanceof Error ? err.message : err)
+          );
         }
       };
       let timer = timeout && setTimeout(() => {
@@ -63051,33 +63048,36 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         onFinish && onFinish(e);
       }
     };
-    return new ReadableStream({
-      async pull(controller) {
-        try {
-          const { done: done2, value } = await iterator2.next();
-          if (done2) {
-            _onFinish();
-            controller.close();
-            return;
+    return new ReadableStream(
+      {
+        async pull(controller) {
+          try {
+            const { done: done2, value } = await iterator2.next();
+            if (done2) {
+              _onFinish();
+              controller.close();
+              return;
+            }
+            let len = value.byteLength;
+            if (onProgress) {
+              let loadedBytes = bytes += len;
+              onProgress(loadedBytes);
+            }
+            controller.enqueue(new Uint8Array(value));
+          } catch (err) {
+            _onFinish(err);
+            throw err;
           }
-          let len = value.byteLength;
-          if (onProgress) {
-            let loadedBytes = bytes += len;
-            onProgress(loadedBytes);
-          }
-          controller.enqueue(new Uint8Array(value));
-        } catch (err) {
-          _onFinish(err);
-          throw err;
+        },
+        cancel(reason) {
+          _onFinish(reason);
+          return iterator2.return();
         }
       },
-      cancel(reason) {
-        _onFinish(reason);
-        return iterator2.return();
+      {
+        highWaterMark: 2
       }
-    }, {
-      highWaterMark: 2
-    });
+    );
   };
 
   // ClientApp/rosie/node_modules/axios/lib/adapters/fetch.js
@@ -63087,10 +63087,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     Request: Request2,
     Response: Response2
   }))(utils_default.global);
-  var {
-    ReadableStream: ReadableStream2,
-    TextEncoder: TextEncoder2
-  } = utils_default.global;
+  var { ReadableStream: ReadableStream2, TextEncoder: TextEncoder2 } = utils_default.global;
   var test = (fn2, ...args) => {
     try {
       return !!fn2(...args);
@@ -63099,9 +63096,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
   };
   var factory = (env) => {
-    env = utils_default.merge.call({
-      skipUndefined: true
-    }, globalFetchAPI, env);
+    env = utils_default.merge.call(
+      {
+        skipUndefined: true
+      },
+      globalFetchAPI,
+      env
+    );
     const { fetch: envFetch, Request: Request2, Response: Response2 } = env;
     const isFetchSupported = envFetch ? isFunction2(envFetch) : typeof fetch === "function";
     const isRequestSupported = isFunction2(Request2);
@@ -63113,14 +63114,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const encodeText = isFetchSupported && (typeof TextEncoder2 === "function" ? /* @__PURE__ */ ((encoder) => (str) => encoder.encode(str))(new TextEncoder2()) : async (str) => new Uint8Array(await new Request2(str).arrayBuffer()));
     const supportsRequestStream = isRequestSupported && isReadableStreamSupported && test(() => {
       let duplexAccessed = false;
+      const body = new ReadableStream2();
       const hasContentType = new Request2(platform_default.origin, {
-        body: new ReadableStream2(),
+        body,
         method: "POST",
         get duplex() {
           duplexAccessed = true;
           return "half";
         }
       }).headers.has("Content-Type");
+      body.cancel();
       return duplexAccessed && !hasContentType;
     });
     const supportsResponseStream = isResponseSupported && isReadableStreamSupported && test(() => utils_default.isReadableStream(new Response2("").body));
@@ -63134,7 +63137,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           if (method) {
             return method.call(res);
           }
-          throw new AxiosError_default(`Response type '${type}' is not supported`, AxiosError_default.ERR_NOT_SUPPORT, config);
+          throw new AxiosError_default(
+            `Response type '${type}' is not supported`,
+            AxiosError_default.ERR_NOT_SUPPORT,
+            config
+          );
         });
       });
     })();
@@ -63183,7 +63190,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } = resolveConfig_default(config);
       let _fetch = envFetch || fetch;
       responseType = responseType ? (responseType + "").toLowerCase() : "text";
-      let composedSignal = composeSignals_default([signal, cancelToken && cancelToken.toAbortSignal()], timeout);
+      let composedSignal = composeSignals_default(
+        [signal, cancelToken && cancelToken.toAbortSignal()],
+        timeout
+      );
       let request = null;
       const unsubscribe = composedSignal && composedSignal.unsubscribe && (() => {
         composedSignal.unsubscribe();
@@ -63243,7 +63253,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           );
         }
         responseType = responseType || "text";
-        let responseData = await resolvers[utils_default.findKey(resolvers, responseType) || "text"](response, config);
+        let responseData = await resolvers[utils_default.findKey(resolvers, responseType) || "text"](
+          response,
+          config
+        );
         !isStreamResponse && unsubscribe && unsubscribe();
         return await new Promise((resolve, reject) => {
           settle(resolve, reject, {
@@ -63259,7 +63272,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         unsubscribe && unsubscribe();
         if (err && err.name === "TypeError" && /Load failed|fetch/i.test(err.message)) {
           throw Object.assign(
-            new AxiosError_default("Network Error", AxiosError_default.ERR_NETWORK, config, request, err && err.response),
+            new AxiosError_default(
+              "Network Error",
+              AxiosError_default.ERR_NETWORK,
+              config,
+              request,
+              err && err.response
+            ),
             {
               cause: err.cause || err
             }
@@ -63273,11 +63292,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var getFetch = (config) => {
     let env = config && config.env || {};
     const { fetch: fetch2, Request: Request2, Response: Response2 } = env;
-    const seeds = [
-      Request2,
-      Response2,
-      fetch2
-    ];
+    const seeds = [Request2, Response2, fetch2];
     let len = seeds.length, i = len, seed, target, map = seedCache;
     while (i--) {
       seed = seeds[i];
@@ -63366,41 +63381,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function dispatchRequest(config) {
     throwIfCancellationRequested(config);
     config.headers = AxiosHeaders_default.from(config.headers);
-    config.data = transformData.call(
-      config,
-      config.transformRequest
-    );
+    config.data = transformData.call(config, config.transformRequest);
     if (["post", "put", "patch"].indexOf(config.method) !== -1) {
       config.headers.setContentType("application/x-www-form-urlencoded", false);
     }
     const adapter2 = adapters_default.getAdapter(config.adapter || defaults_default.adapter, config);
-    return adapter2(config).then(function onAdapterResolution(response) {
-      throwIfCancellationRequested(config);
-      response.data = transformData.call(
-        config,
-        config.transformResponse,
-        response
-      );
-      response.headers = AxiosHeaders_default.from(response.headers);
-      return response;
-    }, function onAdapterRejection(reason) {
-      if (!isCancel(reason)) {
+    return adapter2(config).then(
+      function onAdapterResolution(response) {
         throwIfCancellationRequested(config);
-        if (reason && reason.response) {
-          reason.response.data = transformData.call(
-            config,
-            config.transformResponse,
-            reason.response
-          );
-          reason.response.headers = AxiosHeaders_default.from(reason.response.headers);
+        response.data = transformData.call(config, config.transformResponse, response);
+        response.headers = AxiosHeaders_default.from(response.headers);
+        return response;
+      },
+      function onAdapterRejection(reason) {
+        if (!isCancel(reason)) {
+          throwIfCancellationRequested(config);
+          if (reason && reason.response) {
+            reason.response.data = transformData.call(
+              config,
+              config.transformResponse,
+              reason.response
+            );
+            reason.response.headers = AxiosHeaders_default.from(reason.response.headers);
+          }
         }
+        return Promise.reject(reason);
       }
-      return Promise.reject(reason);
-    });
+    );
   }
 
   // ClientApp/rosie/node_modules/axios/lib/env/data.js
-  var VERSION2 = "1.13.5";
+  var VERSION2 = "1.14.0";
 
   // ClientApp/rosie/node_modules/axios/lib/helpers/validator.js
   var validators = {};
@@ -63452,7 +63463,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         const value = options[opt];
         const result = value === void 0 || validator(value, opt, options);
         if (result !== true) {
-          throw new AxiosError_default("option " + opt + " must be " + result, AxiosError_default.ERR_BAD_OPTION_VALUE);
+          throw new AxiosError_default(
+            "option " + opt + " must be " + result,
+            AxiosError_default.ERR_BAD_OPTION_VALUE
+          );
         }
         continue;
       }
@@ -63514,12 +63528,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       config = mergeConfig(this.defaults, config);
       const { transitional: transitional2, paramsSerializer, headers } = config;
       if (transitional2 !== void 0) {
-        validator_default.assertOptions(transitional2, {
-          silentJSONParsing: validators2.transitional(validators2.boolean),
-          forcedJSONParsing: validators2.transitional(validators2.boolean),
-          clarifyTimeoutError: validators2.transitional(validators2.boolean),
-          legacyInterceptorReqResOrdering: validators2.transitional(validators2.boolean)
-        }, false);
+        validator_default.assertOptions(
+          transitional2,
+          {
+            silentJSONParsing: validators2.transitional(validators2.boolean),
+            forcedJSONParsing: validators2.transitional(validators2.boolean),
+            clarifyTimeoutError: validators2.transitional(validators2.boolean),
+            legacyInterceptorReqResOrdering: validators2.transitional(validators2.boolean)
+          },
+          false
+        );
       }
       if (paramsSerializer != null) {
         if (utils_default.isFunction(paramsSerializer)) {
@@ -63527,10 +63545,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             serialize: paramsSerializer
           };
         } else {
-          validator_default.assertOptions(paramsSerializer, {
-            encode: validators2.function,
-            serialize: validators2.function
-          }, true);
+          validator_default.assertOptions(
+            paramsSerializer,
+            {
+              encode: validators2.function,
+              serialize: validators2.function
+            },
+            true
+          );
         }
       }
       if (config.allowAbsoluteUrls !== void 0) {
@@ -63539,21 +63561,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } else {
         config.allowAbsoluteUrls = true;
       }
-      validator_default.assertOptions(config, {
-        baseUrl: validators2.spelling("baseURL"),
-        withXsrfToken: validators2.spelling("withXSRFToken")
-      }, true);
+      validator_default.assertOptions(
+        config,
+        {
+          baseUrl: validators2.spelling("baseURL"),
+          withXsrfToken: validators2.spelling("withXSRFToken")
+        },
+        true
+      );
       config.method = (config.method || this.defaults.method || "get").toLowerCase();
-      let contextHeaders = headers && utils_default.merge(
-        headers.common,
-        headers[config.method]
-      );
-      headers && utils_default.forEach(
-        ["delete", "get", "head", "post", "put", "patch", "common"],
-        (method) => {
-          delete headers[method];
-        }
-      );
+      let contextHeaders = headers && utils_default.merge(headers.common, headers[config.method]);
+      headers && utils_default.forEach(["delete", "get", "head", "post", "put", "patch", "common"], (method) => {
+        delete headers[method];
+      });
       config.headers = AxiosHeaders_default.concat(contextHeaders, headers);
       const requestInterceptorChain = [];
       let synchronousRequestInterceptors = true;
@@ -63620,24 +63640,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   utils_default.forEach(["delete", "get", "head", "options"], function forEachMethodNoData(method) {
     Axios.prototype[method] = function(url, config) {
-      return this.request(mergeConfig(config || {}, {
-        method,
-        url,
-        data: (config || {}).data
-      }));
+      return this.request(
+        mergeConfig(config || {}, {
+          method,
+          url,
+          data: (config || {}).data
+        })
+      );
     };
   });
   utils_default.forEach(["post", "put", "patch"], function forEachMethodWithData(method) {
     function generateHTTPMethod(isForm) {
       return function httpMethod(url, data2, config) {
-        return this.request(mergeConfig(config || {}, {
-          method,
-          headers: isForm ? {
-            "Content-Type": "multipart/form-data"
-          } : {},
-          url,
-          data: data2
-        }));
+        return this.request(
+          mergeConfig(config || {}, {
+            method,
+            headers: isForm ? {
+              "Content-Type": "multipart/form-data"
+            } : {},
+            url,
+            data: data2
+          })
+        );
       };
     }
     Axios.prototype[method] = generateHTTPMethod();
@@ -68209,6 +68233,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // ClientApp/minerva/ts/core/user.ts
   var AuthUserModel = Model({ proxy: { url: "/api/auth/user" } });
+  var navigator2 = [{
+    navId: "products",
+    navName: "Products",
+    navPath: "/products"
+  }, {
+    navId: "admin",
+    navName: "Administration",
+    navPath: "/admin"
+  }];
 
   // ClientApp/minerva/ts/core/product/product-info.ts
   var ProductInfoStore = Store({
@@ -68264,209 +68297,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     proxy: { url: "/api/products/{productId}/reports/execute", method: "post" }
   });
 
-  // ClientApp/minerva/ts/core/report/index.ts
-  var NUMERIC_TYPES = ["int", "bigint", "float", "double", "decimal", "real", "numeric", "integer", "long"];
-  var DATE_TYPES = ["date", "timestamp", "datetime"];
-  var isNumeric = (t = "") => NUMERIC_TYPES.some((k) => t.toLowerCase().includes(k));
-  var isDate3 = (t = "") => DATE_TYPES.some((k) => t.toLowerCase().includes(k));
-  var aggsFor = (t = "") => isNumeric(t) ? ["SUM", "AVG", "MIN", "MAX", "COUNT"] : ["COUNT"];
-  var defaultAgg = (t = "") => isNumeric(t) ? "SUM" : "COUNT";
-  var autoName = (m) => m.fieldName ? `${m.aggregation}(${m.fieldName})` : "";
-  var newDraft = () => ({
-    id: Rosie.guid("m-"),
-    tableName: "",
-    fieldName: "",
-    aggregation: "",
-    name: "",
-    chartType: "bar",
-    stacked: false,
-    secondaryAxis: false
-  });
-  var buildReportDefinition = (reportName, measures, view) => ({
-    name: reportName || "New Report",
-    rowIndex: 0,
-    colIndex: 0,
-    colWidth: 6,
-    measures: measures.map((m) => ({
-      name: m.name || autoName(m),
-      eventName: m.tableName,
-      fieldName: m.fieldName,
-      aggregation: m.aggregation,
-      chartType: m.chartType,
-      stacked: m.stacked,
-      secondaryAxis: m.secondaryAxis,
-      calculation: []
-    })),
-    view: {
-      timeField: view.timeField,
-      breakdown: view.breakdownField ? { fieldName: view.breakdownField } : null,
-      startRollingDate: view.startExactDate ? null : view.startRollingDate ?? 7,
-      endRollingDate: view.endExactDate ? null : view.endRollingDate ?? 1,
-      startExactDate: view.startExactDate ?? null,
-      endExactDate: view.endExactDate ?? null
-    }
-  });
-  var toRows = (data2) => {
-    if (!data2?.length) return { headers: [], rows: [] };
-    const headers = data2.map((col) => String(col[0]));
-    const rowCount = (data2[0]?.length ?? 1) - 1;
-    const rows = Array.from({ length: rowCount }, (_, i) => data2.map((col) => col[i + 1] ?? ""));
-    return { headers, rows };
-  };
-
   // ClientApp/minerva/ts/components/chart/types.ts
   var import_d3 = __toESM(require_d3_node());
-  var chartConfig = {
-    height: 250,
-    margin: { top: 9, left: 81 },
-    colorPatterns: [
-      "#e97b98",
-      // pink          — primary (bars)
-      "#6765e8",
-      // purple        — secondary (lines)
-      "#2383e2",
-      "#0f7b6c",
-      "#6e4fcb",
-      "#c87017",
-      "#c0392b",
-      "#acaba8",
-      "#5b9bd5",
-      // medium blue
-      "#4dbdb5",
-      // teal
-      "#9b8dc4",
-      // soft purple
-      "#68b58a",
-      // sage green
-      "#f5a623",
-      // amber
-      "#a8c8e8",
-      // pale blue
-      "#b8ddd9",
-      // pale teal
-      "#d4c5ea",
-      // pale lavender
-      "#9da5b4"
-      // slate gray
-    ]
-  };
-  var d3Pattern = (specifier = ",.2~f") => (0, import_d3.format)(specifier);
 
   // ClientApp/minerva/ts/components/chart/cartesian.component.tsx
   var import_react = __toESM(require_react());
   var import_c3 = __toESM(require_c3());
   var import_jsx_runtime = __toESM(require_jsx_runtime());
-  function CartesianChart(props) {
-    const [chartId] = (0, import_react.useState)(Rosie.guid(`rosie-chart-${props.name ?? ""}-`));
-    (0, import_react.useEffect)(() => {
-      if (!props.data?.length) return;
-      const { dataOriented, series, axes } = props, { xField, yField } = series, seriesType = series.type ?? "bar", types = {};
-      axes?.y?.fields?.forEach((field) => types[field] = axes?.y?.type ?? seriesType);
-      axes?.y2?.fields?.forEach((field) => types[field] = axes?.y2?.type ?? seriesType);
-      const config = {
-        bindto: `#${chartId}`,
-        data: {
-          [dataOriented ?? "columns"]: props.data,
-          x: xField,
-          // names: valueFields,
-          type: seriesType,
-          types,
-          axes: Object.fromEntries(axes?.y2?.fields?.map((field) => [field, "y2"]) ?? []),
-          groups: axes?.y?.stacked ? [axes.y.fields] : void 0
-          // labels: false,//series?.label ?? false,
-          // order: null,
-        },
-        size: { height: chartConfig.height },
-        axis: {
-          x: {
-            type: axes.x.type,
-            // label: axes?.x?.label,
-            // show: axes?.x?.show ?? true,
-            tick: { format: axes?.x?.format, rotate: axes?.x?.rotate, multiline: false }
-          },
-          // y: { label: axes?.y?.label, show: axes?.y?.show ?? true, tick: { format: d3Pattern(axes?.y?.format ?? ',.2~s'), rotate: axes?.y?.rotate } },
-          y2: {
-            show: axes?.y2?.fields?.length > 0,
-            tick: { format: d3Pattern(axes?.y2?.format ?? ",.2~s") }
-          }
-          // rotated: axes?.rotated,
-        },
-        color: { pattern: chartConfig.colorPatterns },
-        grid: { y: { show: true } }
-        // tooltip: { format: { value: series?.tooltip?.renderer ?? ((value: number) => d3Format(value, series?.tooltip?.format ?? ',.2~f')) } }
-      };
-      import_c3.default.generate(config);
-    }, [props.data]);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { id: chartId, className: "c3" });
-  }
 
   // ClientApp/rosie/ts/components/loading-indicator.component.tsx
   var import_jsx_runtime2 = __toESM(require_jsx_runtime());
-  function LoadingIndicator() {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "loading-indicator", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "loading-indicator-msg", children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "loading-indicator-msg-text", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "fa fa-circle-notch fa-spin me-1" }),
-      "Loading..."
-    ] }) }) });
-  }
 
   // ClientApp/rosie/ts/components/dialog.component.tsx
   var import_react2 = __toESM(require_react());
   var import_jsx_runtime3 = __toESM(require_jsx_runtime());
-  function Dialog(props) {
-    const { id = "dialog", title = "Dialog", className = "", dialogClass = "", disableCloseButton, fitScreen, children } = props;
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("section", { className: `modal fade ${className}`, id, "data-bs-backdrop": "static", tabIndex: -1, role: "dialog", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: `modal-dialog modal-dialog-centered modal-dialog-scrollable ${dialogClass}`, role: "document", children: /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: Rosie.classNames("modal-content", { fullscreen: fitScreen }), style: { maxHeight: props.height ?? "100%" }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "modal-header", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h5", { className: "modal-title", children: title }),
-        !disableCloseButton && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("button", { type: "button", className: "btn-close", "data-bs-dismiss": "modal" })
-      ] }),
-      children
-    ] }) }) });
-  }
-  function useDialog(id) {
-    const [isShown, setState] = (0, import_react2.useState)(false);
-    (0, import_react2.useEffect)(() => {
-      if (isShown) {
-        Rosie.showModal(id, void 0, () => {
-          setState(false);
-        });
-      }
-    }, [isShown]);
-    return {
-      isShown,
-      show: () => setState(true),
-      hide: () => Rosie.hideModal(id)
-    };
-  }
 
   // ClientApp/rosie/ts/components/grid/grid.component.tsx
   var import_react5 = __toESM(require_react());
 
   // ClientApp/rosie/ts/components/paging-toolbar.component.tsx
   var import_jsx_runtime4 = __toESM(require_jsx_runtime());
-  function PagingToolbar(props) {
-    const { page = 1, size = 100, count = 0, total = 0 } = props, totalPage = (total / size).floor() + (total % size > 0 ? 1 : 0);
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_jsx_runtime4.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "mt-1 me-auto", children: [
-        "Display records ",
-        !count ? 0 : (page - 1) * size + 1,
-        " - ",
-        Math.min(page * size, (page - 1) * size + count),
-        " of ",
-        total
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("ul", { className: "pagination pagination-sm mb-0", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page <= 1 }), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "fa fa-step-backward" }) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page - 1 < 1 }), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "fa fa-play fa-rotate-180" }) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("li", { className: "page-item active", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("span", { className: "page-link", children: [
-          !totalPage ? 0 : page,
-          " / ",
-          totalPage
-        ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page + 1 > totalPage }), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "fa fa-play" }) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("li", { className: Rosie.classNames("page-item", { disabled: page >= totalPage }), children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "page-link", children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { className: "fa fa-step-forward" }) }) })
-      ] })
-    ] });
-  }
 
   // ClientApp/rosie/ts/components/grid/grid-row.component.tsx
   var import_react4 = __toESM(require_react());
@@ -68474,153 +68324,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/rosie/ts/components/grid/grid-cell.component.tsx
   var import_react3 = __toESM(require_react());
   var import_jsx_runtime5 = __toESM(require_jsx_runtime());
-  function GridCell(props) {
-    const { field, headerName, className, renderer, rowIndex, colIndex, header, ...others } = props, cellCls = Rosie.classNames("rosie-grid-cell p-1", className);
-    if (header) {
-      return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: cellCls, ...others, children: headerName ?? field });
-    }
-    const [fieldValue, setFieldValue] = (0, import_react3.useState)(props.record?.get(field));
-    (0, import_react3.useEffect)(() => {
-      setFieldValue(props.record?.get(field));
-    }, [props.record]);
-    function getDisplayValue() {
-      if (renderer) return renderer(fieldValue, props.record, rowIndex, colIndex);
-      return fieldValue;
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { className: Rosie.classNames(cellCls), ...others, children: getDisplayValue() }) });
-  }
 
   // ClientApp/rosie/ts/components/grid/grid-row.component.tsx
   var import_jsx_runtime6 = __toESM(require_jsx_runtime());
-  function GridRow(props) {
-    const { record, rowIndex, columns, checkboxSelection } = props, [selected, setSelected] = (0, import_react4.useState)(false);
-    (0, import_react4.useEffect)(() => {
-      if (record) {
-        record.on("toggle", () => {
-          setSelected(record?.selected ?? false);
-        });
-        record.triggerEvent("toggle");
-      }
-    }, [record]);
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { className: Rosie.classNames("rosie-grid-row d-flex flex-row", { selected }), children: [
-      checkboxSelection && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "rosie-grid-cell p-1", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { className: "form-check mb-0", children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("input", { className: "form-check-input", type: "checkbox", checked: selected, onChange: () => {
-        record.toggle();
-        record.triggerEvent("toggle");
-        props.onCheckChange && props.onCheckChange(record.value, record.selected);
-      } }) }) }) }),
-      columns.map((col, colIndex) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(GridCell, { record, rowIndex, colIndex, ...col }, colIndex))
-    ] }) });
-  }
 
   // ClientApp/rosie/ts/components/grid/grid.component.tsx
   var import_jsx_runtime7 = __toESM(require_jsx_runtime());
-  function GridColumn(_) {
-    return null;
-  }
-  function Grid(props) {
-    const [gridId] = (0, import_react5.useState)(Rosie.guid("rosie-grid-")), [records, setRecords] = (0, import_react5.useState)([]), [columns, setColumns] = (0, import_react5.useState)([]);
-    (0, import_react5.useEffect)(() => {
-      const store$ = props.store?.subscribe((value) => setRecords(value || []));
-      const body = document.querySelector(`#${gridId} .rosie-grid-body`);
-      body.addEventListener("scroll", () => {
-        document.querySelector(`#${gridId} .rosie-grid-header`).scrollLeft = body.scrollLeft;
-      });
-      return () => {
-        store$?.unsubscribe();
-      };
-    }, []);
-    (0, import_react5.useEffect)(() => {
-      const columns2 = import_react5.Children.toArray(props.children).map((child) => child.props);
-      setColumns(columns2);
-    }, [props.children]);
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { id: gridId, className: Rosie.classNames("rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", { fullscreen: props.fitScreen || props.fitHeight }, props.className), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: Rosie.classNames("rosie-grid-header fw-bold overflow-hidden d-flex", { "flex-column": props.fitScreen || props.fitWidth }), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [
-        columns.map((col, index) => /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(GridCell, { header: true, ...col }, index)),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { width: Rosie.SCROLLBAR_WIDTH } })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: Rosie.classNames("rosie-grid-body fullscreen overflow-x-auto d-flex", { "flex-column": !props.fitHeight, "overflow-y-scroll": !props.fitWidth }), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { children: [
-        !records?.length && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "border-top p-2", children: "No record found." }),
-        records?.length > 0 && records.map((record, rowIndex) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(GridRow, { record, rowIndex, columns, checkboxSelection: props.checkboxSelection, onCheckChange: props.onCheckChange }, rowIndex);
-        })
-      ] }) }),
-      !props.pagingToolbar && records?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "rosie-grid-footer border-top d-flex flex-row p-2", children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "text-body-tertiary", children: [
-        records.length,
-        " record",
-        records.length > 1 ? "s" : ""
-      ] }) }) }),
-      props.pagingToolbar && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { className: "rosie-grid-footer border-top d-flex flex-row p-2", children: props.pagingToolbar && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(PagingToolbar, {}) }) })
-    ] }) }) });
-  }
 
   // ClientApp/rosie/ts/components/dropdown.component.tsx
   var import_react6 = __toESM(require_react());
   var import_jsx_runtime8 = __toESM(require_jsx_runtime());
-  function Dropdown2(props) {
-    const { className = "", buttonClass = "" } = props;
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: Rosie.classNames("dropdown", className), children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(InputDropdown, { ...props, buttonClass }) });
-  }
-  function InputDropdown(props) {
-    const {
-      displayField = "name",
-      valueField = "value",
-      multiple = false,
-      defaultText = "Select",
-      smartButtonText = true,
-      rightAligned = false,
-      searchBox = true,
-      buttonClass = "",
-      buttonStyle = {},
-      menuClass = "",
-      menuStyle = {},
-      itemClass = "",
-      itemStyle = {}
-    } = props;
-    const [searchFilter, setSearchFilter] = (0, import_react6.useState)(""), [options, setOptions] = (0, import_react6.useState)(props.options || []), [selection, setSelection] = (0, import_react6.useState)(props.value || []);
-    (0, import_react6.useEffect)(() => setSelection(props?.value || []), [props.value]);
-    (0, import_react6.useEffect)(() => setOptions(props?.options || []), [props.options]);
-    function displayText() {
-      if (!smartButtonText || !selection || !selection.length) {
-        return defaultText;
-      }
-      return selection.map((item) => item?.[displayField] ?? "").join(",");
-    }
-    function isSelected(opt) {
-      return selection.findIndex((item) => item[valueField] === opt[valueField]) > -1;
-    }
-    function select(opt) {
-      let opts = [];
-      if (!multiple) {
-        opts = [opt];
-      } else if (isSelected(opt)) {
-        opts = selection.filter((item) => item[valueField] !== opt[valueField]);
-      } else {
-        opts = options.filter((item) => isSelected(item) || item[valueField] === opt[valueField]);
-      }
-      setSelection(opts);
-      props.onChange && props.onChange(opts);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_jsx_runtime8.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { type: "button", className: Rosie.classNames("btn dropdown-toggle", buttonClass), style: buttonStyle, "data-bs-toggle": "dropdown", children: displayText() }),
-      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: Rosie.classNames("dropdown-menu p-0", menuClass, { "dropdown-menu-right": rightAligned }), style: menuStyle, children: [
-        searchBox && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "p-1 border-bottom", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
-          "input",
-          {
-            type: "text",
-            className: "form-control form-control-sm",
-            name: "searchFilter",
-            placeholder: "Search...",
-            value: searchFilter,
-            onChange: (event) => setSearchFilter(event.target.value)
-          }
-        ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "dropdown-item-list", children: options.map((opt, index) => {
-          if (searchFilter && !opt[displayField].toLowerCase().includes(searchFilter.toLowerCase())) return null;
-          return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { role: "button", className: Rosie.classNames("dropdown-item", itemClass, { active: isSelected(opt) }), style: itemStyle, onClick: () => select(opt), children: props.renderer ? props.renderer(opt[displayField], opt, index) : opt[displayField] }, opt[valueField]);
-        }) })
-      ] })
-    ] });
-  }
 
   // ClientApp/rosie/ts/components/datepicker/date-picker.component.tsx
   var import_react7 = __toESM(require_react());
@@ -68649,16 +68362,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/rosie/ts/components/query-builder/query-operation.component.tsx
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
 
-  // ClientApp/minerva/ts/components/app-layout/app-layout.component.tsx
+  // ClientApp/minerva/ts/components/layout/wrapper.component.tsx
   var import_jsx_runtime13 = __toESM(require_jsx_runtime());
-  function AppLayout(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { className: "fullscreen", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LoadingIndicator, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { className: "app fullscreen d-flex flex-row", children: props.children })
-    ] });
-  }
 
-  // ClientApp/minerva/ts/components/app-layout/require-auth.component.tsx
+  // ClientApp/minerva/ts/components/layout/require-auth.component.tsx
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   function RequireAuth({ component: Component4, title = "" }) {
     if (!LocalCache.get(AUTH_TOKEN)) redirectToLogin();
@@ -68666,10 +68373,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(Component4, {});
   }
 
-  // ClientApp/minerva/ts/components/app-layout/app-sidebar.component.tsx
+  // ClientApp/minerva/ts/components/layout/navigator.component.tsx
   var import_react10 = __toESM(require_react());
   var import_jsx_runtime15 = __toESM(require_jsx_runtime());
-  function AppSidebar(props) {
+  function NavigatorComponent(props) {
     const [navigation2, setNavigation] = (0, import_react10.useState)([]);
     (0, import_react10.useEffect)(() => {
       setNavigation([{
@@ -68682,36 +68389,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         navPath: "/admin"
       }]);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("aside", { className: "app-sidebar d-flex flex-column border-end", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { role: "button", className: "navbar-brand p-2", children: "Minerva" }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("nav", { className: "nav nav-pills flex-column border-bottom p-2", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navigation2, level: 0 }) }),
-      props.children
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, {});
+  }
+
+  // ClientApp/minerva/ts/components/layout/viewport.component.tsx
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  function ViewportComponent({ navigator: navigator3, children }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "viewport", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("aside", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NavigatorComponent, { navigator: navigator3 }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "wrapper position-relative", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(LoadingIndicator2, {}),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("main", { children })
+      ] })
     ] });
   }
-  function NavItemList(props) {
-    const location2 = useLocation(), { items = [], level = 0 } = props;
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, { children: items.map((navItem) => {
-      if (!navItem.navPath || navItem.children && navItem.children.length > 0) {
-        return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_react10.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "nav-link disabled py-1 pe-1", style: { paddingLeft: 8 + 16 * level }, children: navItem.navName }),
-          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navItem.children, level: level + 1 })
-        ] }, navItem.navId);
-      }
-      return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
-        Link,
-        {
-          to: navItem.navPath,
-          style: { paddingLeft: 8 + 16 * level },
-          className: Rosie.classNames("nav-link py-1 pe-1", { active: location2.pathname.startsWith(navItem.navPath) }),
-          children: [
-            navItem.navIcon ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: `fa fa-${navItem.navIcon} nav-icon` }) : "",
-            " ",
-            navItem.navName
-          ]
-        },
-        navItem.navId
-      );
-    }) });
+  function LoadingIndicator2() {
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "loading-indicator", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "loading-indicator-msg", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "loading-indicator-msg-text", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "fa fa-circle-notch fa-spin me-1" }),
+      "Loading..."
+    ] }) }) });
   }
 
   // ClientApp/minerva/ts/components/product-layout/product-layout.component.tsx
@@ -68719,1368 +68415,38 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // ClientApp/minerva/ts/components/product-layout/product-navigator.component.tsx
   var import_react11 = __toESM(require_react());
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
-  function ProductNavigator() {
-    const params = useParams(), [navigation2, setNavigation] = (0, import_react11.useState)([]);
-    (0, import_react11.useEffect)(() => {
-      const { productId } = params;
-      if (productId) {
-        loadDashboardTree(productId);
-      }
-    }, [params]);
-    async function loadDashboardTree(productId) {
-      const dashboardTree = await ProductDashboardTreeModel.fetch({ pathParams: { productId } }) ?? [], navigator2 = [{
-        navId: "dashboards",
-        navName: "Dashboards",
-        children: dashboardTree
-      }, {
-        navId: "management",
-        navName: "Management",
-        children: [{
-          navId: "events",
-          navName: "Events",
-          navPath: `/products/${productId}/events`
-        }, {
-          navId: "settings",
-          navName: "Settings",
-          navPath: `/products/${productId}/settings`
-        }]
-      }];
-      setNavigation(navigator2);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_jsx_runtime16.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NavItemList2, { items: navigation2, level: 0 }) });
-  }
-  function NavItemList2(props) {
-    const location2 = useLocation(), { items = [], level = 0 } = props;
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(import_jsx_runtime16.Fragment, { children: items.map((navItem) => {
-      if (!navItem.navPath || navItem.children && navItem.children.length > 0) {
-        return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(import_react11.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { role: "button", className: Rosie.classNames("nav-link py-1 pe-1 d-flex", { disabled: level === 0 }), style: { paddingLeft: 8 + 16 * level }, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { children: navItem.navName }),
-            level > 0 && /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "dropdown ms-auto hidden-menu", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("button", { className: "btn btn-sm p-0 dropdown-toggle hide-indicator", "data-bs-toggle": "dropdown", "data-bs-auto-close": "true", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "fa fa-plus" }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "dropdown-menu", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { role: "button", className: "dropdown-item", children: "New Dashboard" }),
-                /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { role: "button", className: "dropdown-item", children: "New Folder" })
-              ] })
-            ] })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NavItemList2, { items: navItem.children, level: level + 1 })
-        ] }, navItem.navId);
-      }
-      return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
-        Link,
-        {
-          to: navItem.navPath,
-          style: { paddingLeft: 8 + 16 * level },
-          className: Rosie.classNames("nav-link py-1 pe-1", { active: location2.pathname.startsWith(navItem.navPath) }),
-          children: [
-            navItem.navIcon ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: `fa fa-${navItem.navIcon} nav-icon` }) : "",
-            " ",
-            navItem.navName
-          ]
-        },
-        navItem.navId
-      );
-    }) });
-  }
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/components/product-layout/product-layout.component.tsx
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
-  function ProductLayout(props) {
-    const params = useParams(), [productId, setProductId] = (0, import_react12.useState)("");
-    (0, import_react12.useEffect)(() => {
-      const { productId: productId2 } = params;
-      if (productId2) {
-        setProductId(productId2);
-        CurrentProductModel.load({ pathParams: { productId: productId2 } });
-      }
-    }, [params]);
-    return /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(AppSidebar, { children: productId && /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "sidebar-body p-2 flex-1 overflow-y-auto", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("nav", { className: "nav nav-pills flex-column", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(ProductNavigator, {}) }) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "app-wrapper fullscreen d-flex position-relative", children: /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "app-body fullscreen d-flex flex-column", children: props.children }) })
-    ] });
-  }
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/components/product-layout/product-selector.component.tsx
   var import_react13 = __toESM(require_react());
-  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
-  function ProductSelector(props) {
-    const [products, setProducts] = (0, import_react13.useState)([]), [selectedProduct, setSelectedProduct] = (0, import_react13.useState)(null);
-    (0, import_react13.useEffect)(() => {
-      const product$ = CurrentProductModel.subscribe(setSelectedProduct);
-      loadProducts();
-      return () => {
-        product$.unsubscribe();
-      };
-    }, []);
-    async function loadProducts() {
-      var products2 = await ProductInfoStore.fetch();
-      setProducts(products2 ?? []);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)("ol", { className: "breadcrumb", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("li", { className: "breadcrumb-item", children: "Products" }),
-      /* @__PURE__ */ (0, import_jsx_runtime18.jsx)("li", { className: "breadcrumb-item dropdown", children: /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
-        InputDropdown,
-        {
-          options: products,
-          value: selectedProduct ? [selectedProduct] : [],
-          valueField: "productId",
-          displayField: "productId",
-          searchBox: true,
-          defaultText: "",
-          separator: "",
-          renderer: (value, item) => {
-            return /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
-              Link,
-              {
-                to: `/products/${item.productId}${props.navPath}`,
-                role: "button",
-                className: Rosie.classNames("dropdown-item", { active: item.productId === selectedProduct?.productId }),
-                children: value
-              }
-            );
-          }
-        }
-      ) }),
-      props.children
-    ] });
-    return;
-  }
-
-  // ClientApp/minerva/ts/views/products/list.view.tsx
-  var import_react14 = __toESM(require_react());
   var import_jsx_runtime19 = __toESM(require_jsx_runtime());
-  function ProductListView() {
-    (0, import_react14.useEffect)(() => {
-      ProductInfoStore.loadWithSplashScreen();
-    }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(AppSidebar, {}),
-      /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "app-wrapper fullscreen d-flex position-relative", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("div", { className: "app-body fullscreen d-flex flex-column", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("ol", { className: "breadcrumb", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("li", { className: "breadcrumb-item", children: "Products" }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)("button", { className: "btn btn-sm btn-primary", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("span", { className: "fa fa-plus me-1" }),
-            " Create Product"
-          ] }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime19.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(Grid, { fitScreen: true, store: ProductInfoStore, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Product ID", field: "productId", style: { flex: 1 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_jsx_runtime19.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Link, { to: `/products/${value}/events`, children: value }) }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Start Date", field: "startDate", style: { width: 200 }, renderer: (value) => Date.parseDate(value).format() }),
-          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(GridColumn, { headerName: "Action", field: "productId", style: { width: 200 }, renderer: (value) => /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(import_jsx_runtime19.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Link, { to: `/products/${value}/settings`, children: "Settings" }) }) })
-        ] }) })
-      ] }) })
-    ] });
-  }
 
-  // ClientApp/minerva/ts/views/products/settings.view.tsx
-  var import_react16 = __toESM(require_react());
-
-  // ClientApp/minerva/ts/views/products/connector-creation.component.tsx
-  var import_react15 = __toESM(require_react());
+  // ClientApp/minerva/ts/views/home.view.tsx
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
-  function ConnectorCreationDialog(props) {
-    const { productId } = props, [dataProducer, setDataProducer] = (0, import_react15.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react15.useState)(""), [endpoint, setEndpoint] = (0, import_react15.useState)(""), [clientId, setClientId] = (0, import_react15.useState)(""), [clientSecret, setClientSecret] = (0, import_react15.useState)(""), [dataSetName, setDataSetName] = (0, import_react15.useState)(""), [selectedDataSets, setSelectedDataSets] = (0, import_react15.useState)([]);
-    (0, import_react15.useEffect)(() => {
-      ProductConnectionModel.fetch({ pathParams: { productId } }).then((connection) => {
-        if (!connection) return;
-        setSqlDialect(connection.sqlDialect ?? "");
-        setEndpoint(connection.endpoint ?? "");
-        setClientId(connection.clientId ?? "");
-        setClientSecret(connection.clientSecret ?? "");
-      });
-      ProductDataSetsModel.fetch({ pathParams: { productId } }).then((dataSets) => {
-        if (dataSets?.length) setSelectedDataSets(dataSets);
-      });
-      return () => {
-        setDataSetName("");
-        setSelectedDataSets([]);
-        ConnectionDataSetStore.loadData([]);
-      };
-    }, []);
-    async function testConnection() {
-      ConnectionDataSetStore.load({
-        pathParams: { productId },
-        body: { sqlDialect, endpoint, clientId, clientSecret }
-      });
-    }
-    async function onSubmit() {
-      const product = await UpdateProductInfoModel.fetch({
-        pathParams: { productId },
-        body: { sqlDialect, endpoint, clientId, clientSecret }
-      });
-      await UpdateProductDataSetModel.fetch({
-        pathParams: { productId },
-        body: { dataSets: selectedDataSets.map((x) => x.name) }
-      });
-      product && props.onCreateSuccess(product);
-    }
-    async function addDataSet() {
-      if ((ConnectionDataSetStore?.value ?? []).find((x) => x.get("name") === dataSetName)) {
-        alertError(`Schema ${dataSetName} already existed`);
-        return;
-      }
-      const result = await ConnectionDataSetModel.fetch({
-        pathParams: { productId, dataSetName },
-        body: { sqlDialect, endpoint, clientId, clientSecret }
-      });
-      if (!result?.tables?.length) {
-        alertError(`Cannot get table from schema ${dataSetName}`);
-        return;
-      }
-      const record = DataModel.create(result);
-      record.select();
-      ConnectionDataSetStore.insertRecord(record);
-      addToSelectedDataSet(record.value);
-      setDataSetName("");
-    }
-    function addToSelectedDataSet(dataSet) {
-      const newList = selectedDataSets.filter((x) => x.name !== dataSet.name);
-      if (selectedDataSets.length === newList.length) {
-        setSelectedDataSets([...selectedDataSets, dataSet]);
-      } else {
-        setSelectedDataSets([...newList]);
-      }
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Dialog, { fitScreen: true, id: "connector-creation-dialog", title: "Create Connection", dialogClass: "modal-xl", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "modal-body fullscreen d-flex flex-row p-0", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "flex-fill overflow-y-auto py-2", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "container-fluid", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Data Producer" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "col-9", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { className: "form-control", type: "text", value: dataProducer, onChange: (e) => setDataProducer(e.target.value) }) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-3", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Engine" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "col-9", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { className: "form-control", type: "text", value: sqlDialect, onChange: (e) => setSqlDialect(e.target.value) }) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-3", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Endpoint" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "col-9", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { className: "form-control", type: "text", value: endpoint, onChange: (e) => setEndpoint(e.target.value) }) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-3", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Client ID" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "col-9", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { className: "form-control", type: "text", value: clientId, onChange: (e) => setClientId(e.target.value) }) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "row mt-3", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Client Secret" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "col-9", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { className: "form-control", type: "text", value: clientSecret, onChange: (e) => setClientSecret(e.target.value) }) })
-          ] })
-        ] }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "fullscreen d-flex flex-column", style: { width: 600 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { className: "py-2 pe-2", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "input-group", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("input", { type: "text", className: "form-control", value: dataSetName, onChange: (e) => setDataSetName(e.target.value), placeholder: "Schema" }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-outline-secondary", disabled: dataSetName.trim() === "", onClick: () => addDataSet(), children: "Add" })
-          ] }) }),
-          /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(Grid, { fitScreen: true, store: ConnectionDataSetStore, checkboxSelection: true, onCheckChange: addToSelectedDataSet, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Schema", field: "name", style: { flex: 1 } }),
-            /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(GridColumn, { headerName: "Table Count", field: "tables", style: { width: 150 }, renderer: (value) => value?.length ?? 0 })
-          ] })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { className: "modal-footer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-outline-secondary me-auto", onClick: () => testConnection(), children: "Test Connection" }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
-        /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("button", { type: "button", className: "btn btn-primary ms-1", disabled: selectedDataSets?.length <= 0, onClick: () => onSubmit(), children: [
-          "Save",
-          selectedDataSets?.length > 0 ? ` (${selectedDataSets.length})` : ""
-        ] })
-      ] })
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/products/settings.view.tsx
-  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
-  function ProductSettingsView() {
-    const [productId, setProductId] = (0, import_react16.useState)(""), [productName, setProductName] = (0, import_react16.useState)(""), [dataOwner, setDataOwner] = (0, import_react16.useState)(""), [startDate, setStartDate] = (0, import_react16.useState)(""), [sqlDialect, setSqlDialect] = (0, import_react16.useState)(""), connectorCreationDialog = useDialog("#connector-creation-dialog");
-    (0, import_react16.useEffect)(() => {
-      const product$ = CurrentProductModel.subscribe((value) => {
-        setProductId(value.productId);
-        setProductName(value.productName ?? "");
-        setDataOwner(value.dataOwner ?? "");
-        setStartDate(value.startDate ?? "");
-        setSqlDialect(value.sqlDialect ?? "");
-      });
-      return () => {
-        product$.unsubscribe();
-      };
-    }, []);
-    function onCreateConnectionSuccess(product) {
-      CurrentProductModel.loadData(product);
-      Rosie.hideModal("#connector-creation-dialog");
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ProductSelector, { navPath: "/settings", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("li", { className: "breadcrumb-item active", children: "Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "container-fluid mb-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Product Name" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("input", { className: "form-control", type: "text", value: productName, onChange: (e) => setProductName(e.target.value) }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Owner" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("input", { type: "text", className: "form-control", value: dataOwner, onChange: (e) => setDataOwner(e.target.value) }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Start Date" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "col-6", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("input", { type: "text", className: "form-control", value: startDate, onChange: (e) => setStartDate(e.target.value) }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("label", { htmlFor: "file", className: "col-2 offset-2 col-form-label text-end", children: "Data Connection" }),
-          /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { className: "col-6", children: sqlDialect ? /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(import_jsx_runtime21.Fragment, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("input", { type: "text", readOnly: true, className: "form-control-plaintext", value: sqlDialect }),
-            /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { className: "btn btn-outline-secondary", onClick: () => connectorCreationDialog.show(), children: "Update Tables" })
-          ] }) : /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("button", { className: "btn btn-outline-secondary", onClick: () => connectorCreationDialog.show(), children: "Add Connection" }) })
-        ] })
-      ] }) }),
-      connectorCreationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
-        ConnectorCreationDialog,
-        {
-          productId,
-          onCreateSuccess: onCreateConnectionSuccess
-        }
-      )
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/events/events.view.tsx
-  var import_react17 = __toESM(require_react());
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
-  function EventListView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react17.useState)(""), semanticEventUpdationDialog = useDialog("#semantic-event-updation-dialog");
-    (0, import_react17.useEffect)(() => {
-      const { productId: productId2 } = params;
-      setProductId(productId2);
-      ProductDataTableStore.loadWithSplashScreen({ pathParams: { productId: productId2 } });
-    }, [params]);
-    function onUpdateSemanticEventSuccess(tables) {
-      ProductDataTableStore.loadData(tables);
-      semanticEventUpdationDialog.hide();
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(ProductSelector, { navPath: "/events", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("li", { className: "breadcrumb-item active", children: "Events" }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => semanticEventUpdationDialog.show(), children: "Update Semantic Events" }) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Grid, { fitScreen: true, store: ProductDataTableStore, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(GridColumn, { headerName: "Event Name", field: "name", style: { flex: 1 }, renderer: (value, record) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(import_jsx_runtime22.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Link, { to: `/products/${productId}/events/${value}${record.get("semanticName") ? `?semanticEvent=${record.get("semanticName")}` : ""}`, children: value }) }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(GridColumn, { headerName: "Display Name", field: "displayName", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(GridColumn, { headerName: "Semantic Event", field: "semanticName", style: { flex: 1 } })
-      ] }) }),
-      semanticEventUpdationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-        SemanticEventUpdationDialog,
-        {
-          productId,
-          onUpdateSuccess: onUpdateSemanticEventSuccess
-        }
-      )
-    ] });
-  }
-  function SemanticEventUpdationDialog(props) {
-    const { productId } = props, [installEvent, setInstallEvent] = (0, import_react17.useState)(null), [openAppEvent, setOpenAppEvent] = (0, import_react17.useState)(null), [registerEvent, setRegisterEvent] = (0, import_react17.useState)(null), [sessionStartEvent, setSessionStartEvent] = (0, import_react17.useState)(null), [sessionEndEvent, setSessionEndEvent] = (0, import_react17.useState)(null), [purchaseEvent, setPurchaseEvent] = (0, import_react17.useState)(null), [dataTables, setDataTables] = (0, import_react17.useState)([]);
-    (0, import_react17.useEffect)(() => {
-      const tables$ = ProductDataTableStore.subscribe((value) => {
-        const tables = value.map((x) => x.value);
-        setDataTables(tables);
-        setInstallEvent(tables.find((x) => x.semanticName === "install") ?? null);
-        setOpenAppEvent(tables.find((x) => x.semanticName === "open_app") ?? null);
-        setRegisterEvent(tables.find((x) => x.semanticName === "register") ?? null);
-        setSessionStartEvent(tables.find((x) => x.semanticName === "session_start") ?? null);
-        setSessionEndEvent(tables.find((x) => x.semanticName === "session_end") ?? null);
-        setPurchaseEvent(tables.find((x) => x.semanticName === "purchase") ?? null);
-      });
-      return () => {
-        tables$.unsubscribe();
-      };
-    }, []);
-    async function onSubmit() {
-      const updatedTables = dataTables.map((table) => {
-        if (table.name === installEvent?.name) {
-          table.semanticName = "install";
-          return table;
-        } else if (table.name === openAppEvent?.name) {
-          table.semanticName = "open_app";
-          return table;
-        } else if (table.name === registerEvent?.name) {
-          table.semanticName = "register";
-          return table;
-        } else if (table.name === sessionStartEvent?.name) {
-          table.semanticName = "session_start";
-          return table;
-        } else if (table.name === sessionEndEvent?.name) {
-          table.semanticName = "session_end";
-          return table;
-        } else if (table.name === purchaseEvent?.name) {
-          table.semanticName = "purchase";
-          return table;
-        } else return null;
-      }).filter((x) => x !== null);
-      const result = await UpdateProductDataTableModel.fetch({
-        pathParams: { productId },
-        body: { tables: updatedTables }
-      });
-      result && props.onUpdateSuccess(result);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(Dialog, { id: "semantic-event-updation-dialog", title: "Update Semantic Model", dialogClass: "modal-lg", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "modal-body fullscreen d-flex flex-row pb-2", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "container-fluid", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Install" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: installEvent ? [installEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setInstallEvent(value[0])
-              }
-            ),
-            installEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setInstallEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Open App" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: openAppEvent ? [openAppEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setOpenAppEvent(value[0])
-              }
-            ),
-            openAppEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOpenAppEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Complete Registration" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: registerEvent ? [registerEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setRegisterEvent(value[0])
-              }
-            ),
-            registerEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setRegisterEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session Start" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: sessionStartEvent ? [sessionStartEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setSessionStartEvent(value[0])
-              }
-            ),
-            sessionStartEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionStartEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Session End" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: sessionEndEvent ? [sessionEndEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setSessionEndEvent(value[0])
-              }
-            ),
-            sessionEndEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setSessionEndEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Purchase" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-              Dropdown2,
-              {
-                options: dataTables,
-                value: purchaseEvent ? [purchaseEvent] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setPurchaseEvent(value[0])
-              }
-            ),
-            purchaseEvent && /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPurchaseEvent(null), children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { className: "modal-footer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
-        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Save" })
-      ] })
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/events/event-fields.view.tsx
-  var import_react18 = __toESM(require_react());
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
-  function EventFieldListView() {
-    const params = useParams(), [searchParams] = useSearchParams(), [productId, setProductId] = (0, import_react18.useState)(""), [tableName, setTableName] = (0, import_react18.useState)(""), [eventName, setEventName] = (0, import_react18.useState)(""), semanticFieldUpdationDialog = useDialog("#semantic-field-updation-dialog");
-    (0, import_react18.useEffect)(() => {
-      const { productId: productId2, tableName: tableName2 } = params;
-      setProductId(productId2);
-      setTableName(tableName2);
-      setEventName(searchParams.get("semanticEvent"));
-      ProductDataColumnStore.loadWithSplashScreen({ pathParams: { productId: productId2, tableName: tableName2 } });
-    }, [params]);
-    function onUpdateSemanticEventSuccess(tables) {
-      ProductDataColumnStore.loadData(tables);
-      semanticFieldUpdationDialog.hide();
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(ProductSelector, { navPath: "/events", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("li", { className: "breadcrumb-item", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Link, { to: `/products/${productId}/events`, role: "button", children: "Events" }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("li", { className: "breadcrumb-item active", children: tableName }),
-        eventName && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => semanticFieldUpdationDialog.show(), children: "Update Semantic Fields" }) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("main", { className: "fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Grid, { fitScreen: true, store: ProductDataColumnStore, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(GridColumn, { headerName: "Field Name", field: "name", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(GridColumn, { headerName: "Display Name", field: "displayName", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(GridColumn, { headerName: "Semantic Model", field: "semanticName", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(GridColumn, { headerName: "Type", field: "type", style: { flex: 1 } }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(GridColumn, { headerName: "Desc", field: "desc", style: { flex: 1 } })
-      ] }) }),
-      semanticFieldUpdationDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-        SemanticFieldUpdationDialog,
-        {
-          productId,
-          tableName,
-          eventName,
-          onUpdateSuccess: onUpdateSemanticEventSuccess
-        }
-      )
-    ] });
-  }
-  function SemanticFieldUpdationDialog(props) {
-    const { productId, tableName } = props, [eventTimeField, setEventTimeField] = (0, import_react18.useState)(null), [userIdField, setUserIdField] = (0, import_react18.useState)(null), [osField, setOSField] = (0, import_react18.useState)(null), [countryField, setCountryField] = (0, import_react18.useState)(null), [partDateField, setPartDateField] = (0, import_react18.useState)(null), [dataColumns, setDataColumns] = (0, import_react18.useState)([]);
-    (0, import_react18.useEffect)(() => {
-      const tables$ = ProductDataColumnStore.subscribe((value) => {
-        const columns = value.map((x) => x.value);
-        setDataColumns(columns);
-        setPartDateField(columns.find((x) => x.semanticName === "part_date") ?? null);
-        setEventTimeField(columns.find((x) => x.semanticName === "event_time") ?? null);
-        setUserIdField(columns.find((x) => x.semanticName === "user_id") ?? null);
-        setOSField(columns.find((x) => x.semanticName === "os") ?? null);
-        setCountryField(columns.find((x) => x.semanticName === "country") ?? null);
-      });
-      return () => {
-        tables$.unsubscribe();
-      };
-    }, []);
-    async function onSubmit() {
-      const updatedColumns = dataColumns.map((column) => {
-        if (column.name === partDateField?.name) {
-          column.semanticName = "part_date";
-          return column;
-        } else if (column.name === eventTimeField?.name) {
-          column.semanticName = "event_time";
-          return column;
-        } else if (column.name === userIdField?.name) {
-          column.semanticName = "user_id";
-          return column;
-        } else if (column.name === osField?.name) {
-          column.semanticName = "os";
-          return column;
-        } else if (column.name === countryField?.name) {
-          column.semanticName = "country";
-          return column;
-        } else return null;
-      }).filter((x) => x !== null);
-      const result = await UpdateProductDataColumnModel.fetch({
-        pathParams: { productId, tableName },
-        body: { columns: updatedColumns }
-      });
-      result && props.onUpdateSuccess(result);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(Dialog, { id: "semantic-field-updation-dialog", title: "Update Semantic Model", dialogClass: "modal-lg", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("div", { className: "modal-body fullscreen d-flex flex-row pb-2", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "container-fluid", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Part Date" }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: partDateField ? [partDateField] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setPartDateField(value[0])
-              }
-            ),
-            partDateField && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setPartDateField(null), children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Event Time" }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: eventTimeField ? [eventTimeField] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setEventTimeField(value[0])
-              }
-            ),
-            eventTimeField && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setEventTimeField(null), children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "User ID" }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: userIdField ? [userIdField] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setUserIdField(value[0])
-              }
-            ),
-            userIdField && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setUserIdField(null), children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "OS" }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: osField ? [osField] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setOSField(value[0])
-              }
-            ),
-            osField && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setOSField(null), children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "row mt-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("label", { htmlFor: "sheet_name", className: "col-3 col-form-label text-end", children: "Country" }),
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "col-9 d-flex flex-row", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-              Dropdown2,
-              {
-                options: dataColumns,
-                value: countryField ? [countryField] : [],
-                valueField: "name",
-                displayField: "name",
-                searchBox: true,
-                buttonClass: "btn-outline-secondary",
-                onChange: (value) => setCountryField(value[0])
-              }
-            ),
-            countryField && /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-danger ms-1", onClick: () => setCountryField(null), children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("span", { className: "fa fa-xmark" }) })
-          ] })
-        ] })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { className: "modal-footer", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-outline-secondary", "data-bs-dismiss": "modal", children: "Cancel" }),
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("button", { type: "button", className: "btn btn-primary ms-1", onClick: () => onSubmit(), children: "Save" })
-      ] })
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_react23 = __toESM(require_react());
-
-  // ClientApp/minerva/ts/views/reports/report.component.tsx
-  var import_react19 = __toESM(require_react());
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
-  function ReportComponent(props) {
-    const [data2, setData] = (0, import_react19.useState)([]);
-    const [groups, setGroups] = (0, import_react19.useState)(null);
-    (0, import_react19.useEffect)(() => {
-      if (props.definition) {
-        loadReport(props.productId, props.definition);
-      }
-    }, [props.definition]);
-    async function loadReport(productId, report) {
-      const result = await ReportResultModel.fetch({ pathParams: { productId }, body: { report } });
-      setData(result?.data ?? []);
-      setGroups(result?.groups ?? null);
-    }
-    const { measures, view } = props.definition;
-    const primaryFields = groups ?? measures.filter((x) => !x.secondaryAxis).map((x) => x.name);
-    const secondaryMeasures = measures.filter((x) => x.secondaryAxis);
-    const isStacked = groups != null || measures.some((x) => x.stacked);
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { role: "button", className: `col-${props.definition.colWidth}`, children: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { className: "card card-body card-hover", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)("div", { className: "card-title d-flex", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("button", { className: "btn btn-link fs-4", children: props.definition.name }),
-        /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { className: "hidden-menu ms-auto mt-2", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("button", { className: "btn btn-sm", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("span", { className: "fa fa-ellipsis" }) }) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { children: data2?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
-        CartesianChart,
-        {
-          dataOriented: "columns",
-          data: data2,
-          series: { xField: view.timeField },
-          axes: {
-            x: { type: "timeseries", format: "%Y-%m-%d", rotate: -25 },
-            y: { fields: primaryFields, stacked: isStacked },
-            y2: {
-              fields: secondaryMeasures.map((x) => x.name),
-              type: secondaryMeasures[0]?.chartType ?? "bar"
-            }
-          }
-        }
-      ) })
-    ] }) });
-  }
-
-  // ClientApp/minerva/ts/views/reports/report-editing.component.tsx
-  var import_react22 = __toESM(require_react());
-
-  // ClientApp/minerva/ts/views/reports/mesure-row.component.tsx
-  var import_react20 = __toESM(require_react());
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
-  function MeasureRowComponent(props) {
-    const { measure: m, events: tables, fields: columns } = props;
-    const valueCols = columns.filter((c) => !isDate3(c.type));
-    const colType = columns.find((c) => c.name === m.fieldName)?.type ?? "";
-    const aggs = m.fieldName ? aggsFor(colType) : [];
-    const [table, setTable] = (0, import_react20.useState)(null), [column, setColumn] = (0, import_react20.useState)(null);
-    return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "border rounded p-2 mb-2", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "row g-1 mb-1", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown col-6", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-          InputDropdown,
-          {
-            options: tables,
-            valueField: "name",
-            displayField: "displayName",
-            searchBox: true,
-            defaultText: "Event",
-            menuStyle: { width: "12rem" },
-            itemClass: "text-break text-wrap",
-            buttonClass: "text-truncate",
-            buttonStyle: { maxWidth: "8rem" },
-            value: table ? [table] : [],
-            onChange: (value) => {
-              setTable(value[0]);
-              props.onEventChange(value[0].name);
-            }
-          }
-        ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "dropdown col-6", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-          InputDropdown,
-          {
-            options: columns,
-            valueField: "name",
-            displayField: "displayName",
-            searchBox: true,
-            defaultText: "Field",
-            menuStyle: { width: "12rem" },
-            itemClass: "text-break text-wrap",
-            buttonClass: "text-truncate",
-            buttonStyle: { maxWidth: "8rem" },
-            value: column ? [column] : [],
-            onChange: (value) => {
-              setColumn(value[0]);
-              props.onFieldChange(value[0].name);
-            }
-          }
-        ) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "row g-1 mb-1", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "col-4", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
-          "select",
-          {
-            className: "form-select form-select-sm",
-            value: m.aggregation,
-            onChange: (e) => props.onChange({ aggregation: e.target.value }),
-            disabled: !m.fieldName,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("option", { value: "", children: "Agg" }),
-              aggs.map((a) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("option", { value: a, children: a }, a))
-            ]
-          }
-        ) }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "col-8", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-          "input",
-          {
-            className: "form-control form-control-sm",
-            placeholder: "Metric name",
-            value: m.name,
-            onChange: (e) => props.onChange({ name: e.target.value })
-          }
-        ) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "d-flex align-items-center gap-2", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("div", { className: "btn-group btn-group-sm", children: ["bar", "line"].map((t) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-          "button",
-          {
-            className: `btn btn-outline-secondary ${m.chartType === t ? "active" : ""}`,
-            onClick: () => props.onChange({ chartType: t }),
-            children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: `fa fa-chart-${t === "bar" ? "bar" : "line"}` })
-          },
-          t
-        )) }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "form-check form-check-inline mb-0 small", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-            "input",
-            {
-              type: "checkbox",
-              className: "form-check-input",
-              id: `sec-${m.id}`,
-              checked: m.secondaryAxis,
-              onChange: (e) => props.onChange({ secondaryAxis: e.target.checked })
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("label", { className: "form-check-label", htmlFor: `sec-${m.id}`, children: "Y2" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("div", { className: "form-check form-check-inline mb-0 small", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
-            "input",
-            {
-              type: "checkbox",
-              className: "form-check-input",
-              id: `stk-${m.id}`,
-              checked: m.stacked,
-              onChange: (e) => props.onChange({ stacked: e.target.checked })
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("label", { className: "form-check-label", htmlFor: `stk-${m.id}`, children: "Stacked" })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("button", { className: "btn btn-link btn-sm ms-auto p-0 text-danger", onClick: props.onRemove, children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("span", { className: "fa fa-trash" }) })
-      ] })
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/reports/date-range-picker.component.tsx
-  var import_react21 = __toESM(require_react());
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
-  var PRESET_ROWS = [
-    [{ label: "Yesterday", start: 1, end: 1 }, { label: "Today", start: 0, end: 0 }],
-    [{ label: "Last Week", start: 14, end: 8 }, { label: "This Week", start: 7, end: 1 }],
-    [{ label: "Last Month", start: 62, end: 32 }, { label: "This Month", start: 31, end: 1 }],
-    [{ label: "Last 7D", start: 7, end: 1 }, { label: "Recent 7D", start: 8, end: 2 }],
-    [{ label: "Last 30D", start: 30, end: 1 }, { label: "Recent 30D", start: 31, end: 2 }]
-  ];
-  var SINGLE_PRESETS = [
-    { label: "Until Yesterday", start: 90, end: 1 },
-    { label: "Until Today", start: 90, end: 0 }
-  ];
-  var ALL_PRESETS = [...PRESET_ROWS.flat(), ...SINGLE_PRESETS];
-  function daysAgoFmt(n) {
-    const d = /* @__PURE__ */ new Date();
-    d.setDate(d.getDate() - n);
-    return d.toISOString().slice(0, 10).replace(/-/g, "/");
-  }
-  function matchPreset(start2, end2) {
-    if (start2 == null || end2 == null) return void 0;
-    return ALL_PRESETS.find((p) => p.start === start2 && p.end === end2);
-  }
-  function isActive(draft, p) {
-    return draft.startMode === "rolling" && draft.startRolling === p.start && draft.endRolling === p.end;
-  }
-  function DateRangePicker({ view, onChange }) {
-    const [open, setOpen] = (0, import_react21.useState)(false);
-    const [draft, setDraft] = (0, import_react21.useState)(viewToDraft(view));
-    const ref = (0, import_react21.useRef)(null);
-    function viewToDraft(v) {
-      return {
-        startMode: v.startExactDate ? "exact" : "rolling",
-        endMode: v.endExactDate ? "exact" : "rolling",
-        startRolling: v.startRollingDate ?? 7,
-        endRolling: v.endRollingDate ?? 1,
-        startExact: v.startExactDate ?? "",
-        endExact: v.endExactDate ?? ""
-      };
-    }
-    function openPicker() {
-      setDraft(viewToDraft(view));
-      setOpen(true);
-    }
-    (0, import_react21.useEffect)(() => {
-      if (!open) return;
-      const handler = (e) => {
-        if (ref.current && !ref.current.contains(e.target)) setOpen(false);
-      };
-      document.addEventListener("mousedown", handler);
-      return () => document.removeEventListener("mousedown", handler);
-    }, [open]);
-    function apply() {
-      onChange({
-        startRollingDate: draft.startMode === "rolling" ? draft.startRolling : void 0,
-        endRollingDate: draft.endMode === "rolling" ? draft.endRolling : void 0,
-        startExactDate: draft.startMode === "exact" ? draft.startExact : void 0,
-        endExactDate: draft.endMode === "exact" ? draft.endExact : void 0
-      });
-      setOpen(false);
-    }
-    function selectPreset(p) {
-      setDraft((d) => ({ ...d, startMode: "rolling", endMode: "rolling", startRolling: p.start, endRolling: p.end }));
-    }
-    const matched = matchPreset(view.startRollingDate, view.endRollingDate);
-    const triggerStart = view.startExactDate?.replace(/-/g, "/") ?? daysAgoFmt(view.startRollingDate ?? 7);
-    const triggerEnd = view.endExactDate?.replace(/-/g, "/") ?? daysAgoFmt(view.endRollingDate ?? 1);
-    const triggerLabel = matched?.label ?? `${triggerStart} \u2192 ${triggerEnd}`;
-    const draftMatched = isActive(draft, ALL_PRESETS.find((p) => isActive(draft, p))) ? matchPreset(draft.startRolling, draft.endRolling) : void 0;
-    const previewStart = draft.startMode === "exact" ? draft.startExact?.replace(/-/g, "/") : daysAgoFmt(draft.startRolling);
-    const previewEnd = draft.endMode === "exact" ? draft.endExact?.replace(/-/g, "/") : daysAgoFmt(draft.endRolling);
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { ref, className: "date-range-picker position-relative d-inline-block", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("button", { className: "btn btn-sm btn-outline-secondary d-flex align-items-center gap-1", onClick: openPicker, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "fa fa-calendar" }),
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { children: triggerLabel })
-      ] }),
-      open && /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
-        "div",
-        {
-          className: "date-range-panel shadow border bg-body rounded position-absolute top-100 start-0 mt-1",
-          style: { zIndex: 1050, minWidth: 680 },
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "border-bottom px-3 py-2", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "small text-muted", children: "Date Range" }),
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "fw-semibold", children: draftMatched ? /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
-                draftMatched.label,
-                " ",
-                /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("span", { className: "fw-normal text-muted", children: [
-                  "(",
-                  previewStart,
-                  " \u2192 ",
-                  previewEnd,
-                  ")"
-                ] })
-              ] }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
-                previewStart,
-                " \u2192 ",
-                previewEnd
-              ] }) })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "d-flex", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "presets border-end p-2 d-flex flex-column gap-1", style: { minWidth: 220 }, children: [
-                PRESET_ROWS.map((row, i) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "d-flex gap-1", children: row.map((p) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-                  "button",
-                  {
-                    className: `btn btn-sm flex-fill ${isActive(draft, p) ? "btn-primary" : "btn-light"}`,
-                    onClick: () => selectPreset(p),
-                    children: p.label
-                  },
-                  p.label
-                )) }, i)),
-                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("hr", { className: "my-1" }),
-                SINGLE_PRESETS.map((p) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-                  "button",
-                  {
-                    className: `btn btn-sm w-100 text-start ${isActive(draft, p) ? "btn-primary" : "btn-light"}`,
-                    onClick: () => selectPreset(p),
-                    children: p.label
-                  },
-                  p.label
-                ))
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "d-flex flex-fill p-3 gap-3", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-                  RangeSidePanel,
-                  {
-                    label: "start",
-                    mode: draft.startMode,
-                    rolling: draft.startRolling,
-                    exact: draft.startExact,
-                    suffix: "days ago \u2192",
-                    onModeChange: (m) => setDraft((d) => ({ ...d, startMode: m })),
-                    onRollingChange: (n) => setDraft((d) => ({ ...d, startRolling: n })),
-                    onExactChange: (s) => setDraft((d) => ({ ...d, startExact: s }))
-                  }
-                ),
-                /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-                  RangeSidePanel,
-                  {
-                    label: "end",
-                    mode: draft.endMode,
-                    rolling: draft.endRolling,
-                    exact: draft.endExact,
-                    suffix: "days ago",
-                    onModeChange: (m) => setDraft((d) => ({ ...d, endMode: m })),
-                    onRollingChange: (n) => setDraft((d) => ({ ...d, endRolling: n })),
-                    onExactChange: (s) => setDraft((d) => ({ ...d, endExact: s }))
-                  }
-                )
-              ] })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "border-top px-3 py-2 d-flex justify-content-end gap-2", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("button", { className: "btn btn-sm btn-outline-secondary", onClick: () => setOpen(false), children: "Cancel" }),
-              /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("button", { className: "btn btn-sm btn-primary", onClick: apply, children: "Apply" })
-            ] })
-          ]
-        }
-      )
-    ] });
-  }
-  function RangeSidePanel({ mode, rolling, exact, suffix, onModeChange, onRollingChange, onExactChange }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "flex-fill", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "btn-group btn-group-sm w-100 mb-3", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-          "button",
-          {
-            className: `btn ${mode === "rolling" ? "btn-secondary active" : "btn-outline-secondary"}`,
-            onClick: () => onModeChange("rolling"),
-            children: "Rolling Date"
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-          "button",
-          {
-            className: `btn ${mode === "exact" ? "btn-secondary active" : "btn-outline-secondary"}`,
-            onClick: () => onModeChange("exact"),
-            children: "Exact Date"
-          }
-        )
-      ] }),
-      mode === "rolling" ? /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)("div", { className: "input-group input-group-sm", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-          "input",
-          {
-            type: "number",
-            min: 0,
-            className: "form-control text-center",
-            value: rolling,
-            onChange: (e) => onRollingChange(+e.target.value)
-          }
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("span", { className: "input-group-text", children: suffix })
-      ] }) : /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
-        "input",
-        {
-          type: "date",
-          className: "form-control form-control-sm",
-          value: exact,
-          onChange: (e) => onExactChange(e.target.value)
-        }
-      )
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/reports/report-editing.component.tsx
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
-  function ReportEditingComponent(props) {
-    const { productId } = props;
-    const [reportName, setReportName] = (0, import_react22.useState)("");
-    const [measures, setMeasures] = (0, import_react22.useState)([newDraft()]);
-    const [view, setView] = (0, import_react22.useState)({ timeField: "", breakdownField: "", startRollingDate: 30, endRollingDate: 1 });
-    const [events, setEvents] = (0, import_react22.useState)([]);
-    const [fieldsByEvent, setFieldsByEvent] = (0, import_react22.useState)({});
-    const [result, setResult] = (0, import_react22.useState)(null);
-    const [isCalculating, setIsCalculating] = (0, import_react22.useState)(false);
-    (0, import_react22.useEffect)(() => {
-      const reportResult$ = ReportResultModel.subscribe(setResult);
-      return () => {
-        reportResult$.unsubscribe();
-      };
-    }, []);
-    (0, import_react22.useEffect)(() => {
-      console.log({ props });
-      ProductDataTableStore.fetch({ pathParams: { productId } }).then(setEvents);
-    }, [productId]);
-    async function loadColumns(tableName) {
-      if (!tableName || fieldsByEvent[tableName]) return;
-      const cols = await ProductDataColumnStore.fetch({ pathParams: { productId, tableName } });
-      setFieldsByEvent((prev) => ({ ...prev, [tableName]: cols ?? [] }));
-    }
-    const addMeasure = () => setMeasures((prev) => [...prev, newDraft()]);
-    const removeMeasure = (id) => setMeasures((prev) => prev.filter((m) => m.id !== id));
-    const updateMeasure = (id, patch) => setMeasures((prev) => prev.map((m) => m.id === id ? { ...m, ...patch } : m));
-    async function onTableChange(id, tableName) {
-      updateMeasure(id, { tableName, fieldName: "", aggregation: "", name: "" });
-      await loadColumns(tableName);
-    }
-    function onFieldChange(id, fieldName) {
-      const m = measures.find((x) => x.id === id);
-      const col = fieldsByEvent[m.tableName]?.find((c) => c.name === fieldName);
-      const agg = defaultAgg(col?.type);
-      updateMeasure(id, { fieldName, aggregation: agg, name: `${agg}(${fieldName})` });
-    }
-    async function calculate() {
-      setIsCalculating(true);
-      beforeProcessing();
-      const report = buildReportDefinition(reportName, measures, view);
-      ReportResultModel.load(
-        { pathParams: { productId }, body: { report } },
-        null,
-        () => {
-          setIsCalculating(false);
-          afterProcessing();
-        }
-      );
-    }
-    const primaryCols = fieldsByEvent[measures[0]?.tableName ?? ""] ?? [];
-    const dateCols = primaryCols.filter((c) => isDate3(c.type));
-    const dimCols = primaryCols.filter((c) => !isDate3(c.type));
-    const primaryFields = result?.groups ?? measures.filter((x) => !x.secondaryAxis).map((x) => x.name || autoName(x));
-    const secondaryMeasures = measures.filter((x) => x.secondaryAxis);
-    const isStacked = (result?.groups?.length ?? 0) > 0 || measures.some((x) => x.stacked);
-    const { headers, rows } = toRows(result?.data ?? []);
-    const canCalculate = !!measures[0]?.tableName && !!view.timeField && !isCalculating;
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "report-builder d-flex flex-column fullscreen", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-row p-2 border-bottom", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "flex-fill", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-          "input",
-          {
-            className: "form-control form-control-sm border-0",
-            placeholder: "Report Name",
-            value: reportName,
-            onChange: (e) => setReportName(e.target.value)
-          }
-        ) }),
-        result && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "ms-2", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-          "button",
-          {
-            className: "btn btn-success btn-sm",
-            onClick: () => props.onUpdateSuccess(buildReportDefinition(reportName, measures, view)),
-            children: "Add to Dashboard"
-          }
-        ) })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-row fullscreen", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "metric-selection d-flex flex-column border-end", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "p-2 d-flex flex-column fullscreen", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex justify-content-between align-items-center mb-2", children: [
-              /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "fw-semibold small", children: "Metrics" }),
-              /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("button", { className: "btn btn-link btn-sm p-0", onClick: addMeasure, children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "fa fa-plus" }) })
-            ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex flex-column fullscreen overflow-y-auto", children: measures.map((m) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-              MeasureRowComponent,
-              {
-                measure: m,
-                events,
-                fields: fieldsByEvent[m.tableName] ?? [],
-                onEventChange: (t) => onTableChange(m.id, t),
-                onFieldChange: (f) => onFieldChange(m.id, f),
-                onChange: (patch) => updateMeasure(m.id, patch),
-                onRemove: () => removeMeasure(m.id)
-              },
-              m.id
-            )) }),
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("label", { className: "form-label fw-semibold small mb-1", children: [
-                "Breakdown ",
-                /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("span", { className: "text-muted fw-normal", children: "(optional)" })
-              ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
-                "select",
-                {
-                  className: "form-select form-select-sm",
-                  value: view.breakdownField,
-                  onChange: (e) => setView((v) => ({ ...v, breakdownField: e.target.value })),
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: "", children: "\u2014 None \u2014" }),
-                    dimCols.map((c) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: c.name, children: c.displayName || c.name }, c.name))
-                  ]
-                }
-              )
-            ] })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex p-2 border-top", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "ms-auto", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("button", { className: "btn btn-sm btn-primary", onClick: calculate, disabled: !canCalculate, children: "Calculate" }) }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "d-flex flex-column fullscreen", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "time-range border-bottom px-2 py-1 d-flex align-items-center gap-2", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
-              "select",
-              {
-                className: "form-select form-select-sm",
-                style: { width: "auto" },
-                value: view.timeField,
-                onChange: (e) => setView((v) => ({ ...v, timeField: e.target.value })),
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: "", children: "\u2014 Time Field \u2014" }),
-                  dateCols.map((c) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("option", { value: c.name, children: c.displayName || c.name }, c.name))
-                ]
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(DateRangePicker, { view, onChange: (patch) => setView((v) => ({ ...v, ...patch })) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "report-result d-flex flex-column fullscreen overflow-y-auto", children: !result ? /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "d-flex align-items-center justify-content-center h-100 text-muted small", children: "Configure a metric and click Calculate to preview" }) : /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_jsx_runtime27.Fragment, { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-              CartesianChart,
-              {
-                dataOriented: "columns",
-                data: result.data,
-                series: { xField: view.timeField },
-                axes: {
-                  x: { type: "timeseries", format: "%Y-%m-%d", rotate: -25 },
-                  y: { fields: primaryFields, stacked: isStacked },
-                  y2: {
-                    fields: secondaryMeasures.map((x) => x.name || autoName(x)),
-                    type: secondaryMeasures[0]?.chartType ?? "bar"
-                  }
-                }
-              }
-            ),
-            headers.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ReportGridTable, { headers, rows })
-          ] }) })
-        ] })
-      ] })
-    ] });
-  }
-  function ReportGridTable({ headers, rows }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid rosie-grid-bordered rosie-grid-hover d-flex flex-row", style: { maxHeight: 280 }, children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "rosie-grid-viewport d-flex flex-column fullscreen", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-header fw-bold overflow-hidden d-flex", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("div", { className: "rosie-grid-row d-flex flex-row", children: [
-        headers.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-cell p-1 small", children: h }, i)),
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { style: { width: 8 } })
-      ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-body fullscreen overflow-x-auto d-flex flex-column overflow-y-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { children: rows.map((row, i) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-row d-flex flex-row", children: row.map((cell, j) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-cell p-1 small", children: String(cell ?? "") }, j)) }, i)) }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "rosie-grid-footer border-top d-flex p-2", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("span", { className: "text-body-tertiary small", children: [
-        rows.length,
-        " record",
-        rows.length !== 1 ? "s" : ""
-      ] }) })
-    ] }) });
-  }
-  function ReportEditingView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react22.useState)(""), [dashboardId, setDashboardId] = (0, import_react22.useState)(""), [reportId, setReportId] = (0, import_react22.useState)("");
-    (0, import_react22.useEffect)(() => {
-      const { productId: productId2, dashboardId: dashboardId2, reportId: reportId2 } = params;
-      setProductId(productId2);
-      setDashboardId(dashboardId2);
-      setReportId(reportId2);
-    }, [params]);
-    function onUpdateSuccess(report) {
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ProductSelector, { navPath: "/reports", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("li", { className: "breadcrumb-item active", children: "Create New Report" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("main", { className: "fullscreen", children: reportId && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
-        ReportEditingComponent,
-        {
-          productId,
-          dashboardId,
-          reportId,
-          onUpdateSuccess
-        }
-      ) })
-    ] });
-  }
-  function ReportEditingDialog(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Dialog, { fitScreen: true, id: "report-editing-dialog", title: "Create New Report", dialogClass: "modal-xl", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("div", { className: "modal-body fullscreen", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(ReportEditingComponent, { ...props }) }) });
-  }
-
-  // ClientApp/minerva/ts/views/reports/dashboard.view.tsx
-  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
-  function DashboardView() {
-    const params = useParams(), [productId, setProductId] = (0, import_react23.useState)(""), [dashboardId, setDashboardId] = (0, import_react23.useState)(""), [dashboardName, setDashboardName] = (0, import_react23.useState)(""), reportEditingDialog = useDialog("#report-editing-dialog"), [layout, setLayout] = (0, import_react23.useState)([]);
-    (0, import_react23.useEffect)(() => {
-      const layout$ = ProductDashboard.subscribe((value) => {
-        setDashboardName(value.name);
-        const layout2 = value.reports.groupBy("rowIndex").orderBy("key").map((row) => {
-          return row.elements.orderBy("colIndex");
-        });
-        setLayout(layout2 ?? []);
-      });
-      return () => {
-        layout$.unsubscribe();
-      };
-    }, []);
-    (0, import_react23.useEffect)(() => {
-      const { productId: productId2, dashboardId: dashboardId2 } = params;
-      setProductId(productId2);
-      setDashboardId(dashboardId2);
-      ProductDashboard.loadWithSplashScreen({ pathParams: { productId: productId2, dashboardId: dashboardId2 } });
-    }, [params]);
-    async function saveDashboardReports() {
-      const dashboard = await UpdateProductDashboardModel.fetch({
-        pathParams: { productId, dashboardId },
-        body: { productId, dashboardId, reports: layout.flatMap((x) => x) }
-      });
-      ProductDashboard.loadData(dashboard);
-    }
-    function onUpdateReportSuccess() {
-      Rosie.hideModal("#report-editing-dialog");
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ProductLayout, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ProductSelector, { navPath: "/dashboards", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("li", { className: "breadcrumb-item active", children: dashboardName ?? "Dashboard" }),
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "d-flex ms-auto", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { className: "dropdown me-1", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "btn btn-sm btn-outline-secondary dropdown-toggle hide-indicator", "data-bs-toggle": "dropdown", "data-bs-auto-close": "true", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "fa fa-ellipsis" }) }),
-            /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "dropdown-menu", children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "dropdown-item", onClick: () => saveDashboardReports(), children: "Save Dashboard" }) })
-          ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("button", { className: "btn btn-sm btn-primary", onClick: () => reportEditingDialog.show(), children: /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("span", { className: "fa fa-plus" }) })
-        ] })
-      ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("main", { className: "fullscreen", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("h1", { className: "p-2", children: dashboardName }),
-        layout?.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "container-fluid mb-2", children: layout.map((row, rowIndex) => {
-          return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("div", { className: "row mt-2", children: row.map((col, colIndex) => /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(ReportComponent, { productId, definition: col }, colIndex)) }, rowIndex);
-        }) })
-      ] }),
-      reportEditingDialog.isShown && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-        ReportEditingDialog,
-        {
-          productId,
-          dashboardId,
-          reportId: "-1",
-          onUpdateSuccess: onUpdateReportSuccess
-        }
-      )
-    ] });
-  }
-
-  // ClientApp/minerva/ts/views/admin.view.tsx
-  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
-  function AdminView() {
-    return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(import_jsx_runtime29.Fragment, {});
+  function HomeView() {
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(import_jsx_runtime20.Fragment, {});
   }
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react24.useEffect)(() => {
+    (0, import_react14.useEffect)(() => {
       if (LocalCache.get(AUTH_TOKEN)) {
         AuthUserModel.load();
       }
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(AppLayout, { children: /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(Routes, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/admin", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: AdminView, title: "Administration" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ProductListView, title: "Products" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/settings", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ProductSettingsView, title: "Product Settings" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/events", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: EventListView, title: "Events" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/events/:tableName", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: EventFieldListView, title: "Event Fields" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/dashboards/:dashboardId", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: DashboardView, title: "Dashboards" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "/products/:productId/dashboards/:dashboardId/reports/:reportId", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(RequireAuth, { component: ReportEditingView, title: "Reports" }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Navigate, { to: "/products" }) })
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(BrowserRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(ViewportComponent, { navigator: navigator2, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)(Routes, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "/home", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(RequireAuth, { component: HomeView, title: "Home" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Route, { path: "*", element: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Navigate, { to: "/home" }) })
     ] }) }) });
   }
 
   // ClientApp/minerva/ts/app.tsx
-  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
-  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime31.jsx)(AppView, {}));
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
+  (0, import_client.createRoot)(document.getElementById("react-root")).render(/* @__PURE__ */ (0, import_jsx_runtime22.jsx)(AppView, {}));
 })();
 /*! Bundled license information:
 

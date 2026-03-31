@@ -4,7 +4,7 @@ using DataManager.Auth;
 
 namespace DataManager.Controllers;
 
-[Route("api/auth")] [ApiController] public class AuthController(AuthService authService, IConfiguration configuration) : ControllerBase {
+[Route("api/auth")] [ApiController] public class AuthController(AuthService authService) : ControllerBase {
   [HttpGet("user")] [AuthFilter] public ActionResult<object> GetAuthUser() {
     var token = Request.GetAuthToken();
     var authUser = authService.GetAuthUser(token);
