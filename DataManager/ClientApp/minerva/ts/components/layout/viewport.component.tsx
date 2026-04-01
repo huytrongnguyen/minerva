@@ -1,13 +1,27 @@
-import { ReactElement, PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import { NavigatorComponent } from './navigator.component';
 import { NavItem } from 'minerva/core';
+import { Rosie } from 'rosie/core';
 
 export function ViewportComponent({ navigator, children, }: PropsWithChildren<{ navigator: NavItem[] }>) {
-  return <div className="viewport">
-    <aside>
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+
+  return <div className="viewport fullscreen d-flex flex-row">
+    <aside className={Rosie.classNames({ collapsed })}>
+      <header className="p-2 border-bottom">
+        <span className="navbar-brand text-primary fw-bold">Minerva</span>
+      </header>
       <NavigatorComponent navigator={navigator} />
+      <div className="d-flex justify-content-end p-2">
+        <button className="btn sidebar-collapse-btn" onClick={() => setCollapsed(c => !c)}>
+          {collapsed ? <span className="fa fa-chevron-right" /> : <span className="fa fa-chevron-left" />}
+        </button>
+      </div>
+      <footer className="p-2 border-top">
+        <span>test</span>
+      </footer>
     </aside>
-    <div className="wrapper position-relative">
+    <div className="wrapper flex-1 position-relative border-start">
       <LoadingIndicator />
       <main>
         {children}

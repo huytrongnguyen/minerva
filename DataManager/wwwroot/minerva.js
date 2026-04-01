@@ -53248,7 +53248,7 @@
   var import_client = __toESM(require_client());
 
   // ClientApp/minerva/ts/views/app.view.tsx
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
 
   // node_modules/react-router/dist/development/chunk-JZWAC4HX.mjs
   var React = __toESM(require_react(), 1);
@@ -68380,24 +68380,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [navigation2, setNavigation] = (0, import_react10.useState)([]);
     (0, import_react10.useEffect)(() => {
       setNavigation([{
+        navId: "home",
+        navName: "Home",
+        navIcon: "house",
+        navPath: "/home"
+      }, {
         navId: "products",
         navName: "Products",
+        navIcon: "box",
         navPath: "/products"
       }, {
-        navId: "admin",
-        navName: "Administration",
-        navPath: "/admin"
+        navId: "users",
+        navName: "Users",
+        navIcon: "user",
+        navPath: "/users"
       }]);
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, {});
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("nav", { className: "nav nav-pills flex-column flex-1", children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navigation2, level: 0 }) });
+  }
+  function NavItemList(props) {
+    const location2 = useLocation(), { items = [], level = 0 } = props;
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(import_jsx_runtime15.Fragment, { children: items.map((navItem) => {
+      if (!navItem.navPath || navItem.children && navItem.children.length > 0) {
+        return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_react10.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "nav-link disabled py-1 pe-1", style: { paddingLeft: 8 + 16 * level }, children: navItem.navName }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(NavItemList, { items: navItem.children, level: level + 1 })
+        ] }, navItem.navId);
+      }
+      return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(
+        Link,
+        {
+          to: navItem.navPath,
+          style: { paddingLeft: 8 + 16 * level },
+          className: Rosie.classNames("nav-link py-1 pe-1", { active: location2.pathname.startsWith(navItem.navPath) }),
+          children: [
+            navItem.navIcon ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: `fa fa-${navItem.navIcon} nav-icon me-1` }) : "",
+            /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("span", { className: "nav-item-label", children: navItem.navName })
+          ]
+        },
+        navItem.navId
+      );
+    }) });
   }
 
   // ClientApp/minerva/ts/components/layout/viewport.component.tsx
+  var import_react11 = __toESM(require_react());
   var import_jsx_runtime16 = __toESM(require_jsx_runtime());
   function ViewportComponent({ navigator: navigator3, children }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "viewport", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("aside", { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NavigatorComponent, { navigator: navigator3 }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "wrapper position-relative", children: [
+    const [collapsed, setCollapsed] = (0, import_react11.useState)(false);
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "viewport fullscreen d-flex flex-row", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("aside", { className: Rosie.classNames({ collapsed }), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("header", { className: "p-2 border-bottom", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "navbar-brand text-primary fw-bold", children: "Minerva" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(NavigatorComponent, { navigator: navigator3 }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { className: "d-flex justify-content-end p-2", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("button", { className: "btn sidebar-collapse-btn", onClick: () => setCollapsed((c) => !c), children: collapsed ? /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "fa fa-chevron-right" }) : /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { className: "fa fa-chevron-left" }) }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("footer", { className: "p-2 border-top", children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("span", { children: "test" }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { className: "wrapper flex-1 position-relative border-start", children: [
         /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(LoadingIndicator2, {}),
         /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("main", { children })
       ] })
@@ -68411,17 +68449,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
 
   // ClientApp/minerva/ts/components/product-layout/product-layout.component.tsx
-  var import_react12 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
 
   // ClientApp/minerva/ts/components/product-layout/product-navigator.component.tsx
-  var import_react11 = __toESM(require_react());
+  var import_react12 = __toESM(require_react());
   var import_jsx_runtime17 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/components/product-layout/product-layout.component.tsx
   var import_jsx_runtime18 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/components/product-layout/product-selector.component.tsx
-  var import_react13 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
   var import_jsx_runtime19 = __toESM(require_jsx_runtime());
 
   // ClientApp/minerva/ts/views/home.view.tsx
@@ -68433,7 +68471,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // ClientApp/minerva/ts/views/app.view.tsx
   var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   function AppView() {
-    (0, import_react14.useEffect)(() => {
+    (0, import_react15.useEffect)(() => {
       if (LocalCache.get(AUTH_TOKEN)) {
         AuthUserModel.load();
       }

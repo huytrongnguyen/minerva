@@ -18,25 +18,26 @@ export function NavigatorComponent(props: PropsWithChildren<any>) {
 
   useEffect(() => {
     setNavigation([{
+      navId: 'home',
+      navName: 'Home',
+      navIcon: 'house',
+      navPath: '/home'
+    }, {
       navId: 'products',
       navName: 'Products',
+      navIcon: 'box',
       navPath: '/products'
     }, {
-      navId: 'admin',
-      navName: 'Administration',
-      navPath: '/admin'
+      navId: 'users',
+      navName: 'Users',
+      navIcon: 'user',
+      navPath: '/users'
     }]);
   }, []);
 
-  return <></>
-
-  // return <aside>
-  //   <div role="button" className="navbar-brand p-2">Minerva</div>
-  //   <nav className="nav nav-pills flex-column border-bottom p-2">
-  //     <NavItemList items={navigation} level={0} />
-  //   </nav>
-  //   {props.children}
-  // </aside>
+  return <nav className="nav nav-pills flex-column flex-1">
+    <NavItemList items={navigation} level={0} />
+  </nav>
 }
 
 export function NavItemList(props: { items: NavItem[], level: number }) {
@@ -54,7 +55,8 @@ export function NavItemList(props: { items: NavItem[], level: number }) {
 
       return <Link key={navItem.navId} to={navItem.navPath} style={{paddingLeft: 8 + 16 * level}}
                     className={Rosie.classNames('nav-link py-1 pe-1', { active: location.pathname.startsWith(navItem.navPath) })}>
-        {navItem.navIcon ? <span className={`fa fa-${navItem.navIcon} nav-icon`} /> : ''} {navItem.navName}
+        {navItem.navIcon ? <span className={`fa fa-${navItem.navIcon} nav-icon me-1`} /> : ''}
+        <span className="nav-item-label">{navItem.navName}</span>
       </Link>
     })}
   </>
